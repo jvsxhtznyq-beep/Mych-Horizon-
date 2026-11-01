@@ -10,6 +10,8 @@ Evaluation of version 1.0.0 against the ten scenarios in [scenarios.md](scenario
 | Live behavioral runs: does Claude, with the skill installed, actually behave this way? | **No** | Not run. This environment could not install the skill into a separate Claude instance, and no independent sessions were started for it. The protocol in [scenarios.md](scenarios.md#running-a-live-evaluation) is ready for the owner to run. |
 | Automated checks of the package and scripts | Yes | See [Automated checks](#automated-checks) |
 
+Update: a live, non-independent self-test was run later on 2026-11-01; see [live-test-report.md](live-test-report.md).
+
 The static trace was performed by the same session that wrote the skill, so it is not an independent review. It shows that the instructions exist and route correctly. It cannot show that a model follows them.
 
 ## Method

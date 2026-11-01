@@ -1,0 +1,6 @@
+cd00f65 Add reminders architecture (0003), staff day-view design prototype, no-show invention concepts
+f19a01b Hash staff passwords with scrypt; research, decision 0002 and report
+0b420fa Ledger: restore T6 to blocked pending approval
+e109f3b Fix overlapping bookings and cancelled slots; add investigation log, delivery report and ledger
+0a00105 Pad month and day in format_date
+7e3ad6f clinic-booking 0.3.0 baseline

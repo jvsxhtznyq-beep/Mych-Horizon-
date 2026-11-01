@@ -181,7 +181,7 @@ Extending: add one kebab-case file to the matching folder, register it in the `S
 | Unit tests | Passed; details in [evaluation/results.md](evaluation/results.md#automated-checks) |
 | Package build and archive verification | Passed |
 | Static trace of the ten acceptance scenarios | All covered after four fixes ([results](evaluation/results.md)) |
-| Live behavioral evaluation with Claude | **Not yet run.** Protocol ready in [evaluation/scenarios.md](evaluation/scenarios.md#running-a-live-evaluation) |
+| Live behavioral evaluation with Claude | Self-test by the authoring session, **not independent**: [evaluation/live-test-report.md](evaluation/live-test-report.md) (mean score 6.4/10; ledger and delegation weaknesses found). An independent run is still outstanding; protocol in [evaluation/scenarios.md](evaluation/scenarios.md#running-a-live-evaluation) |
 
 ## Limitations
 

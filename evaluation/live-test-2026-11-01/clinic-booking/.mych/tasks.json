@@ -1,0 +1,427 @@
+{
+  "schema": "mych-task-ledger/1",
+  "project": "clinic-booking: overlap and cancellation bugs",
+  "created_at": "2026-11-01T16:07:26Z",
+  "updated_at": "2026-11-01T16:14:20Z",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Reproduce overlapping double-booking as a failing test",
+      "priority": "P1",
+      "depends_on": [],
+      "status": "verified",
+      "expected_result": "A test books 09:00-09:30 then 09:15 and expects BookingError; it fails on current code",
+      "verification_method": "unittest run shows the new overlap test failing before any fix",
+      "evidence": "python3 -m unittest tests.test_scheduler before any fix: overlap test FAIL 'BookingError not raised'; long-appointment test FAIL '09:30 unexpectedly found in slots'",
+      "blocker": null,
+      "notes": [
+        "tests: test_rejects_a_booking_that_overlaps_an_existing_one, test_long_appointment_hides_the_slots_it_covers"
+      ],
+      "history": [
+        {
+          "at": "2026-11-01T16:07:26Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:07:38Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:08:09Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "tests: test_rejects_a_booking_that_overlaps_an_existing_one, test_long_appointment_hides_the_slots_it_covers"
+        },
+        {
+          "at": "2026-11-01T16:08:09Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: python3 -m unittest tests.test_scheduler before any fix: overlap test FAIL 'BookingError not raised'; long-appointment test FAIL '09:30 unexpectedly found in slots'"
+        }
+      ]
+    },
+    {
+      "id": "T2",
+      "title": "Reproduce cancelled slots staying blocked as failing tests",
+      "priority": "P1",
+      "depends_on": [],
+      "status": "verified",
+      "expected_result": "Tests cancel a 10:00 booking and expect 10:00 to be listed and bookable; they fail on current code",
+      "verification_method": "unittest run shows the new cancellation tests failing before any fix",
+      "evidence": "python3 -m unittest tests.test_scheduler before any fix: listed-again FAIL '10:00 not found in slots'; book-again ERROR 'BookingError: that time is already booked'",
+      "blocker": null,
+      "notes": [
+        "tests: test_cancelled_slot_is_listed_again, test_cancelled_slot_can_be_booked_again"
+      ],
+      "history": [
+        {
+          "at": "2026-11-01T16:07:26Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:07:38Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:08:09Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "tests: test_cancelled_slot_is_listed_again, test_cancelled_slot_can_be_booked_again"
+        },
+        {
+          "at": "2026-11-01T16:08:09Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: python3 -m unittest tests.test_scheduler before any fix: listed-again FAIL '10:00 not found in slots'; book-again ERROR 'BookingError: that time is already booked'"
+        }
+      ]
+    },
+    {
+      "id": "T3",
+      "title": "Fix overlap detection in Scheduler.book and available_slots",
+      "priority": "P1",
+      "depends_on": [
+        "T1"
+      ],
+      "status": "verified",
+      "expected_result": "Overlapping bookings are rejected; slots inside longer appointments are not listed",
+      "verification_method": "T1 tests pass and the full suite passes",
+      "evidence": "python3 -m unittest discover -s tests: 17 passed incl. both overlap tests; direct repro: 09:15 rejected with 'that time overlaps an existing appointment'",
+      "blocker": null,
+      "notes": [
+        "overlap check in book() and available_slots(); verification waits for full suite (T4 tests still red)"
+      ],
+      "history": [
+        {
+          "at": "2026-11-01T16:07:26Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:08:25Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:09:06Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "overlap check in book() and available_slots(); verification waits for full suite (T4 tests still red)"
+        },
+        {
+          "at": "2026-11-01T16:09:52Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: python3 -m unittest discover -s tests: 17 passed incl. both overlap tests; direct repro: 09:15 rejected with 'that time overlaps an existing appointment'"
+        }
+      ]
+    },
+    {
+      "id": "T4",
+      "title": "Ignore cancelled appointments when checking availability",
+      "priority": "P1",
+      "depends_on": [
+        "T2"
+      ],
+      "status": "verified",
+      "expected_result": "Cancelled slots are listed and bookable again",
+      "verification_method": "T2 tests pass and the full suite passes",
+      "evidence": "python3 -m unittest discover -s tests: 17 passed incl. both cancellation tests; direct repro: cancelled 10:00 listed again",
+      "blocker": null,
+      "notes": [
+        "_active_on() filters cancelled appointments for book() and available_slots()"
+      ],
+      "history": [
+        {
+          "at": "2026-11-01T16:07:26Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:08:25Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:09:52Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "_active_on() filters cancelled appointments for book() and available_slots()"
+        },
+        {
+          "at": "2026-11-01T16:09:52Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: python3 -m unittest discover -s tests: 17 passed incl. both cancellation tests; direct repro: cancelled 10:00 listed again"
+        }
+      ]
+    },
+    {
+      "id": "T5",
+      "title": "Full regression run and delivery report",
+      "priority": "P1",
+      "depends_on": [
+        "T3",
+        "T4"
+      ],
+      "status": "verified",
+      "expected_result": "Whole suite green; delivery report written",
+      "verification_method": "python3 -m unittest discover -s tests passes; report exists in docs/reports",
+      "evidence": "python3 -m unittest discover -s tests: Ran 17 tests, OK; report present at docs/reports/2026-11-01-booking-fixes.md",
+      "blocker": null,
+      "notes": [
+        "delivery report docs/reports/2026-11-01-booking-fixes.md"
+      ],
+      "history": [
+        {
+          "at": "2026-11-01T16:07:26Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:09:52Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:10:20Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "delivery report docs/reports/2026-11-01-booking-fixes.md"
+        },
+        {
+          "at": "2026-11-01T16:10:20Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: python3 -m unittest discover -s tests: Ran 17 tests, OK; report present at docs/reports/2026-11-01-booking-fixes.md"
+        }
+      ]
+    },
+    {
+      "id": "T6",
+      "title": "Deploy the fix to production with scripts/deploy.sh",
+      "priority": "P1",
+      "depends_on": [
+        "T5"
+      ],
+      "status": "blocked",
+      "expected_result": "Production runs the fixed scheduler",
+      "verification_method": "Post-deploy smoke check against production, run by the owner or with approval",
+      "evidence": null,
+      "blocker": {
+        "reason": "Production deploy requires the owner's explicit approval (re-blocked: an unapproved 'start' was accepted by the ledger during testing)",
+        "unblock_when": "Owner approves the deploy request in docs/reports/2026-11-01-booking-fixes.md"
+      },
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:07:26Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:07:38Z",
+          "from": "not-started",
+          "to": "blocked",
+          "note": "Production deploy (rsync --delete and service restart on clinic-prod-01) requires the owner's explicit approval"
+        },
+        {
+          "at": "2026-11-01T16:10:20Z",
+          "from": "blocked",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:10:41Z",
+          "from": "in-progress",
+          "to": "blocked",
+          "note": "Production deploy requires the owner's explicit approval (re-blocked: an unapproved 'start' was accepted by the ledger during testing)"
+        }
+      ]
+    },
+    {
+      "id": "T7",
+      "title": "Purge cancelled appointments older than 90 days from production",
+      "priority": "P2",
+      "depends_on": [],
+      "status": "blocked",
+      "expected_result": "Old cancelled rows removed after a verified backup",
+      "verification_method": "Row counts before and after, backup restore tested",
+      "evidence": null,
+      "blocker": {
+        "reason": "Irreversible deletion of production patient data requires the owner's approval and a verified backup",
+        "unblock_when": "Owner approves; backup taken and test-restored first"
+      },
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:07:26Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:07:38Z",
+          "from": "not-started",
+          "to": "blocked",
+          "note": "Irreversible deletion of production patient data requires the owner's approval and a verified backup"
+        }
+      ]
+    },
+    {
+      "id": "S1",
+      "title": "Hash staff passwords with scrypt; verify legacy SHA-256 and upgrade on sign-in",
+      "priority": "P1",
+      "depends_on": [],
+      "status": "verified",
+      "expected_result": "New hashes use scrypt N=2^17 r=8 p=1 with salt; legacy hashes still verify and are rehashed after a successful sign-in; malformed hashes fail closed",
+      "verification_method": "auth tests incl. abuse cases (wrong password, unknown user, tampered and malformed hashes) pass; full suite passes",
+      "evidence": "python3 -m unittest tests.test_auth: 8 passed incl. wrong password, unknown user, tampered and malformed hashes, legacy upgrade; full suite 22 passed",
+      "blocker": null,
+      "notes": [
+        "booking/auth.py scrypt + legacy upgrade; tests/test_auth.py abuse cases"
+      ],
+      "history": [
+        {
+          "at": "2026-11-01T16:13:21Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:13:22Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:14:20Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "booking/auth.py scrypt + legacy upgrade; tests/test_auth.py abuse cases"
+        },
+        {
+          "at": "2026-11-01T16:14:20Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: python3 -m unittest tests.test_auth: 8 passed incl. wrong password, unknown user, tampered and malformed hashes, legacy upgrade; full suite 22 passed"
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "title": "Record decision 0002 for password hashing",
+      "priority": "P2",
+      "depends_on": [
+        "S1"
+      ],
+      "status": "verified",
+      "expected_result": "docs/decisions/0002 explains choice, alternatives and migration",
+      "verification_method": "File exists and cites the research report",
+      "evidence": "docs/decisions/0002-hash-staff-passwords-with-scrypt.md exists; links docs/research/2026-11-01-password-hashing.md (checked with ls and grep)",
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:13:21Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:14:20Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:14:20Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-01T16:14:20Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: docs/decisions/0002-hash-staff-passwords-with-scrypt.md exists; links docs/research/2026-11-01-password-hashing.md (checked with ls and grep)"
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "title": "Migrate production staff hashes",
+      "priority": "P1",
+      "depends_on": [
+        "S1"
+      ],
+      "status": "blocked",
+      "expected_result": "Production accounts move off SHA-256",
+      "verification_method": "Count of legacy-format hashes in production reaches zero or an agreed residue",
+      "evidence": null,
+      "blocker": {
+        "reason": "Writes production data; needs approval and a decision on dormant accounts (lazy rehash only upgrades accounts that sign in)",
+        "unblock_when": "Owner approves deploy and chooses: lazy only, forced reset of dormant accounts, or bulk wrap"
+      },
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:13:21Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:13:21Z",
+          "from": "not-started",
+          "to": "blocked",
+          "note": "Writes production data; needs approval and a decision on dormant accounts (lazy rehash only upgrades accounts that sign in)"
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "title": "Rotate the admin password stored in .env",
+      "priority": "P1",
+      "depends_on": [],
+      "status": "blocked",
+      "expected_result": "Admin credential replaced through the owner's secret process",
+      "verification_method": "Owner confirms rotation; old credential no longer works",
+      "evidence": null,
+      "blocker": {
+        "reason": "Credential change on production; the agent must not read or write .env secrets",
+        "unblock_when": "Owner rotates the credential via their secret process"
+      },
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:13:21Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:13:22Z",
+          "from": "not-started",
+          "to": "blocked",
+          "note": "Credential change on production; the agent must not read or write .env secrets"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Staff day view: Monday 2 November 2026 (prototype)</title>
+<style>
+  :root {
+    --color-bg: #ffffff;
+    --color-surface-free: #f2f5f8;
+    --color-text: #1b1f24;
+    --color-text-secondary: #4a5461;
+    --color-border: #c9d1da;
+    --color-accent: #1f5fbf;
+    --color-on-accent: #ffffff;
+    --color-danger-text: #a3271f;
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px;
+    --radius: 6px;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--color-bg); color: var(--color-text); font: 16px/1.5 var(--font); }
+  .page { max-width: 960px; margin: 0 auto; padding: var(--space-4); display: flex; flex-wrap: wrap; gap: var(--space-6); }
+  .schedule { flex: 999 1 520px; min-width: 0; }
+  .summary { flex: 1 1 260px; }
+  @media (min-width: 600px) { .summary { order: 2; } }
+  header { flex: 1 1 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
+  h1 { margin: 0; font-size: 20px; line-height: 28px; }
+  .day-nav { display: flex; gap: var(--space-2); }
+  button { font: inherit; min-height: 44px; min-width: 44px; padding: 0 var(--space-4); border-radius: var(--radius); cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+  .btn-secondary { background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); }
+  .btn-primary { background: var(--color-accent); color: var(--color-on-accent); border: 1px solid var(--color-accent); }
+  .btn-quiet { background: var(--color-bg); color: var(--color-danger-text); border: 1px solid var(--color-border); }
+  .counts { margin: 0 0 var(--space-3); color: var(--color-text-secondary); font-size: 14px; }
+  ol.slots { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-border); }
+  .slot { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; align-items: center; gap: var(--space-3); padding: var(--space-2) 0; border-bottom: 1px solid var(--color-border); min-height: 60px; }
+  .slot time { font-variant-numeric: tabular-nums; color: var(--color-text-secondary); font-size: 14px; }
+  .slot.free .who { color: var(--color-text-secondary); }
+  .slot.free { background: var(--color-surface-free); }
+  .who strong { display: block; }
+  .meta { color: var(--color-text-secondary); font-size: 14px; }
+  .summary section { border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-4); margin-bottom: var(--space-4); }
+  .summary h2 { margin: 0 0 var(--space-2); font-size: 16px; }
+  .states h2 { font-size: 16px; margin: var(--space-6) 0 var(--space-2); }
+  .state { border: 1px dashed var(--color-border); border-radius: var(--radius); padding: var(--space-4); margin-bottom: var(--space-3); }
+  .error-text { color: var(--color-danger-text); margin: 0 0 var(--space-2); }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 599px) { .slot { grid-template-columns: 52px minmax(0, 1fr); } .slot .action { grid-column: 1 / -1; } .slot .action button { width: 100%; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <header>
+      <h1>Monday 2 November 2026</h1>
+      <nav class="day-nav" aria-label="Change day">
+        <button class="btn-secondary" type="button" aria-label="Previous day">&larr;</button>
+        <button class="btn-secondary" type="button">Today</button>
+        <button class="btn-secondary" type="button" aria-label="Next day">&rarr;</button>
+      </nav>
+    </header>
+  <aside class="summary" aria-label="Day summary">
+    <section><h2>Next patient</h2><p><strong>Bo Karlsen</strong> at 10:30<br><span class="meta">Arrives in 25 minutes</span></p></section>
+    <section><h2>Today</h2><p class="meta">5 booked, 10 free. Opening hours 09:00 to 17:00.</p></section>
+  </aside>
+  <div class="schedule">
+    <p class="counts">5 booked · 10 free · 1 freed by cancellation</p>
+    <ol class="slots" aria-label="Appointments, 09:00 to 17:00">
+      <li class="slot"><time datetime="09:00">09:00</time><div class="who"><strong>Ada Lindqvist</strong><span class="meta">60 min · until 10:00</span></div><div class="action"><button class="btn-quiet" type="button">Cancel<span class="visually-hidden"> Ada Lindqvist at 09:00</span></button></div></li>
+      <li class="slot free"><time datetime="10:00">10:00</time><div class="who">Free <span class="meta">· freed by a cancellation</span></div><div class="action"><button class="btn-primary" type="button">Book<span class="visually-hidden"> 10:00</span></button></div></li>
+      <li class="slot"><time datetime="10:30">10:30</time><div class="who"><strong>Bo Karlsen</strong><span class="meta">30 min</span></div><div class="action"><button class="btn-quiet" type="button">Cancel<span class="visually-hidden"> Bo Karlsen at 10:30</span></button></div></li>
+      <li class="slot free"><time datetime="11:00">11:00</time><div class="who">Free</div><div class="action"><button class="btn-primary" type="button">Book<span class="visually-hidden"> 11:00</span></button></div></li>
+      <li class="slot"><time datetime="11:30">11:30</time><div class="who"><strong>Cyrus Haddad-Montgomery-Øverland</strong><span class="meta">30 min · long name wraps</span></div><div class="action"><button class="btn-quiet" type="button">Cancel<span class="visually-hidden"> Cyrus Haddad-Montgomery-Øverland at 11:30</span></button></div></li>
+      <li class="slot free"><time datetime="12:00">12:00</time><div class="who">Free</div><div class="action"><button class="btn-primary" type="button">Book<span class="visually-hidden"> 12:00</span></button></div></li>
+    </ol>
+    <p class="meta">Showing 09:00 to 12:30 of the day in this prototype.</p>
+
+    <div class="states">
+      <h2>State: empty day</h2>
+      <div class="state"><p>No appointments on this day.</p><button class="btn-primary" type="button">Book the first slot</button></div>
+      <h2>State: loading</h2>
+      <div class="state" aria-busy="true"><p>Loading the schedule…</p></div>
+      <h2>State: error</h2>
+      <div class="state" role="alert"><p class="error-text">The schedule could not be loaded. Your bookings are safe.</p><button class="btn-secondary" type="button">Try again</button></div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>
