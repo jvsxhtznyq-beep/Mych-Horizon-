@@ -1,6 +1,6 @@
 # Transparency and Reporting
 
-How MYCH-PLUGIN communicates progress and results. Reports exist so the owner can trust what was done and see what was not. No fabricated progress, no invented tool access, no false completion claims.
+How MYCH-HORIZON communicates progress and results. Reports exist so the owner can trust what was done and see what was not. No fabricated progress, no invented tool access, no false completion claims.
 
 ## Contents
 

@@ -1,0 +1,604 @@
+{
+  "schema": "mych-task-ledger/2",
+  "project": "MYCH-HORIZON 2.0",
+  "created_at": "2026-11-01T16:32:53Z",
+  "updated_at": "2026-11-01T16:53:35Z",
+  "tasks": [
+    {
+      "id": "A1",
+      "title": "Provider-neutral core: neutral wording, delegation and portability guidance, domain specialist routing",
+      "priority": "P0",
+      "depends_on": [],
+      "status": "verified",
+      "expected_result": "Core text free of host-specific assumptions outside adapters; delegation and portability systems documented; specialists routable",
+      "verification_method": "validate-skill --strict passes; grep finds no Claude-only instructions outside clearly labeled host notes",
+      "evidence": "validate-skill.py mych-plugin: PASSED (0 errors, 0 warnings), 53 files; grep finds no Claude-specific wording in core docs except labeled examples",
+      "blocker": null,
+      "notes": [
+        "neutral wording, delegation.md, model-portability.md, domain specialist routing"
+      ],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:53Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "neutral wording, delegation.md, model-portability.md, domain specialist routing"
+        },
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: validate-skill.py mych-plugin: PASSED (0 errors, 0 warnings), 53 files; grep finds no Claude-specific wording in core docs except labeled examples"
+        }
+      ],
+      "checks": [
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "result": "pass",
+          "evidence": "validate-skill.py mych-plugin: PASSED (0 errors, 0 warnings), 53 files; grep finds no Claude-specific wording in core docs except labeled examples"
+        }
+      ],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "A2",
+      "title": "Harden task ledger (locking, approval blocks, failed checks, evidence rules, v1 migration)",
+      "priority": "P0",
+      "depends_on": [],
+      "status": "verified",
+      "expected_result": "All four live-test ledger weaknesses closed; v1 ledgers still readable",
+      "verification_method": "Unit tests incl. 12-writer concurrency test and approval-gate tests pass",
+      "evidence": "unittest tests/test_task_ledger.py: Ran 25 tests OK (incl. 12 concurrent writers keep all 12 tasks, approval gates, failure-marker refusals, v1 migration)",
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:53Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_task_ledger.py: Ran 25 tests OK (incl. 12 concurrent writers keep all 12 tasks, approval gates, failure-marker refusals, v1 migration)"
+        }
+      ],
+      "checks": [
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_task_ledger.py: Ran 25 tests OK (incl. 12 concurrent writers keep all 12 tasks, approval gates, failure-marker refusals, v1 migration)"
+        }
+      ],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "A3",
+      "title": "Fix project scanner (unittest -s tests, data files flagged, python3)",
+      "priority": "P2",
+      "depends_on": [],
+      "status": "verified",
+      "expected_result": "Scanner suggests a command that finds tests in a tests/ layout and flags *.db files",
+      "verification_method": "Unit tests; scan of the live-test fixture",
+      "evidence": "unittest tests/test_scan_project.py: Ran 16 tests OK; live-test fixture now infers python3 -m unittest discover -s tests",
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:53Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_scan_project.py: Ran 16 tests OK; live-test fixture now infers python3 -m unittest discover -s tests"
+        }
+      ],
+      "checks": [
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_scan_project.py: Ran 16 tests OK; live-test fixture now infers python3 -m unittest discover -s tests"
+        }
+      ],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "A4",
+      "title": "Capability detection script",
+      "priority": "P0",
+      "depends_on": [],
+      "status": "verified",
+      "expected_result": "detect-capabilities reports OS, shell, Python, packages, CLIs, GPU, key names, MCP server names, permissions; never prints secret values",
+      "verification_method": "Unit tests incl. secret-leak test; real run in this container",
+      "evidence": "unittest tests/test_detect_capabilities.py: Ran 5 tests OK; live run reported 4 CPUs, 15.7 GB RAM, no GPU, image generation partial",
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:53Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_detect_capabilities.py: Ran 5 tests OK; live run reported 4 CPUs, 15.7 GB RAM, no GPU, image generation partial"
+        }
+      ],
+      "checks": [
+        {
+          "at": "2026-11-01T16:53:35Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_detect_capabilities.py: Ran 5 tests OK; live run reported 4 CPUs, 15.7 GB RAM, no GPU, image generation partial"
+        }
+      ],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "A5",
+      "title": "Validator support for specialist skills",
+      "priority": "P1",
+      "depends_on": [],
+      "status": "not-started",
+      "expected_result": "mych-* specialist layout with required sections and full coverage",
+      "verification_method": "Validator unit tests",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "A6",
+      "title": "Registries, provider adapters and mych CLI (route, bundle, export, package-all)",
+      "priority": "P0",
+      "depends_on": [
+        "A1",
+        "A4"
+      ],
+      "status": "not-started",
+      "expected_result": "One core, exported per target; tool schemas rendered per provider; router suggests specialists",
+      "verification_method": "Unit tests for routing, bundles within budget, exports per target, schema translation",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "B1",
+      "title": "Pixel-art specialist with text-to-sprite, validator and sheet packer",
+      "priority": "P0",
+      "depends_on": [
+        "A5"
+      ],
+      "status": "not-started",
+      "expected_result": "Independent skill; stdlib PNG tooling; quality rules enforced by script",
+      "verification_method": "Validator strict; unit tests on generated and malformed PNGs",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "B2",
+      "title": "Image-generation specialist with honest backend detection",
+      "priority": "P1",
+      "depends_on": [
+        "A5"
+      ],
+      "status": "not-started",
+      "expected_result": "Detects backends; processes images with Pillow; refuses to claim generation without a backend",
+      "verification_method": "Validator strict; unit tests incl. no-backend refusal and stub ComfyUI client",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "B3",
+      "title": "3D design specialist with glTF tooling and Blender script templates",
+      "priority": "P1",
+      "depends_on": [
+        "A5"
+      ],
+      "status": "not-started",
+      "expected_result": "Inspect and generate glTF/GLB; STL printability checks; Blender templates",
+      "verification_method": "Validator strict; unit tests; templates compile (Blender not installed)",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "C1",
+      "title": "Chatbot engineering specialist with tested reference kit (Python and JS)",
+      "priority": "P1",
+      "depends_on": [
+        "A5"
+      ],
+      "status": "not-started",
+      "expected_result": "State, memory, tool calling, recovery, routing in a runnable kit",
+      "verification_method": "Validator strict; Python and Node tests against a deterministic model",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "C2",
+      "title": "API integration specialist with resilient client toolkit",
+      "priority": "P1",
+      "depends_on": [
+        "A5"
+      ],
+      "status": "not-started",
+      "expected_result": "Retries, idempotency, pagination, rate limits, redaction, webhook signatures",
+      "verification_method": "Validator strict; tests against a local stub server",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "C3",
+      "title": "Emoji and visual language specialist with sequence inspector",
+      "priority": "P2",
+      "depends_on": [
+        "A5"
+      ],
+      "status": "not-started",
+      "expected_result": "ZWJ, modifiers, flags, keycaps analysed; naming and fallback rules",
+      "verification_method": "Validator strict; unit tests",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "D1",
+      "title": "Cloud infrastructure specialist",
+      "priority": "P1",
+      "depends_on": [
+        "A5"
+      ],
+      "status": "not-started",
+      "expected_result": "Architecture, security, cost and DR guidance; cost calculator with user-supplied prices",
+      "verification_method": "Validator strict; unit tests",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "D2",
+      "title": "RunPod specialist",
+      "priority": "P1",
+      "depends_on": [
+        "A5"
+      ],
+      "status": "not-started",
+      "expected_result": "Storage persistence rules, GPU sizing, billing and shutdown guidance; VRAM estimator; no live API calls",
+      "verification_method": "Validator strict; unit tests",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "E1",
+      "title": "Ecosystem research and integration registry with real adoption evidence",
+      "priority": "P1",
+      "depends_on": [],
+      "status": "not-started",
+      "expected_result": "Registry entries with source, stars, last push, license, permissions, security and compatibility",
+      "verification_method": "Registry JSON schema test; evidence fields come from GitHub search output captured in the repo",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "G1",
+      "title": "Game benchmark: build a complete playable game using the specialists",
+      "priority": "P0",
+      "depends_on": [
+        "B1",
+        "A6"
+      ],
+      "status": "not-started",
+      "expected_result": "Playable game with menus, levels, enemies, scoring, audio, animation, save/load, settings",
+      "verification_method": "Automated playthrough completes a level through real keyboard input in headless Chromium",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "G2",
+      "title": "Game benchmark: unit, E2E, stress and failure tests; fixes; scored report",
+      "priority": "P0",
+      "depends_on": [
+        "G1"
+      ],
+      "status": "not-started",
+      "expected_result": "Evidence-backed report under evaluation/complex-projects/game-benchmark",
+      "verification_method": "Test outputs and screenshots stored; score per rubric with evidence",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "F1",
+      "title": "Architecture docs, compatibility and capability matrices, roadmap, changelog, README",
+      "priority": "P1",
+      "depends_on": [],
+      "status": "not-started",
+      "expected_result": "Docs match the implemented system",
+      "verification_method": "Link check; matrices list every specialist and provider",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "F2",
+      "title": "Package all skills, full validation, security review, push",
+      "priority": "P0",
+      "depends_on": [
+        "F1"
+      ],
+      "status": "not-started",
+      "expected_result": "dist archives verified; all tests green; no secrets",
+      "verification_method": "package-all output; unittest output; secret scan output",
+      "evidence": null,
+      "blocker": null,
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    },
+    {
+      "id": "X1",
+      "title": "Cross-model benchmark runs (GPT, Gemini, GLM, local)",
+      "priority": "P2",
+      "depends_on": [],
+      "status": "blocked",
+      "expected_result": "Comparable runs across model families",
+      "verification_method": "Recorded transcripts and scores per model",
+      "evidence": null,
+      "blocker": {
+        "reason": "No credentials for other model providers and no local model runtime in this environment (checked: env key names, ollama absent, no GPU)",
+        "unblock_when": "Owner supplies provider access or a runtime; harness from A6 runs the benchmark",
+        "kind": "dependency",
+        "previous": "not-started"
+      },
+      "notes": [],
+      "history": [
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": null,
+          "to": "not-started",
+          "note": "created"
+        },
+        {
+          "at": "2026-11-01T16:32:54Z",
+          "from": "not-started",
+          "to": "blocked",
+          "note": "No credentials for other model providers and no local model runtime in this environment (checked: env key names, ollama absent, no GPU)"
+        }
+      ],
+      "checks": [],
+      "approval": null,
+      "approvals": []
+    }
+  ],
+  "migrated_from": "mych-task-ledger/1"
+}

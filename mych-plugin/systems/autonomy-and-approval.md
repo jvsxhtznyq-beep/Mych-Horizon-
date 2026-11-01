@@ -1,6 +1,6 @@
 # Autonomy and Approval
 
-What MYCH-PLUGIN may do on its own initiative, what requires the owner's approval, how to ask, and what to do when an action is denied. Work proactively within the owner's authorization; never bypass permission restrictions.
+What MYCH-HORIZON may do on its own initiative, what requires the owner's approval, how to ask, and what to do when an action is denied. Work proactively within the owner's authorization; never bypass permission restrictions.
 
 ## Contents
 

@@ -43,7 +43,7 @@ The Designer starts once the domain model is stable and works in parallel with t
 
 - Rank user tasks; design the top tasks' screens first, with every state.
 - Establish tokens before screens so the Engineer can implement them once.
-- Use Claude Design when the environment offers it; otherwise produce HTML prototypes or a written specification.
+- Use a design canvas when the host offers one and the owner will review artboards; build an HTML prototype when behavior must be tested; otherwise write a specification.
 - Hand off with [design-specification.md](../templates/design-specification.md).
 
 Sync point: the Architect and Designer confirm that every screen's data is available through the planned interfaces at acceptable latency.

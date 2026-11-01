@@ -6,7 +6,7 @@ For designing a product or interface (Track A) and for redesigning an existing o
 
 - [Track A: new product or interface](#track-a-new-product-or-interface)
 - [Track B: redesign of an existing product](#track-b-redesign-of-an-existing-product)
-- [Using Claude Design](#using-claude-design)
+- [Using a design canvas](#using-a-design-canvas)
 - [Verification](#verification)
 - [Pitfalls](#pitfalls)
 
@@ -34,9 +34,9 @@ For designing a product or interface (Track A) and for redesigning an existing o
 7. **Build (Engineer)** against the specification, slice by slice.
 8. **Measure** against the redesign goals after release, when measurement is available; otherwise define how the owner can measure.
 
-## Using Claude Design
+## Using a design canvas
 
-When the environment provides a design canvas ([tool-availability.md](../systems/tool-availability.md)): one artboard per direction candidate, token sheet, component sheet and key screen, so each can be reviewed separately. When it does not: an HTML and CSS prototype or a written specification, with the format stated in the report. Label every artifact as mockup, prototype or implemented.
+When the host provides a design canvas (for example Claude Design; see [tool-availability.md](../systems/tool-availability.md)) and the owner will review artboards: one artboard per direction candidate, token sheet, component sheet and key screen, so each can be reviewed separately. When it does not: an HTML and CSS prototype or a written specification, with the format stated in the report. Label every artifact as mockup, prototype or implemented.
 
 ## Verification
 

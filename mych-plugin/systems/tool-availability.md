@@ -1,19 +1,19 @@
 # Tool Availability
 
-How MYCH-PLUGIN establishes which tools and access it actually has, adapts when something is missing, and communicates limitations without pretending. Never claim a tool, connector, permission or result that was not confirmed.
+How MYCH-HORIZON establishes which tools and access it actually has, adapts when something is missing, and communicates limitations without pretending. Never claim a tool, connector, permission or result that was not confirmed.
 
 ## Contents
 
 - [Establishing capabilities](#establishing-capabilities)
 - [Capability inventory](#capability-inventory)
-- [Differences between surfaces](#differences-between-surfaces)
+- [Differences between hosts](#differences-between-hosts)
 - [When a tool is missing](#when-a-tool-is-missing)
 - [Communicating limitations](#communicating-limitations)
 
 ## Establishing capabilities
 
 1. **Read the actual tool list** and any environment notes provided with the session. A capability exists when a tool for it is listed or a probe succeeds, not when a task assumes it.
-2. **Probe cheaply and non-destructively** when the list is ambiguous: `python3 --version`, `git --version`, listing a directory, a read-only API call. Never probe with an action that changes something.
+2. **Run `scripts/detect-capabilities.py`** for a machine-readable inventory, and **probe cheaply and non-destructively** when anything is still ambiguous: `python3 --version`, `git --version`, listing a directory, a read-only API call. Never probe with an action that changes something.
 3. **Record the result** in the orientation (question 7) and plan around it.
 4. **Re-check after failures.** A tool that worked earlier can fail later (expired credentials, network policy). Treat errors as information, not as reasons to fabricate results.
 
@@ -28,18 +28,23 @@ How MYCH-PLUGIN establishes which tools and access it actually has, adapts when 
 | Web search and fetch | Search or fetch tools listed; a fetch succeeds | Research, documentation |
 | Version control | `git` available; repository present | History, diffs, commits |
 | Remote repository actions | Repository tools or credentials present and permitted | Pushing, pull requests, issues |
-| Design canvas (Claude Design) | A design or artifact tool listed by the environment | Design artifacts, prototypes |
+| Design canvas (for example Claude Design) | A design or artifact tool listed by the environment | Design artifacts, prototypes |
+| GPU | `scripts/detect-capabilities.py` (reads `nvidia-smi` when present) | Local model inference, image generation, rendering |
+| Model or service credentials | Environment variable names via `scripts/detect-capabilities.py`; values are never read | Calling model or service APIs |
+| MCP servers | Server names in host configuration files via `scripts/detect-capabilities.py` | Extra tools offered by the host |
 | Connectors (issue trackers, docs, data) | Connector tools listed and authorized | Project context, external data |
 | Browser automation | A browser tool or an installed automation library | End-to-end and visual checks |
 | Persistent memory | A memory tool, or project files you can read | Continuity across sessions |
 
-## Differences between surfaces
+## Differences between hosts
 
-- **Claude Code:** runs on the owner's machine or a managed container; tools are subject to permission prompts and policies; local tooling varies by machine. Network access depends on the environment's policy.
-- **claude.ai with code execution:** skills run in a sandbox; the documentation notes that packages can be installed there, but probe rather than assume.
-- **Claude API code execution:** the documentation states there is no network access and no runtime package installation; bundled scripts must rely on the standard library.
+The same model behaves differently depending on the host it runs in:
 
-These descriptions summarize vendor documentation and may change. Trust probes over this table.
+- **Local agent on the owner's machine** (a coding agent or IDE assistant): broad file and shell access behind permission prompts; tooling varies by machine.
+- **Managed sandbox** (code execution attached to a chat product): files and Python available; network access and package installation may be restricted.
+- **API integration** (a model called from someone's application): only the tools that application exposes, often no files or shell.
+
+Vendor-specific notes live in the MYCH-HORIZON repository's adapters folder and summarize documentation that changes. Trust `scripts/detect-capabilities.py` and probes over any table, and see [model-portability.md](model-portability.md) for fallbacks.
 
 ## When a tool is missing
 
@@ -49,7 +54,7 @@ These descriptions summarize vendor documentation and may change. Trust probes o
 | Web access | No current documentation or sources | Local docs, installed package sources and metadata; training knowledge labeled as possibly outdated |
 | Package installation | Cannot add dependencies or tools | Standard library; vendored or already-installed tools; instructions for the owner |
 | File writing | Cannot create deliverables on disk | Deliver content inline for the owner to save |
-| Design canvas | No Claude Design artifacts | Self-contained HTML and CSS prototype, or a written specification with token tables |
+| Design canvas | No canvas artboards | Self-contained HTML and CSS prototype, or a written specification with token tables |
 | Remote repository access | Cannot push or open pull requests | Commit locally, or provide a patch and the exact commands |
 | Credentials or environment access | Cannot reach staging, production or a paid service | Verify everything up to that boundary; provide the commands and expected results |
 | Browser automation | No end-to-end or visual checks | Unit and integration tests; a manual test script for the owner |

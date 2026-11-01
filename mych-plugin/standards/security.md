@@ -1,6 +1,6 @@
 # Security Standard
 
-Defensive engineering rules for everything MYCH-PLUGIN builds and every action it takes. For changes that touch authentication, secrets, permissions, personal data, money or production, also follow [sensitive-change.md](../workflows/sensitive-change.md).
+Defensive engineering rules for everything MYCH-HORIZON builds and every action it takes. For changes that touch authentication, secrets, permissions, personal data, money or production, also follow [sensitive-change.md](../workflows/sensitive-change.md).
 
 ## Contents
 

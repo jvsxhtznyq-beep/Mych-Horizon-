@@ -11,6 +11,7 @@ How the coordinator chooses which disciplines to activate, which one leads, how 
 - [Handoff contracts](#handoff-contracts)
 - [Escalation during a task](#escalation-during-a-task)
 - [Anti-patterns](#anti-patterns)
+- [Domain specialists](#domain-specialists)
 - [Registering a new discipline](#registering-a-new-discipline)
 
 ## Selection procedure
@@ -105,6 +106,35 @@ Drop a discipline when its input is complete and nothing downstream needs it.
 - **Research as procrastination.** Researching what the codebase or the conversation already answers.
 - **Invention by default.** Proposing novel mechanisms when a standard one meets the requirements.
 - **Design skipped for "small" interfaces.** Small interfaces still need states, errors and accessibility.
+
+## Domain specialists
+
+Domain specialists are separate skills (`mych-` prefix) that carry deep knowledge and tools for one domain. They complement the five disciplines rather than replacing them: the Engineer still writes the integration code, the Designer still owns the experience, and the coordinator still owns integration and verification.
+
+| Specialist | Strong signals | Do not load for |
+|---|---|---|
+| `mych-3d-design` | Modeling, topology, UVs, materials, lighting, rendering, rigging, animation, glTF/GLB/OBJ/FBX/STL/USD, Blender or Geometry Nodes, 3D printing | 2D art, flat UI |
+| `mych-image-generation` | Text-to-image, image-to-image, inpainting, outpainting, upscaling, background removal, batch image pipelines, diffusion models, ComfyUI | Hand-authored pixel art (use `mych-pixel-art`), vector icons |
+| `mych-pixel-art` | Sprites, tilesets, sprite sheets, palettes, dithering, pixel animation, pixel UI | Photographic or high-resolution illustration |
+| `mych-chatbot-engineering` | Conversational products, assistants, bots, memory, tool calling, retrieval, routing between models | One-off API calls with no conversation |
+| `mych-api-integration` | Consuming or designing REST, GraphQL or WebSocket APIs; OAuth; rate limits; webhooks; SDKs | Purely local code with no network interface |
+| `mych-emoji-language` | Emoji sets, Unicode sequences, platform rendering, custom emoji, iconographic visual language | Adding decoration to technical output |
+| `mych-cloud-infrastructure` | Hosting, VMs, containers, networking, DNS, storage, CDNs, monitoring, backups, scaling, cost, disaster recovery | Code changes that do not affect deployment |
+| `mych-runpod` | RunPod pods, serverless endpoints, network volumes, GPU selection, RunPod billing and lifecycle | Other providers (use `mych-cloud-infrastructure`) |
+
+**Example combination, a 2D game:** Architect + Designer + **Engineer**, with `mych-pixel-art` for sprites and tiles; add `mych-image-generation` only for image processing or when a generation backend exists; add `mych-api-integration` only for online features. `mych-3d-design` stays unloaded unless the game uses 3D assets.
+
+**Handoffs from specialists:**
+
+| From, to | Artifact | Must contain |
+|---|---|---|
+| `mych-pixel-art`, Engineer | Sprite sheet and metadata | PNG with transparency, fixed cell size, frame order, animation names and frame durations, anchor points |
+| `mych-3d-design`, Engineer | Exported asset | Format and version, units and scale, axis convention, triangle count, materials and texture paths, animation clips |
+| `mych-image-generation`, any | Generated or processed images | Backend actually used (or none), parameters and seed, dimensions, color mode, alpha, provenance and license notes |
+| `mych-api-integration`, Engineer | Client contract | Documented endpoints used (with links), auth method, rate limits, retry and idempotency policy, error mapping |
+| `mych-cloud-infrastructure` or `mych-runpod`, owner | Deployment plan | Resources, cost estimate with stated prices, persistence of data, approval points, shutdown and rollback steps |
+
+If a needed specialist skill is not installed, say so, continue with the core disciplines, and never imply the specialist's tools ran.
 
 ## Registering a new discipline
 

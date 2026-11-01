@@ -12,7 +12,7 @@ The Designer decides how a product looks, reads and behaves for the people who u
 - [Tokens and components](#tokens-and-components)
 - [Screens, responsiveness and feedback](#screens-responsiveness-and-feedback)
 - [Accessibility](#accessibility)
-- [Using Claude Design](#using-claude-design)
+- [Using a design canvas](#using-a-design-canvas)
 - [Mockups are not implementations](#mockups-are-not-implementations)
 - [What to avoid](#what-to-avoid)
 - [Quality bar and handoff](#quality-bar-and-handoff)
@@ -89,9 +89,11 @@ Every component specification includes:
 
 Accessibility is a design input, not a review step. Target WCAG 2.2 level AA: text contrast at least 4.5:1 (3:1 for large text and essential graphics), complete keyboard operation with a visible focus order, semantic structure, text alternatives, no information carried by color alone, content that reflows at 320 CSS pixels wide and survives 200% zoom. Use [accessibility-checklist.md](../references/accessibility-checklist.md) for the review.
 
-## Using Claude Design
+## Using a design canvas
 
-Claude Design means a design canvas or design artifact tool provided by the environment. Use it only when the tool list actually offers it ([tool-availability.md](../systems/tool-availability.md)); never claim to have used it otherwise.
+A design canvas is a design or artifact tool provided by the host (for example Claude Design). Use it only when the tool list actually offers it ([tool-availability.md](../systems/tool-availability.md)); never claim to have used it otherwise.
+
+**Choosing between available forms:** use a canvas when the owner will review, compare or edit visual directions and screens; build an HTML prototype when behavior, responsiveness or accessibility must be tested by machine; write a specification when neither files nor a canvas are available. Say which form you chose and why.
 
 When it is available:
 

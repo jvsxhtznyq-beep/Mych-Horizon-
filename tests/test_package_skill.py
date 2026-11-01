@@ -31,7 +31,9 @@ class BuildTest(PackageTestCase):
         status, result = packager.package(SKILL_DIR, self.root / "dist")
         self.assertEqual(status, 0, result)
         archive = Path(result["archive"])
-        self.assertEqual(archive.name, "mych-plugin-1.0.0.zip")
+        version = validator.parse_frontmatter((SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")).data[
+            "metadata"]["version"]
+        self.assertEqual(archive.name, "mych-plugin-{}.zip".format(version))
         with zipfile.ZipFile(archive) as zf:
             names = zf.namelist()
         self.assertTrue(all(name.startswith("mych-plugin/") for name in names))

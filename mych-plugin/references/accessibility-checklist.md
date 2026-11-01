@@ -53,7 +53,7 @@ A review checklist oriented to WCAG 2.2 level AA, organized by the four principl
 - [ ] **Label in name (2.5.3):** the accessible name contains the visible label text.
 - [ ] **Motion actuation (2.5.4):** functions triggered by device motion have an interface alternative and can be disabled.
 - [ ] **Dragging (2.5.7):** anything done by dragging can also be done with single clicks or taps.
-- [ ] **Target size (2.5.8):** targets at least 24 by 24 CSS px, or with enough spacing. MYCH-PLUGIN's design standard recommends 44 by 44 px for touch interfaces.
+- [ ] **Target size (2.5.8):** targets at least 24 by 24 CSS px, or with enough spacing. MYCH-HORIZON's design standard recommends 44 by 44 px for touch interfaces.
 
 ## Understandable
 

@@ -141,3 +141,58 @@ class ScanTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ScannerFixesTest(unittest.TestCase):
+    """Fixes for weaknesses found in the 1.0 live test."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name) / "proj"
+        self.root.mkdir()
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def commands(self, result, purpose="test"):
+        return [item["command"] for item in result["commands"] if item["purpose"] == purpose]
+
+    def test_unittest_command_points_at_the_tests_folder_and_runs_tests(self):
+        write(self.root, "app/__init__.py", "")
+        write(self.root, "app/core.py", "def add(a, b):\n    return a + b\n")
+        write(self.root, "tests/test_core.py",
+              "import unittest\nfrom app.core import add\n\nclass T(unittest.TestCase):\n"
+              "    def test_add(self):\n        self.assertEqual(add(1, 2), 3)\n")
+        result = scanner.scan(self.root)
+        self.assertEqual(self.commands(result), ["python3 -m unittest discover -s tests"])
+        run = subprocess.run(["python3", "-B", "-m", "unittest", "discover", "-s", "tests"], cwd=str(self.root),
+                             capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        self.assertIn("Ran 1 test", run.stderr)
+
+    def test_unittest_pattern_for_suffix_named_tests(self):
+        write(self.root, "checks/core_test.py", "import unittest\n")
+        self.assertEqual(self.commands(scanner.scan(self.root)),
+                         ['python3 -m unittest discover -s checks -p "*_test.py"'])
+
+    def test_data_files_are_listed_but_not_opened(self):
+        write(self.root, "data/production.db", "SQLite format 3\x00 " + SECRET_VALUE)
+        write(self.root, "backups/2026-01-01-dump.sql", SECRET_VALUE)
+        write(self.root, "migrations/0001_init.sql", "create table t (id int);\n")
+        result = scanner.scan(self.root)
+        self.assertEqual(sorted(result["data_files"]), ["backups/2026-01-01-dump.sql", "data/production.db"])
+        rendered = scanner.render_markdown(result)
+        self.assertIn("## Data files (listed, not opened", rendered)
+        self.assertNotIn(SECRET_VALUE, rendered + json.dumps(result))
+
+    def test_node_tap_and_builtin_runner_are_recognized(self):
+        write(self.root, "package.json", json.dumps({"scripts": {"test": "node --test test/"},
+                                                     "devDependencies": {"tap": "^18.0.0"}}))
+        result = scanner.scan(self.root)
+        stacks = [item["signal"] for item in result["stack"]]
+        self.assertIn("node-tap", stacks)
+        self.assertIn("Node.js built-in test runner", stacks)
+
+    def test_node_test_files_without_package_json(self):
+        write(self.root, "tests/physics.test.mjs", "import test from 'node:test';\n")
+        self.assertEqual(self.commands(scanner.scan(self.root)), ["node --test"])

@@ -5,7 +5,7 @@ For resuming earlier work. Continuity comes from the project's files, not from m
 ## Steps
 
 1. **Find the project's memory sources.** Run `python3 ${CLAUDE_SKILL_DIR}/scripts/scan-project.py PROJECT_DIR` and read, in this order, whatever exists:
-   1. Agent and contributor instructions (for example `CLAUDE.md`, `AGENTS.md`, `CONTRIBUTING.md`).
+   1. Agent and contributor instructions (for example `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `CONTRIBUTING.md`).
    2. `README` and the `docs/` folder.
    3. Decision records (`docs/decisions/`, `docs/adr/`, `adr/` or similar).
    4. The project context file, if the project keeps one ([project-context.md](../templates/project-context.md)).

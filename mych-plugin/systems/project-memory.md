@@ -26,7 +26,7 @@ Use the project's existing locations first. Only when none exists, use the defau
 
 | Kind of fact | Look for first | Default if none exists |
 |---|---|---|
-| How to work in this repository | `CLAUDE.md`, `AGENTS.md`, `CONTRIBUTING.md` | Section in `README.md` |
+| How to work in this repository | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `CONTRIBUTING.md` | Section in `README.md` |
 | What the project is and how to run it | `README.md`, `docs/` | `README.md` |
 | Why it is built this way | `docs/adr/`, `docs/decisions/`, `adr/` | `docs/decisions/` |
 | What is planned and in progress | Issue tracker, `TASKS.md`, existing plan | `.mych/tasks.json` via the ledger script |

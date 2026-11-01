@@ -72,6 +72,14 @@ SECRET_FILE_RE = re.compile(
     r"|.+\.(?:pem|key|p12|pfx|keystore|jks)|\.npmrc|\.pypirc|\.netrc|secrets?\.(?:json|ya?ml|toml))$",
     re.IGNORECASE,
 )
+# Files that usually hold data rather than code: databases, dumps, backups and
+# serialized datasets. They may contain personal or production data, so they
+# are listed but never opened.
+DATA_FILE_RE = re.compile(
+    r"^.+\.(?:db|db3|sqlite|sqlite3|mdb|accdb|dump|bak|parquet|feather|h5|hdf5|pkl|pickle|xlsx|xls|npy|npz)$"
+    r"|^.*(?:dump|backup).*\.sql(?:\.gz)?$",
+    re.IGNORECASE,
+)
 ENV_TEMPLATE_RE = re.compile(r"^(?:\.env\.(?:example|sample|template)|env\.example|example\.env)$", re.IGNORECASE)
 ENV_VAR_RE = re.compile(r"^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=")
 
@@ -83,6 +91,7 @@ NODE_FRAMEWORKS = {
     "vite": "Vite", "webpack": "webpack", "typescript": "TypeScript", "tailwindcss": "Tailwind CSS",
     "prisma": "Prisma", "@prisma/client": "Prisma", "drizzle-orm": "Drizzle ORM", "jest": "Jest",
     "vitest": "Vitest", "mocha": "Mocha", "@playwright/test": "Playwright", "cypress": "Cypress",
+    "tap": "node-tap", "ava": "AVA", "uvu": "uvu", "phaser": "Phaser", "pixi.js": "PixiJS", "three": "three.js",
 }
 PYTHON_FRAMEWORKS = {
     "django": "Django", "flask": "Flask", "fastapi": "FastAPI", "starlette": "Starlette", "pydantic": "Pydantic",
@@ -174,7 +183,8 @@ class Scanner:
         self.result: Dict[str, Any] = {
             "root": str(root), "files_scanned": 0, "truncated": False, "skipped_dirs": [],
             "git": {}, "languages": {}, "formats": {}, "stack": [], "commands": [], "tooling": [],
-            "ci": [], "docs": [], "task_ledgers": [], "env_templates": [], "sensitive_files": [], "notes": [],
+            "ci": [], "docs": [], "task_ledgers": [], "env_templates": [], "sensitive_files": [], "data_files": [],
+            "notes": [],
         }
 
     # -- collection -------------------------------------------------------------
@@ -278,6 +288,10 @@ class Scanner:
         if nested:
             self.result["notes"].append("{} nested package.json files (possible monorepo).".format(len(nested)))
         if not self.exists("package.json"):
+            node_tests = [rel for rel in self.files if re.search(r"(?:^|/)[\w.-]+\.test\.(?:mjs|cjs|js)$", rel)]
+            if node_tests:
+                self.add_command("test", "node --test", "{} *.test.js files and no package.json (assumes the "
+                                 "Node.js built-in runner; check the files' imports)".format(len(node_tests)))
             return
         data = _load_json(self.root / "package.json") or {}
         manager, lockfile = "npm", None
@@ -313,6 +327,8 @@ class Scanner:
             body = str(scripts[script])
             self.add_command(purpose, command, 'package.json scripts.{}: "{}"'.format(
                 script, body if len(body) <= 80 else body[:77] + "..."))
+            if purpose == "test" and re.search(r"\bnode\s+(?:[\w=-]+\s+)*--test\b", body):
+                self.add_stack("Node.js built-in test runner", 'package.json scripts.{} uses "node --test"'.format(script))
 
     def detect_python(self) -> None:
         prefix = ""
@@ -385,7 +401,7 @@ class Scanner:
         if has_pytest:
             self.add_command("test", prefix + "pytest", "pytest configuration or dependency found")
         elif test_files:
-            self.add_command("test", prefix + "python -m unittest discover",
+            self.add_command("test", prefix + unittest_command(test_files),
                              "{} test files, no pytest configuration found".format(len(test_files)))
         if "ruff" in tools or self.exists("ruff.toml") or self.exists(".ruff.toml"):
             self.add_command("quality", prefix + "ruff check .", "Ruff configuration")
@@ -597,10 +613,34 @@ class Scanner:
                 self.result["env_templates"].append({"path": rel, "variables": variables})
             elif SECRET_FILE_RE.match(name):
                 self.result["sensitive_files"].append(rel)
+            elif DATA_FILE_RE.match(name):
+                self.result["data_files"].append(rel)
 
 
 def _cell(value: Any) -> str:
     return str(value).replace("|", "\\|").replace("\n", " ")
+
+
+def unittest_command(test_files: List[str]) -> str:
+    """Build a unittest discovery command that finds the project's tests.
+
+    Plain 'python -m unittest discover' starts in the current folder and only
+    descends into packages, so tests in a tests/ folder without __init__.py
+    are missed (0 tests ran). Point -s at the folder holding most test files
+    and match their naming pattern.
+    """
+    folders: Dict[str, int] = {}
+    for rel in test_files:
+        folder = rel.rsplit("/", 1)[0] if "/" in rel else "."
+        top = folder.split("/", 1)[0]
+        folders[top] = folders.get(top, 0) + 1
+    start = max(sorted(folders), key=lambda name: folders[name])
+    command = "python3 -m unittest discover"
+    if start != ".":
+        command += " -s " + start
+    if all(re.search(r"_test\.py$", rel) for rel in test_files):
+        command += ' -p "*_test.py"'
+    return command
 
 
 def render_markdown(result: Dict[str, Any]) -> str:
@@ -669,6 +709,12 @@ def render_markdown(result: Dict[str, Any]) -> str:
     out.append("## Secret-bearing files (listed, not opened)")
     if result["sensitive_files"]:
         out.extend("- {}".format(path) for path in result["sensitive_files"])
+    else:
+        out.append("None found.")
+    out.append("")
+    out.append("## Data files (listed, not opened; may hold personal or production data, so ask before reading)")
+    if result["data_files"]:
+        out.extend("- {}".format(path) for path in result["data_files"])
     else:
         out.append("None found.")
     out.append("")
