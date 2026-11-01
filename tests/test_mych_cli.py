@@ -132,6 +132,15 @@ class ToolTest(unittest.TestCase):
         bad = mych.run_tool("mych_task_ledger", {"command": "rm -rf"}, self.workspace)
         self.assertFalse(bad["ok"])
 
+    def test_tools_that_spend_money_need_approval(self):
+        args = {"prompt": "x", "out": "out", "backend": "openai", "model": "m"}
+        refused = mych.run_tool("mych_image_generate", args, self.workspace)
+        self.assertFalse(refused["ok"])
+        self.assertIn("approval", refused["error"])
+        dry = mych.run_tool("mych_image_generate", dict(args, dry_run=True), self.workspace)
+        self.assertTrue(dry["ok"], dry)
+        self.assertIn('"dry_run": true', dry["stdout"])
+
     def test_run_tool_detect_capabilities_returns_json(self):
         result = mych.run_tool("mych_detect_capabilities", {}, self.workspace)
         self.assertTrue(result["ok"], result)

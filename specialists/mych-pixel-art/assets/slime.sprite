@@ -1,0 +1,28 @@
+# Example sprite for mych-pixel-art: a 12x8 slime with a two-frame idle loop.
+# Format reference: references/sprite-format.md
+name: slime
+palette:
+  k #1a1c2c
+  g #38b764
+  l #a7f070
+  w #f4f4f4
+frame idle_0 220
+....kkkk....
+..kkggggkk..
+.kgglgggggk.
+kggwkggwkggk
+kgggggggggk.
+kgggggggggk.
+.kkkkkkkkk..
+............
+frame idle_1 220
+............
+...kkkkkk...
+.kkggglgggk.
+kggwkggwkggk
+kggggggggggk
+kggggggggggk
+.kkkkkkkkkk.
+............
+tag idle idle_0 idle_1 pingpong
+anchor 6 7

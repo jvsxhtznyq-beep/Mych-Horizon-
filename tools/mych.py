@@ -342,12 +342,22 @@ def build_command(tool: Dict[str, Any], args: Dict[str, Any], workspace: Path) -
     return command
 
 
-def run_tool(name: str, args: Dict[str, Any], workspace: Path, timeout: int = TOOL_TIMEOUT) -> Dict[str, Any]:
-    """Execute a neutral tool call. Paths stay inside the workspace; no shell is involved."""
+def run_tool(name: str, args: Dict[str, Any], workspace: Path, timeout: int = TOOL_TIMEOUT,
+             approved: bool = False) -> Dict[str, Any]:
+    """Execute a neutral tool call. Paths stay inside the workspace; no shell is involved.
+
+    Tools marked requires_approval run only when the caller passes approved=True,
+    which a person must decide; the harness never sets it on a model's behalf.
+    """
     tool, _ = find_tool(name)
     problems = check_arguments(tool, args)
     if problems:
         return {"tool": name, "ok": False, "error": "; ".join(problems)}
+    dry = args.get("dry_run") is True
+    if tool.get("requires_approval") and not approved and not dry:
+        return {"tool": name, "ok": False, "needs_approval": tool["requires_approval"],
+                "error": "this tool needs the owner's approval ({}); ask them, or call it with dry_run".format(
+                    tool["requires_approval"])}
     workspace = workspace.resolve()
     for key in tool.get("path_params", ["path", "file"]):
         if isinstance(args.get(key), str):
@@ -736,6 +746,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--args", default="{}", help="JSON object of arguments")
     p.add_argument("--workspace", default=".", help="folder the tool may read and write (default: current)")
     p.add_argument("--timeout", type=int, default=TOOL_TIMEOUT)
+    p.add_argument("--approved", action="store_true",
+                   help="the owner approved this call (needed for tools that spend money or change external state)")
 
     p = sub.add_parser("harness", help="run an agent loop against a model API (or --dry-run)")
     p.add_argument("--provider", required=True)
@@ -792,7 +804,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 call_args = json.loads(args.args)
             except ValueError as exc:
                 raise MychError("--args is not valid JSON: {}".format(exc), code=2) from exc
-            result = run_tool(args.name, call_args, Path(args.workspace), args.timeout)
+            result = run_tool(args.name, call_args, Path(args.workspace), args.timeout, approved=args.approved)
             print(json.dumps(result, indent=2))
             return 0 if result["ok"] else 1
         if args.command == "harness":

@@ -9,76 +9,849 @@
   },
   "specialists": [
     {
-      "id": "mych-pixel-art", "display_name": "Professional Pixel Art", "path": "specialists/mych-pixel-art", "version": "2.0.0",
-      "status": "planned",
+      "id": "mych-pixel-art",
+      "display_name": "Professional Pixel Art",
+      "path": "specialists/mych-pixel-art",
+      "version": "2.0.0",
+      "status": "tested",
       "summary": "Sprites, tilesets, palettes, animation and sprite sheets, with a standard-library PNG toolchain.",
-      "triggers": ["pixel art", "sprite", "sprites", "sprite sheet", "spritesheet", "tileset", "tile set", "tilemap", "palette", "dithering", "8-bit", "16-bit", "retro", "pixel animation", "platformer", "2d game"],
-      "avoid": ["photorealistic", "3d model", "vector icon"],
-      "requires": ["python3"], "optional": ["aseprite|libresprite", "module:PIL", "convert|magick"], "live_capability": null,
-      "scripts": [], "tests": [], "tools": []
+      "triggers": [
+        "pixel art",
+        "sprite",
+        "sprites",
+        "sprite sheet",
+        "spritesheet",
+        "tileset",
+        "tile set",
+        "tilemap",
+        "palette",
+        "dithering",
+        "8-bit",
+        "16-bit",
+        "retro",
+        "pixel animation",
+        "platformer",
+        "2d game"
+      ],
+      "avoid": [
+        "photorealistic",
+        "3d model",
+        "vector icon"
+      ],
+      "requires": [
+        "python3"
+      ],
+      "optional": [
+        "aseprite|libresprite",
+        "module:PIL",
+        "convert|magick"
+      ],
+      "live_capability": null,
+      "scripts": [
+        {
+          "path": "scripts/pixel_tool.py",
+          "purpose": "PNG codec, text-sprite renderer, sheet packer with Aseprite-style JSON, validator, palettes, scaling"
+        }
+      ],
+      "tests": [
+        "tests/test_spec_pixel_art.py"
+      ],
+      "tools": [
+        {
+          "name": "mych_pixel_render",
+          "description": "Render a text sprite file to PNG frames or to a sprite sheet with Aseprite-style JSON metadata (frames, durations, tags, anchor).",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "sprite": {
+                "type": "string",
+                "description": "Path to the .sprite text file, relative to the workspace."
+              },
+              "out": {
+                "type": "string",
+                "description": "Output folder, relative to the workspace."
+              },
+              "sheet": {
+                "type": "boolean",
+                "description": "Write one sheet PNG plus JSON instead of one PNG per frame."
+              },
+              "scale": {
+                "type": "integer",
+                "description": "Integer upscale for previews (ship 1x).",
+                "minimum": 1,
+                "maximum": 64
+              }
+            },
+            "required": [
+              "sprite",
+              "out"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-pixel-art",
+              "path": "scripts/pixel_tool.py"
+            },
+            "render",
+            {
+              "param": "sprite"
+            },
+            "--out",
+            {
+              "param": "out"
+            },
+            {
+              "flag": "--sheet",
+              "when": "sheet"
+            },
+            {
+              "option": "--scale",
+              "param": "scale"
+            }
+          ],
+          "path_params": [
+            "sprite",
+            "out"
+          ],
+          "read_only": false
+        },
+        {
+          "name": "mych_pixel_validate",
+          "description": "Check a PNG against pixel-art rules: palette membership, color limit, semi-transparency, cell alignment and isolated pixels. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "png": {
+                "type": "string",
+                "description": "PNG path relative to the workspace."
+              },
+              "palette": {
+                "type": "string",
+                "description": "Built-in palette name (pico8, sweetie16, gameboy, grayscale4) or a palette file path."
+              },
+              "max_colors": {
+                "type": "integer",
+                "description": "Maximum number of opaque colors.",
+                "minimum": 1
+              },
+              "cell": {
+                "type": "string",
+                "description": "Frame or tile size such as 16x16."
+              }
+            },
+            "required": [
+              "png"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-pixel-art",
+              "path": "scripts/pixel_tool.py"
+            },
+            "validate",
+            {
+              "param": "png"
+            },
+            "--json",
+            {
+              "option": "--palette",
+              "param": "palette"
+            },
+            {
+              "option": "--max-colors",
+              "param": "max_colors"
+            },
+            {
+              "option": "--cell",
+              "param": "cell"
+            }
+          ],
+          "path_params": [
+            "png",
+            "palette"
+          ],
+          "read_only": true
+        }
+      ]
     },
     {
-      "id": "mych-image-generation", "display_name": "Image Generation and Python Imaging", "path": "specialists/mych-image-generation", "version": "2.0.0",
-      "status": "planned",
+      "id": "mych-image-generation",
+      "display_name": "Image Generation and Python Imaging",
+      "path": "specialists/mych-image-generation",
+      "version": "2.0.0",
+      "status": "tested",
       "summary": "Generation backends (APIs, ComfyUI, diffusers), prompting, and deterministic Python image processing, with honest refusal when no backend exists.",
-      "triggers": ["generate an image", "generate images", "image generation", "text-to-image", "image-to-image", "img2img", "inpainting", "outpainting", "upscale", "upscaling", "background removal", "diffusion", "stable diffusion", "comfyui", "batch images", "image pipeline", "resize images", "thumbnails"],
-      "avoid": ["pixel art"],
-      "requires": ["python3"], "optional": ["module:PIL"], "live_capability": "a generation backend: GPU with module:torch and module:diffusers, a local ComfyUI server, or an image API credential",
-      "scripts": [], "tests": [], "tools": []
+      "triggers": [
+        "generate an image",
+        "generate images",
+        "image generation",
+        "text-to-image",
+        "image-to-image",
+        "img2img",
+        "inpainting",
+        "outpainting",
+        "upscale",
+        "upscaling",
+        "background removal",
+        "diffusion",
+        "stable diffusion",
+        "comfyui",
+        "batch images",
+        "image pipeline",
+        "resize images",
+        "thumbnails"
+      ],
+      "avoid": [
+        "pixel art"
+      ],
+      "requires": [
+        "python3"
+      ],
+      "optional": [
+        "module:PIL"
+      ],
+      "live_capability": "a generation backend: GPU with module:torch and module:diffusers, a local ComfyUI server, or an image API credential",
+      "scripts": [
+        {
+          "path": "scripts/imagegen.py",
+          "purpose": "backend detection, ComfyUI and OpenAI-style generation clients with provenance, Pillow processing and batch recipes"
+        }
+      ],
+      "tests": [
+        "tests/test_spec_image_generation.py"
+      ],
+      "tools": [
+        {
+          "name": "mych_image_detect",
+          "description": "Report which image generation backends are actually available (local GPU with diffusers, ComfyUI server, API keys by name) and whether processing works. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "probe_local": {
+                "type": "boolean",
+                "description": "Probe a local ComfyUI server."
+              }
+            },
+            "required": []
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-image-generation",
+              "path": "scripts/imagegen.py"
+            },
+            "detect",
+            "--json",
+            {
+              "flag": "--probe-local",
+              "when": "probe_local"
+            }
+          ],
+          "read_only": true
+        },
+        {
+          "name": "mych_image_generate",
+          "description": "Generate images through an available backend and write provenance sidecars. Exits with status 3 and writes nothing when no backend is available. Paid APIs require the owner's approval.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "prompt": {
+                "type": "string",
+                "description": "Image prompt."
+              },
+              "out": {
+                "type": "string",
+                "description": "Output folder relative to the workspace."
+              },
+              "backend": {
+                "type": "string",
+                "enum": [
+                  "auto",
+                  "comfyui",
+                  "openai"
+                ],
+                "description": "Backend to use."
+              },
+              "model": {
+                "type": "string",
+                "description": "Model name for API backends."
+              },
+              "workflow": {
+                "type": "string",
+                "description": "ComfyUI API-format workflow file relative to the workspace."
+              },
+              "checkpoint": {
+                "type": "string",
+                "description": "ComfyUI checkpoint name."
+              },
+              "seed": {
+                "type": "integer",
+                "description": "Seed for reproducible backends.",
+                "minimum": 0
+              },
+              "size": {
+                "type": "string",
+                "description": "Size such as 1024x1024."
+              },
+              "dry_run": {
+                "type": "boolean",
+                "description": "Print the request and send nothing."
+              }
+            },
+            "required": [
+              "prompt",
+              "out"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-image-generation",
+              "path": "scripts/imagegen.py"
+            },
+            "generate",
+            "--prompt",
+            {
+              "param": "prompt"
+            },
+            "--out",
+            {
+              "param": "out"
+            },
+            {
+              "option": "--backend",
+              "param": "backend"
+            },
+            {
+              "option": "--model",
+              "param": "model"
+            },
+            {
+              "option": "--workflow",
+              "param": "workflow"
+            },
+            {
+              "option": "--checkpoint",
+              "param": "checkpoint"
+            },
+            {
+              "option": "--seed",
+              "param": "seed"
+            },
+            {
+              "option": "--size",
+              "param": "size"
+            },
+            {
+              "flag": "--dry-run",
+              "when": "dry_run"
+            }
+          ],
+          "path_params": [
+            "out",
+            "workflow"
+          ],
+          "read_only": false,
+          "requires_approval": "may spend money on a paid image API or use a shared GPU server"
+        },
+        {
+          "name": "mych_image_process",
+          "description": "Deterministic Pillow processing of one image: resize, crop, pad, convert, trim or strip metadata. Output is saved without metadata.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string",
+                "enum": [
+                  "resize",
+                  "crop",
+                  "pad",
+                  "convert",
+                  "trim",
+                  "strip"
+                ],
+                "description": "Operation."
+              },
+              "input": {
+                "type": "string",
+                "description": "Input image relative to the workspace."
+              },
+              "out": {
+                "type": "string",
+                "description": "Output file relative to the workspace."
+              },
+              "size": {
+                "type": "string",
+                "description": "Target size for resize, such as 512x512."
+              },
+              "fit": {
+                "type": "string",
+                "enum": [
+                  "contain",
+                  "cover",
+                  "stretch"
+                ],
+                "description": "Resize mode."
+              },
+              "filter": {
+                "type": "string",
+                "enum": [
+                  "nearest",
+                  "bilinear",
+                  "bicubic",
+                  "lanczos"
+                ],
+                "description": "Resampling filter."
+              },
+              "box": {
+                "type": "string",
+                "description": "Crop box LEFT,TOP,RIGHT,BOTTOM."
+              },
+              "aspect": {
+                "type": "string",
+                "description": "Pad aspect such as 16:9."
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "RGB",
+                  "RGBA",
+                  "L",
+                  "P"
+                ],
+                "description": "Convert mode."
+              }
+            },
+            "required": [
+              "operation",
+              "input",
+              "out"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-image-generation",
+              "path": "scripts/imagegen.py"
+            },
+            "process",
+            {
+              "param": "operation"
+            },
+            {
+              "param": "input"
+            },
+            "--out",
+            {
+              "param": "out"
+            },
+            {
+              "option": "--size",
+              "param": "size"
+            },
+            {
+              "option": "--fit",
+              "param": "fit"
+            },
+            {
+              "option": "--filter",
+              "param": "filter"
+            },
+            {
+              "option": "--box",
+              "param": "box"
+            },
+            {
+              "option": "--aspect",
+              "param": "aspect"
+            },
+            {
+              "option": "--mode",
+              "param": "mode"
+            }
+          ],
+          "path_params": [
+            "input",
+            "out"
+          ],
+          "read_only": false
+        }
+      ]
     },
     {
-      "id": "mych-3d-design", "display_name": "3D Design and Engineering", "path": "specialists/mych-3d-design", "version": "2.0.0",
-      "status": "planned",
+      "id": "mych-3d-design",
+      "display_name": "3D Design and Engineering",
+      "path": "specialists/mych-3d-design",
+      "version": "2.0.0",
+      "status": "tested",
       "summary": "Modeling, topology, materials, lighting, rendering, rigging, formats (glTF, OBJ, STL, FBX, USD), Blender scripting and 3D printing checks.",
-      "triggers": ["3d", "3d model", "mesh", "topology", "uv", "uvs", "pbr", "material", "materials", "render", "rendering", "rigging", "blender", "gltf", "glb", "obj", "fbx", "stl", "usd", "3d printing", "geometry nodes", "three.js", "low poly"],
-      "avoid": ["2d game", "pixel art", "flat ui"],
-      "requires": ["python3"], "optional": ["blender", "gltf-validator", "gpu"], "live_capability": "Blender for modeling and rendering",
-      "scripts": [], "tests": [], "tools": []
+      "triggers": [
+        "3d",
+        "3d model",
+        "mesh",
+        "topology",
+        "uv",
+        "uvs",
+        "pbr",
+        "material",
+        "materials",
+        "render",
+        "rendering",
+        "rigging",
+        "blender",
+        "gltf",
+        "glb",
+        "obj",
+        "fbx",
+        "stl",
+        "usd",
+        "3d printing",
+        "geometry nodes",
+        "three.js",
+        "low poly"
+      ],
+      "avoid": [
+        "2d game",
+        "pixel art",
+        "flat ui"
+      ],
+      "requires": [
+        "python3"
+      ],
+      "optional": [
+        "blender",
+        "gltf-validator",
+        "gpu"
+      ],
+      "live_capability": "Blender for modeling and rendering",
+      "scripts": [
+        {
+          "path": "scripts/gltf_tool.py",
+          "purpose": "inspect and validate glTF/GLB, generate primitives, check STL for printing, convert OBJ to GLB"
+        },
+        {
+          "path": "scripts/blender_export_gltf.py",
+          "purpose": "Blender headless glTF export template (compile-checked only)"
+        },
+        {
+          "path": "scripts/blender_scene_report.py",
+          "purpose": "Blender headless mesh quality report template (compile-checked only)"
+        }
+      ],
+      "tests": [
+        "tests/test_spec_3d_design.py"
+      ],
+      "tools": [
+        {
+          "name": "mych_3d_inspect",
+          "description": "Describe and structurally validate a .glb or .gltf file: meshes, triangles, bounds, materials, animations, buffer and accessor integrity. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "file": {
+                "type": "string",
+                "description": "Asset path relative to the workspace."
+              }
+            },
+            "required": [
+              "file"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-3d-design",
+              "path": "scripts/gltf_tool.py"
+            },
+            "inspect",
+            {
+              "param": "file"
+            },
+            "--json"
+          ],
+          "path_params": [
+            "file"
+          ],
+          "read_only": true
+        },
+        {
+          "name": "mych_3d_make_primitive",
+          "description": "Write a valid GLB primitive (box, plane, uvsphere or cylinder) with normals, UVs and a PBR material.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "shape": {
+                "type": "string",
+                "enum": [
+                  "box",
+                  "plane",
+                  "uvsphere",
+                  "cylinder"
+                ],
+                "description": "Primitive shape."
+              },
+              "out": {
+                "type": "string",
+                "description": "Output .glb path relative to the workspace."
+              },
+              "color": {
+                "type": "string",
+                "description": "Base color as sRGB hex, for example #4a90d9."
+              }
+            },
+            "required": [
+              "shape",
+              "out"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-3d-design",
+              "path": "scripts/gltf_tool.py"
+            },
+            "make-primitive",
+            "--shape",
+            {
+              "param": "shape"
+            },
+            "--out",
+            {
+              "param": "out"
+            },
+            {
+              "option": "--color",
+              "param": "color"
+            }
+          ],
+          "path_params": [
+            "out"
+          ],
+          "read_only": false
+        },
+        {
+          "name": "mych_3d_stl_check",
+          "description": "Check an STL mesh for 3D printing: watertight, manifold, consistent orientation, degenerate faces, volume and bounding box. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "file": {
+                "type": "string",
+                "description": "STL path relative to the workspace."
+              }
+            },
+            "required": [
+              "file"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-3d-design",
+              "path": "scripts/gltf_tool.py"
+            },
+            "stl-check",
+            {
+              "param": "file"
+            },
+            "--json"
+          ],
+          "path_params": [
+            "file"
+          ],
+          "read_only": true
+        }
+      ]
     },
     {
-      "id": "mych-chatbot-engineering", "display_name": "Chatbot Engineering", "path": "specialists/mych-chatbot-engineering", "version": "2.0.0",
+      "id": "mych-chatbot-engineering",
+      "display_name": "Chatbot Engineering",
+      "path": "specialists/mych-chatbot-engineering",
+      "version": "2.0.0",
       "status": "planned",
       "summary": "Conversational systems: state, memory, tool calling, retrieval, model routing, safety and evaluation, with a provider-neutral reference kit in Python and JavaScript.",
-      "triggers": ["chatbot", "chat bot", "assistant", "conversational", "discord bot", "slack bot", "telegram bot", "conversation memory", "tool calling", "function calling", "rag", "retrieval", "knowledge base", "agent loop", "model routing"],
+      "triggers": [
+        "chatbot",
+        "chat bot",
+        "assistant",
+        "conversational",
+        "discord bot",
+        "slack bot",
+        "telegram bot",
+        "conversation memory",
+        "tool calling",
+        "function calling",
+        "rag",
+        "retrieval",
+        "knowledge base",
+        "agent loop",
+        "model routing"
+      ],
       "avoid": [],
-      "requires": ["python3"], "optional": ["node"], "live_capability": "a model credential or a local model runtime",
-      "scripts": [], "tests": [], "tools": []
+      "requires": [
+        "python3"
+      ],
+      "optional": [
+        "node"
+      ],
+      "live_capability": "a model credential or a local model runtime",
+      "scripts": [],
+      "tests": [],
+      "tools": []
     },
     {
-      "id": "mych-api-integration", "display_name": "API Control and Integration", "path": "specialists/mych-api-integration", "version": "2.0.0",
+      "id": "mych-api-integration",
+      "display_name": "API Control and Integration",
+      "path": "specialists/mych-api-integration",
+      "version": "2.0.0",
       "status": "planned",
       "summary": "Designing and consuming APIs safely: authentication, retries, rate limits, pagination, webhooks, contracts and stub-based testing.",
-      "triggers": ["api", "apis", "rest", "graphql", "websocket", "webhook", "webhooks", "oauth", "rate limit", "rate limits", "pagination", "sdk", "openapi", "endpoint", "endpoints", "integration", "third-party service"],
+      "triggers": [
+        "api",
+        "apis",
+        "rest",
+        "graphql",
+        "websocket",
+        "webhook",
+        "webhooks",
+        "oauth",
+        "rate limit",
+        "rate limits",
+        "pagination",
+        "sdk",
+        "openapi",
+        "endpoint",
+        "endpoints",
+        "integration",
+        "third-party service"
+      ],
       "avoid": [],
-      "requires": ["python3"], "optional": ["curl"], "live_capability": "network access to the API",
-      "scripts": [], "tests": [], "tools": []
+      "requires": [
+        "python3"
+      ],
+      "optional": [
+        "curl"
+      ],
+      "live_capability": "network access to the API",
+      "scripts": [],
+      "tests": [],
+      "tools": []
     },
     {
-      "id": "mych-emoji-language", "display_name": "Emoji and Visual Language", "path": "specialists/mych-emoji-language", "version": "2.0.0",
+      "id": "mych-emoji-language",
+      "display_name": "Emoji and Visual Language",
+      "path": "specialists/mych-emoji-language",
+      "version": "2.0.0",
       "status": "planned",
       "summary": "Unicode emoji sequences, platform rendering, custom emoji sets, accessibility and cultural meaning, with a sequence inspector.",
-      "triggers": ["emoji", "emojis", "emoticon", "zwj", "skin tone", "unicode", "custom emoji", "reaction", "iconography", "visual language", "pictogram"],
+      "triggers": [
+        "emoji",
+        "emojis",
+        "emoticon",
+        "zwj",
+        "skin tone",
+        "unicode",
+        "custom emoji",
+        "reaction",
+        "iconography",
+        "visual language",
+        "pictogram"
+      ],
       "avoid": [],
-      "requires": ["python3"], "optional": ["module:PIL"], "live_capability": null,
-      "scripts": [], "tests": [], "tools": []
+      "requires": [
+        "python3"
+      ],
+      "optional": [
+        "module:PIL"
+      ],
+      "live_capability": null,
+      "scripts": [],
+      "tests": [],
+      "tools": []
     },
     {
-      "id": "mych-cloud-infrastructure", "display_name": "Cloud Infrastructure", "path": "specialists/mych-cloud-infrastructure", "version": "2.0.0",
+      "id": "mych-cloud-infrastructure",
+      "display_name": "Cloud Infrastructure",
+      "path": "specialists/mych-cloud-infrastructure",
+      "version": "2.0.0",
       "status": "planned",
       "summary": "Hosting, networking, DNS, storage, CI/CD, monitoring, backups, scaling, cost and disaster recovery, with plan linting and cost estimates from owner-supplied prices.",
-      "triggers": ["cloud", "hosting", "host it", "server", "vps", "vm", "container", "containers", "docker", "kubernetes", "terraform", "dns", "cdn", "load balancer", "s3", "storage bucket", "backup", "backups", "monitoring", "uptime", "autoscaling", "disaster recovery", "aws", "gcp", "azure", "cost estimate"],
-      "avoid": ["runpod"],
-      "requires": ["python3"], "optional": ["docker|podman", "terraform|tofu", "kubectl", "aws|gcloud|az"], "live_capability": "cloud credentials and the owner's approval for spending or deploying",
-      "scripts": [], "tests": [], "tools": []
+      "triggers": [
+        "cloud",
+        "hosting",
+        "host it",
+        "server",
+        "vps",
+        "vm",
+        "container",
+        "containers",
+        "docker",
+        "kubernetes",
+        "terraform",
+        "dns",
+        "cdn",
+        "load balancer",
+        "s3",
+        "storage bucket",
+        "backup",
+        "backups",
+        "monitoring",
+        "uptime",
+        "autoscaling",
+        "disaster recovery",
+        "aws",
+        "gcp",
+        "azure",
+        "cost estimate"
+      ],
+      "avoid": [
+        "runpod"
+      ],
+      "requires": [
+        "python3"
+      ],
+      "optional": [
+        "docker|podman",
+        "terraform|tofu",
+        "kubectl",
+        "aws|gcloud|az"
+      ],
+      "live_capability": "cloud credentials and the owner's approval for spending or deploying",
+      "scripts": [],
+      "tests": [],
+      "tools": []
     },
     {
-      "id": "mych-runpod", "display_name": "RunPod GPU Cloud", "path": "specialists/mych-runpod", "version": "2.0.0",
+      "id": "mych-runpod",
+      "display_name": "RunPod GPU Cloud",
+      "path": "specialists/mych-runpod",
+      "version": "2.0.0",
       "status": "planned",
       "summary": "RunPod pods, serverless endpoints, storage persistence, GPU sizing, billing and shutdown discipline, with a VRAM estimator and a dry-run-first client.",
-      "triggers": ["runpod", "gpu pod", "gpu cloud", "serverless gpu", "network volume", "vram", "gpu sizing", "rent a gpu", "inference endpoint"],
+      "triggers": [
+        "runpod",
+        "gpu pod",
+        "gpu cloud",
+        "serverless gpu",
+        "network volume",
+        "vram",
+        "gpu sizing",
+        "rent a gpu",
+        "inference endpoint"
+      ],
       "avoid": [],
-      "requires": ["python3"], "optional": ["runpodctl"], "live_capability": "RUNPOD_API_KEY and the owner's approval for spending",
-      "scripts": [], "tests": [], "tools": []
+      "requires": [
+        "python3"
+      ],
+      "optional": [
+        "runpodctl"
+      ],
+      "live_capability": "RUNPOD_API_KEY and the owner's approval for spending",
+      "scripts": [],
+      "tests": [],
+      "tools": []
     }
   ]
 }

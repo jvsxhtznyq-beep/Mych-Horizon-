@@ -2,7 +2,7 @@
   "schema": "mych-task-ledger/2",
   "project": "MYCH-HORIZON 2.0",
   "created_at": "2026-11-01T16:32:53Z",
-  "updated_at": "2026-11-01T17:04:17Z",
+  "updated_at": "2026-11-01T17:23:23Z",
   "tasks": [
     {
       "id": "A1",
@@ -298,10 +298,10 @@
       "depends_on": [
         "A5"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "Independent skill; stdlib PNG tooling; quality rules enforced by script",
       "verification_method": "Validator strict; unit tests on generated and malformed PNGs",
-      "evidence": null,
+      "evidence": "unittest tests/test_spec_pixel_art.py: Ran 12 tests OK incl. Pillow and ImageMagick codec cross-checks; validate-skill --strict specialists/mych-pixel-art: PASSED",
       "blocker": null,
       "notes": [],
       "history": [
@@ -310,9 +310,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-01T17:23:11Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T17:23:11Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-01T17:23:12Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_spec_pixel_art.py: Ran 12 tests OK incl. Pillow and ImageMagick codec cross-checks; validate-skill --strict specialists/mych-pixel-art: PASSED"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-01T17:23:12Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_spec_pixel_art.py: Ran 12 tests OK incl. Pillow and ImageMagick codec cross-checks; validate-skill --strict specialists/mych-pixel-art: PASSED"
+        }
+      ],
       "approval": null,
       "approvals": []
     },
@@ -323,10 +347,10 @@
       "depends_on": [
         "A5"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "Detects backends; processes images with Pillow; refuses to claim generation without a backend",
       "verification_method": "Validator strict; unit tests incl. no-backend refusal and stub ComfyUI client",
-      "evidence": null,
+      "evidence": "unittest tests/test_spec_image_generation.py: Ran 10 tests OK (no-backend exit 3 writes nothing; ComfyUI and OpenAI-style stubs; Pillow processing); validate --strict PASSED",
       "blocker": null,
       "notes": [],
       "history": [
@@ -335,9 +359,34 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-01T17:23:11Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T17:23:11Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-01T17:23:23Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_spec_image_generation.py: Ran 10 tests OK (no-backend exit 3 writes nothing; ComfyUI and OpenAI-style stubs; Pillow processing); validate --strict PASSED (override: 'exit 3' quotes the expected no-backend status under test, not a failed check; waived: it reports a non-zero exit status ('exit 3'))"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-01T17:23:23Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_spec_image_generation.py: Ran 10 tests OK (no-backend exit 3 writes nothing; ComfyUI and OpenAI-style stubs; Pillow processing); validate --strict PASSED",
+          "override": "'exit 3' quotes the expected no-backend status under test, not a failed check"
+        }
+      ],
       "approval": null,
       "approvals": []
     },
@@ -348,10 +397,10 @@
       "depends_on": [
         "A5"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "Inspect and generate glTF/GLB; STL printability checks; Blender templates",
       "verification_method": "Validator strict; unit tests; templates compile (Blender not installed)",
-      "evidence": null,
+      "evidence": "unittest tests/test_spec_3d_design.py: Ran 11 tests OK; Khronos glTF-Validator 2.0.0-dev.3.10: 0 errors, 0 warnings on 4 primitives + OBJ conversion",
       "blocker": null,
       "notes": [],
       "history": [
@@ -360,9 +409,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-01T17:23:11Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T17:23:11Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-01T17:23:23Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_spec_3d_design.py: Ran 11 tests OK; Khronos glTF-Validator 2.0.0-dev.3.10: 0 errors, 0 warnings on 4 primitives + OBJ conversion"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-01T17:23:23Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_spec_3d_design.py: Ran 11 tests OK; Khronos glTF-Validator 2.0.0-dev.3.10: 0 errors, 0 warnings on 4 primitives + OBJ conversion"
+        }
+      ],
       "approval": null,
       "approvals": []
     },
