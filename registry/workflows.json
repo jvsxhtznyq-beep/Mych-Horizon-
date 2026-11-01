@@ -1,0 +1,40 @@
+{
+  "schema": "mych-registry-workflows/1",
+  "updated": "2026-11-01",
+  "notes": "Routing data for tools/mych.py route. Order is priority: the first matching workflow (other than sensitive-change, which is added as also_follow) becomes the primary workflow.",
+  "workflows": [
+    {"id": "sensitive-change", "file": "mych-plugin/workflows/sensitive-change.md", "lead": "Engineer", "min_tier": 2,
+     "triggers": ["auth", "authentication", "authorization", "login", "password", "secret", "secrets", "api key", "credential", "credentials", "token", "permission", "permissions", "rbac", "encryption", "personal data", "pii", "gdpr", "hipaa", "delete data", "drop table", "production", "deploy", "deployment", "payment", "payments", "billing", "dns", "firewall", "iam", "leaked"]},
+    {"id": "debugging", "file": "mych-plugin/workflows/debugging.md", "lead": "Engineer", "min_tier": 2,
+     "triggers": ["bug", "error", "exception", "crash", "crashes", "failing", "fails", "broken", "regression", "not working", "doesn't work", "stack trace", "traceback", "flaky", "intermittent"]},
+    {"id": "performance-investigation", "file": "mych-plugin/workflows/performance-investigation.md", "lead": "Engineer", "min_tier": 2,
+     "triggers": ["slow", "slowness", "latency", "performance", "memory leak", "cpu usage", "throughput", "bottleneck", "frame rate", "fps drops", "too heavy", "does not scale", "timeouts"]},
+    {"id": "continuing-project", "file": "mych-plugin/workflows/continuing-project.md", "lead": "Engineer", "min_tier": 1,
+     "triggers": ["continue", "resume", "pick up where", "last session", "previous session", "where we left off", "ongoing project"]},
+    {"id": "lightweight-task", "file": "mych-plugin/workflows/lightweight-task.md", "lead": "Engineer", "min_tier": 1,
+     "triggers": ["typo", "rename", "small change", "one-line", "one line", "quick fix", "bump the version", "bump version", "update the text", "tweak"]},
+    {"id": "technical-research", "file": "mych-plugin/workflows/technical-research.md", "lead": "Researcher", "min_tier": 0,
+     "triggers": ["compare", "comparison", "versus", "vs", "which is better", "evaluate", "research", "feasibility", "alternatives", "pros and cons", "trade-offs between", "should we use"]},
+    {"id": "invention", "file": "mych-plugin/workflows/invention.md", "lead": "Inventor", "min_tier": 2,
+     "triggers": ["invent", "novel", "original idea", "new concept", "experimental", "brainstorm", "never been done", "unconventional"]},
+    {"id": "product-design", "file": "mych-plugin/workflows/product-design.md", "lead": "Designer", "min_tier": 2,
+     "triggers": ["redesign", "ui", "ux", "user interface", "design system", "wireframe", "mockup", "visual design", "onboarding flow", "accessibility audit", "brand identity"]},
+    {"id": "architecture-decision", "file": "mych-plugin/modes/architect.md", "template": "mych-plugin/templates/architecture-proposal.md", "lead": "Architect", "min_tier": 2,
+     "triggers": ["architecture", "system design", "choose a database", "infrastructure plan", "microservices", "monolith", "event-driven", "scalability plan", "high availability", "disaster recovery plan"]},
+    {"id": "new-software-project", "file": "mych-plugin/workflows/new-software-project.md", "lead": "Engineer", "min_tier": 2,
+     "triggers": ["build", "create", "make", "develop", "new app", "application", "game", "platform", "website", "web app", "service", "from scratch", "mvp", "major feature", "chatbot", "bot", "pipeline"]},
+    {"id": "execution-lifecycle", "file": "mych-plugin/workflows/execution-lifecycle.md", "lead": "Engineer", "min_tier": 2, "triggers": []}
+  ],
+  "disciplines": {
+    "Architect": ["architecture", "infrastructure", "database", "schema", "api design", "protocol", "scalability", "scaling", "reliability", "migration", "integration", "multiplayer", "backend", "deployment", "save system", "cloud", "serverless"],
+    "Researcher": ["compare", "research", "evaluate", "feasibility", "benchmark", "documentation", "which is better", "unknown", "investigate", "alternatives", "standards", "versus"],
+    "Designer": ["ui", "ux", "interface", "design", "layout", "screen", "menu", "menus", "accessibility", "prototype", "responsive", "visual", "brand", "animation", "hud", "settings screen", "game feel", "sprites", "pixel art"],
+    "Engineer": ["build", "implement", "code", "fix", "bug", "refactor", "test", "tests", "debug", "optimize", "integrate", "script", "app", "game", "api", "deploy", "bot", "pipeline", "automate", "rename", "typo"],
+    "Inventor": ["invent", "novel", "original", "new concept", "experimental", "unconventional", "brainstorm", "never been done"]
+  },
+  "tiers": {
+    "tier0": ["what is", "what are", "explain", "how does", "why does", "difference between", "tell me about"],
+    "tier1": ["typo", "rename", "small change", "one-line", "one line", "quick fix", "bump", "tweak", "single file"],
+    "tier3": ["new app", "application", "game", "platform", "from scratch", "system", "migration", "multi", "end-to-end", "complete", "full", "product", "redesign", "infrastructure"]
+  }
+}

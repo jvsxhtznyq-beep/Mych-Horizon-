@@ -1,0 +1,113 @@
+{
+  "schema": "mych-registry-providers/1",
+  "retrieved": "2026-11-01",
+  "evidence_levels": {
+    "executed": "ran successfully in the MYCH-HORIZON test environment, with recorded output",
+    "stub-tested": "the adapter code ran against a local stub that imitates the documented format; never against the real service",
+    "documented": "stated in the vendor's own documentation (found via web search on the retrieval date)",
+    "secondary": "stated only by third-party sources",
+    "unknown": "no evidence collected"
+  },
+  "providers": [
+    {
+      "id": "anthropic", "family": "Claude", "api_style": "anthropic-messages",
+      "endpoint": "https://api.anthropic.com/v1/messages", "auth": {"header": "x-api-key", "env": "ANTHROPIC_API_KEY", "extra_headers": {"anthropic-version": "2023-06-01"}},
+      "instructions": "Top-level system parameter, separate from the messages list.",
+      "tool_format": "anthropic", "tool_call": "assistant content block of type tool_use with id, name and input (an object)",
+      "tool_result": "next user message holds tool_result blocks referencing tool_use_id",
+      "structured_output": "Tool use with an input_schema is the portable route; check current docs for a dedicated structured output mode.",
+      "multimodal_input": ["text", "image", "pdf"],
+      "skills_native": "Agent Skills originate here; Claude Code loads SKILL.md folders.",
+      "evidence": {"skill_loading": "executed", "api_adapter": "stub-tested", "model_behavior": "executed (Claude Code session that built this repository)"},
+      "sources": ["https://docs.anthropic.com/en/docs/build-with-claude/tool-use"]
+    },
+    {
+      "id": "openai", "family": "GPT", "api_style": "openai-chat",
+      "endpoint": "https://api.openai.com/v1/chat/completions", "auth": {"header": "Authorization", "scheme": "Bearer", "env": "OPENAI_API_KEY"},
+      "instructions": "A system (or developer) message at the start of the messages list.",
+      "tool_format": "openai", "tool_call": "assistant message tool_calls[] with id and function {name, arguments}; arguments is a JSON string to parse",
+      "tool_result": "a message with role tool and tool_call_id",
+      "structured_output": "JSON schema response formats on supported models; tool calls as the portable fallback.",
+      "multimodal_input": ["text", "image"],
+      "skills_native": "Codex reads SKILL.md folders (see hosts).",
+      "evidence": {"skill_loading": "documented", "api_adapter": "stub-tested", "model_behavior": "unknown"},
+      "sources": ["https://platform.openai.com/docs/guides/function-calling", "https://developers.openai.com/codex/skills"]
+    },
+    {
+      "id": "gemini", "family": "Gemini", "api_style": "gemini",
+      "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", "auth": {"header": "x-goog-api-key", "env": "GEMINI_API_KEY"},
+      "instructions": "systemInstruction field with parts, separate from contents.",
+      "tool_format": "gemini", "tool_call": "candidate content part functionCall {name, args}; Gemini 3 models also return an id to echo back",
+      "tool_result": "a content with role user holding a functionResponse part {name, response, id when given}",
+      "structured_output": "responseSchema with a JSON response MIME type on supported models; tool calls as the portable fallback.",
+      "schema_dialect": "OpenAPI-style subset; the bundle keeps only widely supported keywords (type, description, enum, properties, required, items, numeric and length bounds).",
+      "multimodal_input": ["text", "image", "audio", "video", "pdf"],
+      "skills_native": "Gemini CLI reads SKILL.md folders (see hosts).",
+      "evidence": {"skill_loading": "documented", "api_adapter": "stub-tested", "model_behavior": "unknown"},
+      "sources": ["https://ai.google.dev/gemini-api/docs/function-calling", "https://geminicli.com/docs/cli/skills/"]
+    },
+    {
+      "id": "glm", "family": "GLM (Zhipu AI / Z.ai)", "api_style": "openai-chat",
+      "endpoint": "https://open.bigmodel.cn/api/paas/v4/chat/completions", "alternate_endpoints": ["https://api.z.ai/api/paas/v4/chat/completions"],
+      "auth": {"header": "Authorization", "scheme": "Bearer", "env": "ZHIPUAI_API_KEY"},
+      "instructions": "System message, OpenAI-compatible format.",
+      "tool_format": "openai", "tool_call": "OpenAI-compatible tool_calls", "tool_result": "role tool message",
+      "structured_output": "Treat as unverified; use tool calls and validate output.",
+      "multimodal_input": ["text", "image (vision models only)"],
+      "skills_native": "No native SKILL.md loading found; use a bundle or a host that reads skills.",
+      "notes": "Keys for the China-mainland and international endpoints are reported not to be interchangeable (secondary source).",
+      "evidence": {"skill_loading": "unknown", "api_adapter": "stub-tested", "model_behavior": "unknown", "endpoint": "secondary"},
+      "sources": ["https://docs.jambonz.org/guides/features/bring-your-own-llm/zai", "https://developers.llamaindex.ai/python/framework-api-reference/llms/zhipuai/"]
+    },
+    {
+      "id": "ollama", "family": "Open-weight models served locally (Ollama)", "api_style": "openai-chat",
+      "endpoint": "http://localhost:11434/v1/chat/completions", "auth": {"header": "Authorization", "scheme": "Bearer", "env": "OLLAMA_API_KEY", "notes": "the local server ignores the key value"},
+      "instructions": "System message.",
+      "tool_format": "openai", "tool_call": "OpenAI-compatible tool_calls for models that support tools", "tool_result": "role tool message",
+      "structured_output": "JSON mode; tool support depends on the model.",
+      "multimodal_input": ["text", "image (vision models only)"],
+      "skills_native": "None; use a bundle with a host or harness.",
+      "notes": "Keep tool schemas simple: complex constructs (anyOf, $ref) are reported to be ignored by some servers (secondary source).",
+      "evidence": {"skill_loading": "unknown", "api_adapter": "stub-tested", "model_behavior": "unknown", "tools_on_v1": "documented"},
+      "sources": ["https://docs.ollama.com/api/openai-compatibility", "https://registry.ollama.ai/blog/tool-support"]
+    },
+    {
+      "id": "openai-compatible", "family": "Any OpenAI-compatible server (vLLM, llama.cpp server, LM Studio, gateways)", "api_style": "openai-chat",
+      "endpoint": "{base_url}/chat/completions", "auth": {"header": "Authorization", "scheme": "Bearer", "env": "OPENAI_API_KEY"},
+      "instructions": "System message.",
+      "tool_format": "openai", "tool_call": "tool_calls when the server and model support them", "tool_result": "role tool message",
+      "structured_output": "Varies by server; validate everything.",
+      "multimodal_input": ["varies"],
+      "skills_native": "None.",
+      "evidence": {"skill_loading": "unknown", "api_adapter": "stub-tested", "model_behavior": "unknown"},
+      "sources": []
+    }
+  ],
+  "hosts": [
+    {"id": "claude-code", "name": "Claude Code", "reads_skill_md": true, "project_paths": [".claude/skills"], "user_paths": ["~/.claude/skills"],
+     "substitutes_skill_dir": true, "evidence": "executed",
+     "evidence_note": "MYCH-PLUGIN 1.0 was installed and invoked through the Skill tool in this repository's sessions; ${CLAUDE_SKILL_DIR} substitution observed.",
+     "sources": ["https://docs.anthropic.com/en/docs/claude-code/skills"]},
+    {"id": "codex", "name": "OpenAI Codex", "reads_skill_md": true, "project_paths": [".agents/skills"], "user_paths": ["see vendor documentation for user and admin scopes"],
+     "substitutes_skill_dir": false, "evidence": "documented",
+     "evidence_note": "Official docs: repository skills under .agents/skills, scanned from the working directory up to the repository root. Not executed here.",
+     "sources": ["https://developers.openai.com/codex/skills"]},
+    {"id": "gemini-cli", "name": "Gemini CLI", "reads_skill_md": true, "project_paths": [".gemini/skills", ".agents/skills"], "user_paths": ["see vendor documentation"],
+     "substitutes_skill_dir": false, "evidence": "documented",
+     "evidence_note": "Official docs: workspace skills in .gemini/skills, .agents/skills as an alternative, plus user and extension skills. Not executed here.",
+     "sources": ["https://geminicli.com/docs/cli/skills/", "https://geminicli.com/docs/cli/creating-skills/"]},
+    {"id": "github-copilot", "name": "GitHub Copilot (cloud agent, Copilot CLI, VS Code agent mode)", "reads_skill_md": true,
+     "project_paths": [".github/skills", ".claude/skills", ".agents/skills"], "user_paths": ["~/.copilot/skills", "~/.claude/skills", "~/.agents/skills"],
+     "substitutes_skill_dir": false, "evidence": "documented",
+     "evidence_note": "Official how-to page lists these paths and surfaces. Not executed here.",
+     "sources": ["https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/create-skills"]},
+    {"id": "cursor", "name": "Cursor", "reads_skill_md": true, "project_paths": [".agents/skills"], "user_paths": [],
+     "substitutes_skill_dir": false, "evidence": "secondary",
+     "evidence_note": "Named as a SKILL.md client by third-party sources only; path unconfirmed.",
+     "sources": ["https://atlan.com/know/ai-agent/ai-agent-skills/what-are-agent-skills/"]},
+    {"id": "generic-agents", "name": "Other hosts following the Agent Skills convention", "reads_skill_md": true, "project_paths": [".agents/skills"], "user_paths": ["~/.agents/skills"],
+     "substitutes_skill_dir": false, "evidence": "secondary",
+     "evidence_note": ".agents/skills is accepted by Codex, Gemini CLI and Copilot per their docs, so it is the most portable project path found.",
+     "sources": ["https://developers.openai.com/codex/skills", "https://geminicli.com/docs/cli/skills/", "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/create-skills"]}
+  ]
+}

@@ -2,7 +2,7 @@
   "schema": "mych-task-ledger/2",
   "project": "MYCH-HORIZON 2.0",
   "created_at": "2026-11-01T16:32:53Z",
-  "updated_at": "2026-11-01T16:53:35Z",
+  "updated_at": "2026-11-01T17:04:17Z",
   "tasks": [
     {
       "id": "A1",
@@ -199,10 +199,10 @@
       "title": "Validator support for specialist skills",
       "priority": "P1",
       "depends_on": [],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "mych-* specialist layout with required sections and full coverage",
       "verification_method": "Validator unit tests",
-      "evidence": null,
+      "evidence": "unittest tests/test_validate_skill.py: Ran 46 tests OK (5 new specialist-layout tests: sections, framework metadata, snake_case python, full coverage)",
       "blocker": null,
       "notes": [],
       "history": [
@@ -211,9 +211,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-01T17:04:17Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T17:04:17Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-01T17:04:17Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_validate_skill.py: Ran 46 tests OK (5 new specialist-layout tests: sections, framework metadata, snake_case python, full coverage)"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-01T17:04:17Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_validate_skill.py: Ran 46 tests OK (5 new specialist-layout tests: sections, framework metadata, snake_case python, full coverage)"
+        }
+      ],
       "approval": null,
       "approvals": []
     },
@@ -225,10 +249,10 @@
         "A1",
         "A4"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "One core, exported per target; tool schemas rendered per provider; router suggests specialists",
       "verification_method": "Unit tests for routing, bundles within budget, exports per target, schema translation",
-      "evidence": null,
+      "evidence": "unittest tests/test_mych_cli.py: Ran 20 tests OK; tools/mych.py registry-check: OK (0 errors); openai bundle ~5962 tokens",
       "blocker": null,
       "notes": [],
       "history": [
@@ -237,9 +261,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-01T17:04:17Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-01T17:04:17Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-01T17:04:17Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_mych_cli.py: Ran 20 tests OK; tools/mych.py registry-check: OK (0 errors); openai bundle ~5962 tokens"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-01T17:04:17Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_mych_cli.py: Ran 20 tests OK; tools/mych.py registry-check: OK (0 errors); openai bundle ~5962 tokens"
+        }
+      ],
       "approval": null,
       "approvals": []
     },

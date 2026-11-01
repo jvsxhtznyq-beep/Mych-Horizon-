@@ -1,0 +1,84 @@
+{
+  "schema": "mych-registry-specialists/1",
+  "updated": "2026-11-01",
+  "status_values": {
+    "planned": "registered, not built yet",
+    "implemented": "skill exists and validates; its tools have not all been exercised",
+    "tested": "skill validates and its tool tests ran and passed in this repository",
+    "verified": "tested, and used successfully in a real project or benchmark with recorded evidence"
+  },
+  "specialists": [
+    {
+      "id": "mych-pixel-art", "display_name": "Professional Pixel Art", "path": "specialists/mych-pixel-art", "version": "2.0.0",
+      "status": "planned",
+      "summary": "Sprites, tilesets, palettes, animation and sprite sheets, with a standard-library PNG toolchain.",
+      "triggers": ["pixel art", "sprite", "sprites", "sprite sheet", "spritesheet", "tileset", "tile set", "tilemap", "palette", "dithering", "8-bit", "16-bit", "retro", "pixel animation", "platformer", "2d game"],
+      "avoid": ["photorealistic", "3d model", "vector icon"],
+      "requires": ["python3"], "optional": ["aseprite|libresprite", "module:PIL", "convert|magick"], "live_capability": null,
+      "scripts": [], "tests": [], "tools": []
+    },
+    {
+      "id": "mych-image-generation", "display_name": "Image Generation and Python Imaging", "path": "specialists/mych-image-generation", "version": "2.0.0",
+      "status": "planned",
+      "summary": "Generation backends (APIs, ComfyUI, diffusers), prompting, and deterministic Python image processing, with honest refusal when no backend exists.",
+      "triggers": ["generate an image", "generate images", "image generation", "text-to-image", "image-to-image", "img2img", "inpainting", "outpainting", "upscale", "upscaling", "background removal", "diffusion", "stable diffusion", "comfyui", "batch images", "image pipeline", "resize images", "thumbnails"],
+      "avoid": ["pixel art"],
+      "requires": ["python3"], "optional": ["module:PIL"], "live_capability": "a generation backend: GPU with module:torch and module:diffusers, a local ComfyUI server, or an image API credential",
+      "scripts": [], "tests": [], "tools": []
+    },
+    {
+      "id": "mych-3d-design", "display_name": "3D Design and Engineering", "path": "specialists/mych-3d-design", "version": "2.0.0",
+      "status": "planned",
+      "summary": "Modeling, topology, materials, lighting, rendering, rigging, formats (glTF, OBJ, STL, FBX, USD), Blender scripting and 3D printing checks.",
+      "triggers": ["3d", "3d model", "mesh", "topology", "uv", "uvs", "pbr", "material", "materials", "render", "rendering", "rigging", "blender", "gltf", "glb", "obj", "fbx", "stl", "usd", "3d printing", "geometry nodes", "three.js", "low poly"],
+      "avoid": ["2d game", "pixel art", "flat ui"],
+      "requires": ["python3"], "optional": ["blender", "gltf-validator", "gpu"], "live_capability": "Blender for modeling and rendering",
+      "scripts": [], "tests": [], "tools": []
+    },
+    {
+      "id": "mych-chatbot-engineering", "display_name": "Chatbot Engineering", "path": "specialists/mych-chatbot-engineering", "version": "2.0.0",
+      "status": "planned",
+      "summary": "Conversational systems: state, memory, tool calling, retrieval, model routing, safety and evaluation, with a provider-neutral reference kit in Python and JavaScript.",
+      "triggers": ["chatbot", "chat bot", "assistant", "conversational", "discord bot", "slack bot", "telegram bot", "conversation memory", "tool calling", "function calling", "rag", "retrieval", "knowledge base", "agent loop", "model routing"],
+      "avoid": [],
+      "requires": ["python3"], "optional": ["node"], "live_capability": "a model credential or a local model runtime",
+      "scripts": [], "tests": [], "tools": []
+    },
+    {
+      "id": "mych-api-integration", "display_name": "API Control and Integration", "path": "specialists/mych-api-integration", "version": "2.0.0",
+      "status": "planned",
+      "summary": "Designing and consuming APIs safely: authentication, retries, rate limits, pagination, webhooks, contracts and stub-based testing.",
+      "triggers": ["api", "apis", "rest", "graphql", "websocket", "webhook", "webhooks", "oauth", "rate limit", "rate limits", "pagination", "sdk", "openapi", "endpoint", "endpoints", "integration", "third-party service"],
+      "avoid": [],
+      "requires": ["python3"], "optional": ["curl"], "live_capability": "network access to the API",
+      "scripts": [], "tests": [], "tools": []
+    },
+    {
+      "id": "mych-emoji-language", "display_name": "Emoji and Visual Language", "path": "specialists/mych-emoji-language", "version": "2.0.0",
+      "status": "planned",
+      "summary": "Unicode emoji sequences, platform rendering, custom emoji sets, accessibility and cultural meaning, with a sequence inspector.",
+      "triggers": ["emoji", "emojis", "emoticon", "zwj", "skin tone", "unicode", "custom emoji", "reaction", "iconography", "visual language", "pictogram"],
+      "avoid": [],
+      "requires": ["python3"], "optional": ["module:PIL"], "live_capability": null,
+      "scripts": [], "tests": [], "tools": []
+    },
+    {
+      "id": "mych-cloud-infrastructure", "display_name": "Cloud Infrastructure", "path": "specialists/mych-cloud-infrastructure", "version": "2.0.0",
+      "status": "planned",
+      "summary": "Hosting, networking, DNS, storage, CI/CD, monitoring, backups, scaling, cost and disaster recovery, with plan linting and cost estimates from owner-supplied prices.",
+      "triggers": ["cloud", "hosting", "host it", "server", "vps", "vm", "container", "containers", "docker", "kubernetes", "terraform", "dns", "cdn", "load balancer", "s3", "storage bucket", "backup", "backups", "monitoring", "uptime", "autoscaling", "disaster recovery", "aws", "gcp", "azure", "cost estimate"],
+      "avoid": ["runpod"],
+      "requires": ["python3"], "optional": ["docker|podman", "terraform|tofu", "kubectl", "aws|gcloud|az"], "live_capability": "cloud credentials and the owner's approval for spending or deploying",
+      "scripts": [], "tests": [], "tools": []
+    },
+    {
+      "id": "mych-runpod", "display_name": "RunPod GPU Cloud", "path": "specialists/mych-runpod", "version": "2.0.0",
+      "status": "planned",
+      "summary": "RunPod pods, serverless endpoints, storage persistence, GPU sizing, billing and shutdown discipline, with a VRAM estimator and a dry-run-first client.",
+      "triggers": ["runpod", "gpu pod", "gpu cloud", "serverless gpu", "network volume", "vram", "gpu sizing", "rent a gpu", "inference endpoint"],
+      "avoid": [],
+      "requires": ["python3"], "optional": ["runpodctl"], "live_capability": "RUNPOD_API_KEY and the owner's approval for spending",
+      "scripts": [], "tests": [], "tools": []
+    }
+  ]
+}

@@ -105,7 +105,34 @@ LAYOUTS: Dict[str, Dict[str, Any]] = {
         # Every file must be referenced from SKILL.md (references one level deep).
         "full_coverage": True,
     },
+    # MYCH-HORIZON domain specialists: any other skill named mych-*.
+    "mych-specialist": {
+        "directories": ["references"],
+        "files": ["SKILL.md"],
+        "metadata": ["version", "display-name", "framework"],
+        "strict_naming": True,
+        "full_coverage": True,
+        # Python files may use snake_case so sibling scripts can import them.
+        "allow_snake_case_python": True,
+        # Level-2 headings every specialist SKILL.md must contain.
+        "required_sections": [
+            "Identity", "Core knowledge", "Workflows", "Decision rules", "Tool requirements", "Inputs and outputs",
+            "Quality standards", "Failure modes", "Security", "Examples", "Integration", "Testing criteria",
+        ],
+    },
 }
+SNAKE_PY_RE = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*\.py$")
+
+
+def layout_for(name: Optional[str]) -> Tuple[Optional[str], Optional[Dict[str, Any]]]:
+    """Return the layout name and rules that apply to a skill name, if any."""
+    if not name:
+        return None, None
+    if name in LAYOUTS and name != "mych-specialist":
+        return name, LAYOUTS[name]
+    if name.startswith("mych-"):
+        return "mych-specialist", LAYOUTS["mych-specialist"]
+    return None, None
 
 # What never belongs in a packaged skill. The packager imports these rules,
 # so this module is the single source of truth for exclusions.
@@ -1032,9 +1059,9 @@ def validate_skill(skill_dir: Path) -> Report:
         naming.errors.append("no valid 'name' to check")
 
     # -- layout -------------------------------------------------------------
-    layout = LAYOUTS.get(name or "")
+    layout_name, layout = layout_for(name)
     if layout:
-        structure.notes.append("applied the '{}' layout rules".format(name))
+        structure.notes.append("applied the '{}' layout rules".format(layout_name))
         for directory in layout["directories"]:
             dir_path = root / directory
             if not dir_path.is_dir():
@@ -1101,6 +1128,16 @@ def validate_skill(skill_dir: Path) -> Report:
     if len(body_lines) > SKILL_BODY_MAX_LINES:
         content.warnings.append("SKILL.md body has {} lines; keep it under {} and move detail into files".format(
             len(body_lines), SKILL_BODY_MAX_LINES))
+
+    # -- required sections (specialist layout) --------------------------------
+    if layout and layout.get("required_sections"):
+        skill_info = markdown.get(skill_md.resolve())
+        present = {re.sub(r"[\s:.]+$", "", title).strip().lower()
+                   for _, level, title in (skill_info.headings if skill_info else []) if level == 2}
+        for section in layout["required_sections"]:
+            if section.lower() not in present:
+                structure.errors.append("SKILL.md is missing the required section '## {}'".format(section))
+        structure.notes.append("{} required sections checked".format(len(layout["required_sections"])))
 
     # -- links ----------------------------------------------------------------
     link_count = 0
@@ -1197,6 +1234,8 @@ def validate_skill(skill_dir: Path) -> Report:
         if len(rel_parts) == 1 and filename == "SKILL.md":
             continue
         if filename in LICENSE_FILE_NAMES:
+            continue
+        if layout and layout.get("allow_snake_case_python") and SNAKE_PY_RE.match(filename):
             continue
         if not KEBAB_FILE_RE.match(filename):
             message = "{}: file name is not lowercase kebab-case".format(_rel(path, root))

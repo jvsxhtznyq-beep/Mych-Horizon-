@@ -291,3 +291,66 @@ class ContentAndHygieneTest(SkillFolderTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+SPECIALIST_SECTIONS = ["Identity", "Core knowledge", "Workflows", "Decision rules", "Tool requirements",
+                       "Inputs and outputs", "Quality standards", "Failure modes", "Security", "Examples",
+                       "Integration", "Testing criteria"]
+
+
+def specialist_body(skip=None, extra_links=""):
+    parts = ["# Demo specialist", "", "Reference: [guide](references/guide.md)." + extra_links, ""]
+    for section in SPECIALIST_SECTIONS:
+        if section == skip:
+            continue
+        parts += ["## " + section, "", "Content for {} that is long enough to be real guidance.".format(section), ""]
+    return "\n".join(parts)
+
+
+SPECIALIST_FRONTMATTER = (
+    "name: mych-demo\n"
+    "description: Demo specialist for validator tests. Use when testing the specialist layout.\n"
+    "metadata:\n  version: \"2.0.0\"\n  display-name: Demo\n  framework: MYCH-HORIZON\n")
+
+
+class SpecialistLayoutTest(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def build(self, body=None, frontmatter=SPECIALIST_FRONTMATTER, files=None):
+        all_files = {"references/guide.md": "# Guide\n\nUseful reference text for the demo specialist.\n"}
+        all_files.update(files or {})
+        return make_skill(self.root, "mych-demo", frontmatter=frontmatter,
+                          body=specialist_body() if body is None else body, files=all_files)
+
+    def test_complete_specialist_passes(self):
+        report = validator.validate_skill(self.build())
+        self.assertEqual(report.error_count(), 0, validator.format_report(report))
+        self.assertIn("applied the 'mych-specialist' layout rules", validator.format_report(report))
+
+    def test_missing_section_is_an_error(self):
+        report = validator.validate_skill(self.build(body=specialist_body(skip="Failure modes")))
+        self.assertIn("missing the required section '## Failure modes'", validator.format_report(report))
+        self.assertGreater(report.error_count(), 0)
+
+    def test_framework_metadata_is_required(self):
+        frontmatter = SPECIALIST_FRONTMATTER.replace("  framework: MYCH-HORIZON\n", "")
+        report = validator.validate_skill(self.build(frontmatter=frontmatter))
+        self.assertIn("requires metadata 'framework'", validator.format_report(report))
+
+    def test_snake_case_python_allowed_but_other_names_strict(self):
+        links = " Tools: [codec](scripts/png_codec.py), [bad](scripts/BadName.py)."
+        report = validator.validate_skill(self.build(body=specialist_body(extra_links=links), files={
+            "scripts/png_codec.py": "print('ok')\n", "scripts/BadName.py": "print('bad')\n"}))
+        rendered = validator.format_report(report)
+        self.assertNotIn("png_codec.py: file name", rendered)
+        self.assertIn("BadName.py: file name is not lowercase kebab-case", rendered)
+
+    def test_unreferenced_file_is_an_error_for_specialists(self):
+        report = validator.validate_skill(self.build(files={"references/orphan.md": "# Orphan\n\nNot linked.\n"}))
+        self.assertIn("references/orphan.md: not referenced from SKILL.md", validator.format_report(report))
+        self.assertGreater(report.error_count(), 0)

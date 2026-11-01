@@ -1,0 +1,208 @@
+{
+  "schema": "mych-registry-tools/1",
+  "updated": "2026-11-01",
+  "notes": "Provider-neutral definitions of the core scripts as callable tools. tools/mych.py translates them into OpenAI, Anthropic, Gemini and OpenAI-compatible formats and executes calls as argument lists (never through a shell). Command tokens: a plain string is literal ('{python}' is the running interpreter); {skill, path} resolves to a file inside a skill; {repo} resolves to a file in the MYCH-HORIZON repository; {param} inserts one value; {option, param} inserts the option and value when the value is present; {flag, when} inserts the flag when the boolean is true; {spread} appends each string of an array.",
+  "tools": [
+    {
+      "name": "mych_detect_capabilities",
+      "description": "Inventory what the environment can do: platform, commands, Python modules, GPU, credential variable names (never values), installed skills, MCP server names and specialist readiness. Read-only.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "deep": {
+            "type": "boolean",
+            "description": "Also run version commands and list global npm packages."
+          },
+          "network": {
+            "type": "boolean",
+            "description": "Probe a few public hosts over HTTPS."
+          }
+        },
+        "required": []
+      },
+      "command": [
+        "{python}",
+        {
+          "skill": "mych-plugin",
+          "path": "scripts/detect-capabilities.py"
+        },
+        "--json",
+        {
+          "flag": "--deep",
+          "when": "deep"
+        },
+        {
+          "flag": "--network",
+          "when": "network"
+        }
+      ],
+      "read_only": true
+    },
+    {
+      "name": "mych_scan_project",
+      "description": "Summarize a project folder for discovery: languages, frameworks, likely test and build commands, CI, docs, decision records, task ledgers; secret and data files are listed but never opened. Read-only.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Project folder to scan, relative to the workspace."
+          },
+          "max_files": {
+            "type": "integer",
+            "description": "Stop after this many files.",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "path"
+        ]
+      },
+      "command": [
+        "{python}",
+        {
+          "skill": "mych-plugin",
+          "path": "scripts/scan-project.py"
+        },
+        {
+          "param": "path"
+        },
+        "--format",
+        "json",
+        {
+          "option": "--max-files",
+          "param": "max_files"
+        }
+      ],
+      "read_only": true
+    },
+    {
+      "name": "mych_task_ledger",
+      "description": "Operate the project's task ledger, which enforces dependencies, approval gates and evidence before a task counts as verified. Commands that change state write only the ledger file.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "enum": [
+              "init",
+              "add",
+              "start",
+              "block",
+              "unblock",
+              "approve",
+              "complete",
+              "verify",
+              "fail",
+              "reopen",
+              "list",
+              "show",
+              "render",
+              "check"
+            ],
+            "description": "Ledger command."
+          },
+          "file": {
+            "type": "string",
+            "description": "Ledger path relative to the workspace (default .mych/tasks.json)."
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Remaining command-line arguments, for example [\"T1\", \"--evidence\", \"pytest: 12 passed\"]."
+          }
+        },
+        "required": [
+          "command"
+        ]
+      },
+      "command": [
+        "{python}",
+        {
+          "skill": "mych-plugin",
+          "path": "scripts/task-ledger.py"
+        },
+        {
+          "option": "--file",
+          "param": "file"
+        },
+        {
+          "param": "command"
+        },
+        {
+          "spread": "arguments"
+        }
+      ],
+      "read_only": false,
+      "forbidden_arguments": [
+        "--file"
+      ]
+    },
+    {
+      "name": "mych_validate_skill",
+      "description": "Validate a skill folder against the Agent Skills format and, for MYCH-HORIZON skills, their required layout and sections. Read-only.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Skill folder relative to the workspace."
+          },
+          "strict": {
+            "type": "boolean",
+            "description": "Treat warnings as failures."
+          }
+        },
+        "required": [
+          "path"
+        ]
+      },
+      "command": [
+        "{python}",
+        {
+          "skill": "mych-plugin",
+          "path": "scripts/validate-skill.py"
+        },
+        {
+          "param": "path"
+        },
+        "--json",
+        {
+          "flag": "--strict",
+          "when": "strict"
+        }
+      ],
+      "read_only": true
+    },
+    {
+      "name": "mych_route",
+      "description": "Suggest tier, disciplines, workflow and domain specialists for a task description. Heuristic: the coordinator confirms with the orientation questions. Read-only.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "The task description."
+          }
+        },
+        "required": [
+          "task"
+        ]
+      },
+      "command": [
+        "{python}",
+        {
+          "repo": "tools/mych.py"
+        },
+        "route",
+        "--json",
+        {
+          "param": "task"
+        }
+      ],
+      "read_only": true
+    }
+  ]
+}
