@@ -1065,7 +1065,7 @@
       "display_name": "Cloud Infrastructure",
       "path": "specialists/mych-cloud-infrastructure",
       "version": "2.0.0",
-      "status": "planned",
+      "status": "tested",
       "summary": "Hosting, networking, DNS, storage, CI/CD, monitoring, backups, scaling, cost and disaster recovery, with plan linting and cost estimates from owner-supplied prices.",
       "triggers": [
         "cloud",
@@ -1108,16 +1108,69 @@
         "aws|gcloud|az"
       ],
       "live_capability": "cloud credentials and the owner's approval for spending or deploying",
-      "scripts": [],
-      "tests": [],
-      "tools": []
+      "scripts": [
+        {
+          "path": "scripts/infra_tool.py",
+          "purpose": "offline cost estimates from sourced prices, deployment plan review, DNS review, Dockerfile review"
+        }
+      ],
+      "tests": [
+        "tests/test_spec_infrastructure.py"
+      ],
+      "tools": [
+        {
+          "name": "mych_cloud_check",
+          "description": "Offline review of a deployment plan, DNS zone or Dockerfile, or a monthly cost estimate from owner-supplied prices with sources. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "check": {
+                "type": "string",
+                "enum": [
+                  "cost",
+                  "check-plan",
+                  "check-dns",
+                  "check-dockerfile"
+                ],
+                "description": "Which review to run."
+              },
+              "file": {
+                "type": "string",
+                "description": "Input file relative to the workspace."
+              }
+            },
+            "required": [
+              "check",
+              "file"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-cloud-infrastructure",
+              "path": "scripts/infra_tool.py"
+            },
+            {
+              "param": "check"
+            },
+            {
+              "param": "file"
+            },
+            "--json"
+          ],
+          "path_params": [
+            "file"
+          ],
+          "read_only": true
+        }
+      ]
     },
     {
       "id": "mych-runpod",
       "display_name": "RunPod GPU Cloud",
       "path": "specialists/mych-runpod",
       "version": "2.0.0",
-      "status": "planned",
+      "status": "tested",
       "summary": "RunPod pods, serverless endpoints, storage persistence, GPU sizing, billing and shutdown discipline, with a VRAM estimator and a dry-run-first client.",
       "triggers": [
         "runpod",
@@ -1138,9 +1191,173 @@
         "runpodctl"
       ],
       "live_capability": "RUNPOD_API_KEY and the owner's approval for spending",
-      "scripts": [],
-      "tests": [],
-      "tools": []
+      "scripts": [
+        {
+          "path": "scripts/runpod_tool.py",
+          "purpose": "VRAM estimates, deployment plans with persistence warnings and approval requests, dry-run-first serverless client"
+        }
+      ],
+      "tests": [
+        "tests/test_spec_infrastructure.py"
+      ],
+      "tools": [
+        {
+          "name": "mych_runpod_vram",
+          "description": "Estimate GPU memory for a model (weights, KV cache, overhead; inference, LoRA or full fine-tuning) and recommend a GPU size. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "params_b": {
+                "type": "number",
+                "description": "Parameters in billions.",
+                "minimum": 0
+              },
+              "precision": {
+                "type": "string",
+                "enum": [
+                  "fp32",
+                  "fp16",
+                  "bf16",
+                  "fp8",
+                  "int8",
+                  "int4"
+                ],
+                "description": "Weight precision."
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "inference",
+                  "lora",
+                  "full"
+                ],
+                "description": "Workload type."
+              },
+              "context": {
+                "type": "integer",
+                "description": "Context length in tokens.",
+                "minimum": 1
+              },
+              "layers": {
+                "type": "integer",
+                "description": "Transformer layers.",
+                "minimum": 1
+              },
+              "kv_heads": {
+                "type": "integer",
+                "description": "Key-value heads.",
+                "minimum": 1
+              },
+              "head_dim": {
+                "type": "integer",
+                "description": "Head dimension.",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "params_b"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-runpod",
+              "path": "scripts/runpod_tool.py"
+            },
+            "vram",
+            "--params-b",
+            {
+              "param": "params_b"
+            },
+            {
+              "option": "--precision",
+              "param": "precision"
+            },
+            {
+              "option": "--mode",
+              "param": "mode"
+            },
+            {
+              "option": "--context",
+              "param": "context"
+            },
+            {
+              "option": "--layers",
+              "param": "layers"
+            },
+            {
+              "option": "--kv-heads",
+              "param": "kv_heads"
+            },
+            {
+              "option": "--head-dim",
+              "param": "head_dim"
+            }
+          ],
+          "read_only": true
+        },
+        {
+          "name": "mych_runpod_endpoint_preview",
+          "description": "Preview a RunPod serverless endpoint request (run, runsync, status, cancel, health) without sending it. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "endpoint_id": {
+                "type": "string",
+                "description": "Endpoint id."
+              },
+              "operation": {
+                "type": "string",
+                "enum": [
+                  "run",
+                  "runsync",
+                  "status",
+                  "cancel",
+                  "health"
+                ],
+                "description": "Operation."
+              },
+              "job_id": {
+                "type": "string",
+                "description": "Job id for status or cancel."
+              },
+              "input": {
+                "type": "string",
+                "description": "Job input as a JSON string."
+              }
+            },
+            "required": [
+              "endpoint_id",
+              "operation"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-runpod",
+              "path": "scripts/runpod_tool.py"
+            },
+            "endpoint",
+            "--endpoint-id",
+            {
+              "param": "endpoint_id"
+            },
+            "--operation",
+            {
+              "param": "operation"
+            },
+            {
+              "option": "--job-id",
+              "param": "job_id"
+            },
+            {
+              "option": "--input",
+              "param": "input"
+            }
+          ],
+          "read_only": true
+        }
+      ]
     }
   ]
 }

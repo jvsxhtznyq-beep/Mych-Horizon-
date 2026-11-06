@@ -2,7 +2,7 @@
   "schema": "mych-task-ledger/2",
   "project": "MYCH-HORIZON 2.0",
   "created_at": "2026-11-01T16:32:53Z",
-  "updated_at": "2026-11-06T14:59:25Z",
+  "updated_at": "2026-11-06T15:04:51Z",
   "tasks": [
     {
       "id": "A1",
@@ -593,10 +593,10 @@
       "depends_on": [
         "A5"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "Architecture, security, cost and DR guidance; cost calculator with user-supplied prices",
       "verification_method": "Validator strict; unit tests",
-      "evidence": null,
+      "evidence": "unittest tests/test_spec_infrastructure.py: Ran 13 tests OK (cost math and refusal of unsourced prices, plan/DNS/Dockerfile findings); validate --strict PASSED",
       "blocker": null,
       "notes": [],
       "history": [
@@ -605,9 +605,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-06T15:04:51Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-06T15:04:51Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-06T15:04:51Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_spec_infrastructure.py: Ran 13 tests OK (cost math and refusal of unsourced prices, plan/DNS/Dockerfile findings); validate --strict PASSED"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-06T15:04:51Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_spec_infrastructure.py: Ran 13 tests OK (cost math and refusal of unsourced prices, plan/DNS/Dockerfile findings); validate --strict PASSED"
+        }
+      ],
       "approval": null,
       "approvals": []
     },
@@ -618,10 +642,10 @@
       "depends_on": [
         "A5"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "Storage persistence rules, GPU sizing, billing and shutdown guidance; VRAM estimator; no live API calls",
       "verification_method": "Validator strict; unit tests",
-      "evidence": null,
+      "evidence": "unittest tests/test_spec_infrastructure.py: VRAM 8B fp16 = 14.9+1.0 GiB matches hand calc; plan, dry-run endpoint paths, stub execute, handler template all OK",
       "blocker": null,
       "notes": [],
       "history": [
@@ -630,9 +654,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-06T15:04:51Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-06T15:04:51Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-06T15:04:51Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_spec_infrastructure.py: VRAM 8B fp16 = 14.9+1.0 GiB matches hand calc; plan, dry-run endpoint paths, stub execute, handler template all OK"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-06T15:04:51Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_spec_infrastructure.py: VRAM 8B fp16 = 14.9+1.0 GiB matches hand calc; plan, dry-run endpoint paths, stub execute, handler template all OK"
+        }
+      ],
       "approval": null,
       "approvals": []
     },
