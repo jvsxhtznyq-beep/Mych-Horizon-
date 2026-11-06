@@ -2,7 +2,7 @@
   "schema": "mych-task-ledger/2",
   "project": "MYCH-HORIZON 2.0",
   "created_at": "2026-11-01T16:32:53Z",
-  "updated_at": "2026-11-06T14:53:22Z",
+  "updated_at": "2026-11-06T14:59:25Z",
   "tasks": [
     {
       "id": "A1",
@@ -495,10 +495,10 @@
       "depends_on": [
         "A5"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "Retries, idempotency, pagination, rate limits, redaction, webhook signatures",
       "verification_method": "Validator strict; tests against a local stub server",
-      "evidence": null,
+      "evidence": "unittest tests/test_spec_api_integration.py: Ran 18 tests OK (idempotency-aware retries, Retry-After, breaker, pagination, webhooks x3 schemes, OpenAPI verify/diff, stub server)",
       "blocker": null,
       "notes": [],
       "history": [
@@ -507,9 +507,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-06T14:59:25Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-06T14:59:25Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-06T14:59:25Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_spec_api_integration.py: Ran 18 tests OK (idempotency-aware retries, Retry-After, breaker, pagination, webhooks x3 schemes, OpenAPI verify/diff, stub server)"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-06T14:59:25Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_spec_api_integration.py: Ran 18 tests OK (idempotency-aware retries, Retry-After, breaker, pagination, webhooks x3 schemes, OpenAPI verify/diff, stub server)"
+        }
+      ],
       "approval": null,
       "approvals": []
     },
@@ -520,10 +544,10 @@
       "depends_on": [
         "A5"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "ZWJ, modifiers, flags, keycaps analysed; naming and fallback rules",
       "verification_method": "Validator strict; unit tests",
-      "evidence": null,
+      "evidence": "unittest tests/test_spec_emoji.py: Ran 8 tests OK (ZWJ, flags, keycaps, skin tones, tag sequences, lengths 1/5/8/18, asset checks)",
       "blocker": null,
       "notes": [],
       "history": [
@@ -532,9 +556,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-06T14:59:25Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-06T14:59:25Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-06T14:59:25Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_spec_emoji.py: Ran 8 tests OK (ZWJ, flags, keycaps, skin tones, tag sequences, lengths 1/5/8/18, asset checks)"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-06T14:59:25Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_spec_emoji.py: Ran 8 tests OK (ZWJ, flags, keycaps, skin tones, tag sequences, lengths 1/5/8/18, asset checks)"
+        }
+      ],
       "approval": null,
       "approvals": []
     },

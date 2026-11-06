@@ -801,7 +801,7 @@
       "display_name": "API Control and Integration",
       "path": "specialists/mych-api-integration",
       "version": "2.0.0",
-      "status": "planned",
+      "status": "tested",
       "summary": "Designing and consuming APIs safely: authentication, retries, rate limits, pagination, webhooks, contracts and stub-based testing.",
       "triggers": [
         "api",
@@ -830,16 +830,129 @@
         "curl"
       ],
       "live_capability": "network access to the API",
-      "scripts": [],
-      "tests": [],
-      "tools": []
+      "scripts": [
+        {
+          "path": "scripts/apiclient.py",
+          "purpose": "resilient client: retries with idempotency rules, Retry-After, rate limiting, circuit breaker, pagination, redaction"
+        },
+        {
+          "path": "scripts/webhook_verify.py",
+          "purpose": "HMAC webhook signing and verification for timestamped, slack and github schemes"
+        },
+        {
+          "path": "scripts/openapi_check.py",
+          "purpose": "list OpenAPI operations, verify used endpoints exist, diff for breaking changes"
+        },
+        {
+          "path": "scripts/stub_server.py",
+          "purpose": "configurable local HTTP stub with response sequences and request recording"
+        }
+      ],
+      "tests": [
+        "tests/test_spec_api_integration.py"
+      ],
+      "tools": [
+        {
+          "name": "mych_api_openapi_verify",
+          "description": "Check that every endpoint a client uses (one 'METHOD /path' per line) is documented in an OpenAPI 3 description. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "spec": {
+                "type": "string",
+                "description": "OpenAPI JSON or YAML file relative to the workspace."
+              },
+              "uses": {
+                "type": "string",
+                "description": "File listing used endpoints, relative to the workspace."
+              }
+            },
+            "required": [
+              "spec",
+              "uses"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-api-integration",
+              "path": "scripts/openapi_check.py"
+            },
+            "verify",
+            {
+              "param": "spec"
+            },
+            "--uses",
+            {
+              "param": "uses"
+            }
+          ],
+          "path_params": [
+            "spec",
+            "uses"
+          ],
+          "read_only": true
+        },
+        {
+          "name": "mych_api_request_preview",
+          "description": "Show exactly what an HTTP request would send (method, URL with key-like parameters redacted, headers, JSON body) without sending it. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "method": {
+                "type": "string",
+                "enum": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ],
+                "description": "HTTP method."
+              },
+              "url": {
+                "type": "string",
+                "description": "Absolute URL."
+              },
+              "json": {
+                "type": "string",
+                "description": "JSON body as a string."
+              }
+            },
+            "required": [
+              "method",
+              "url"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-api-integration",
+              "path": "scripts/apiclient.py"
+            },
+            "request",
+            {
+              "param": "method"
+            },
+            {
+              "param": "url"
+            },
+            {
+              "option": "--json",
+              "param": "json"
+            },
+            "--dry-run"
+          ],
+          "read_only": true
+        }
+      ]
     },
     {
       "id": "mych-emoji-language",
       "display_name": "Emoji and Visual Language",
       "path": "specialists/mych-emoji-language",
       "version": "2.0.0",
-      "status": "planned",
+      "status": "tested",
       "summary": "Unicode emoji sequences, platform rendering, custom emoji sets, accessibility and cultural meaning, with a sequence inspector.",
       "triggers": [
         "emoji",
@@ -862,9 +975,90 @@
         "module:PIL"
       ],
       "live_capability": null,
-      "scripts": [],
-      "tests": [],
-      "tools": []
+      "scripts": [
+        {
+          "path": "scripts/emoji_tool.py",
+          "purpose": "emoji sequence inspector (graphemes, names, sequence types, lengths, warnings) and custom emoji asset checks"
+        }
+      ],
+      "tests": [
+        "tests/test_spec_emoji.py"
+      ],
+      "tools": [
+        {
+          "name": "mych_emoji_inspect",
+          "description": "Inspect a string's emoji: grapheme clusters, code points and names, sequence types (ZWJ, flags, keycaps, skin tones, tags), lengths in several counting systems and warnings. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "Text to inspect."
+              }
+            },
+            "required": [
+              "text"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-emoji-language",
+              "path": "scripts/emoji_tool.py"
+            },
+            "inspect",
+            {
+              "param": "text"
+            },
+            "--json"
+          ],
+          "read_only": true
+        },
+        {
+          "name": "mych_emoji_check_asset",
+          "description": "Check a custom emoji PNG or GIF against platform guidance: dimensions, file size, squareness, animation. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "file": {
+                "type": "string",
+                "description": "Image path relative to the workspace."
+              },
+              "platform": {
+                "type": "string",
+                "enum": [
+                  "discord",
+                  "generic"
+                ],
+                "description": "Guidance profile."
+              }
+            },
+            "required": [
+              "file"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-emoji-language",
+              "path": "scripts/emoji_tool.py"
+            },
+            "check-asset",
+            {
+              "param": "file"
+            },
+            "--json",
+            {
+              "option": "--platform",
+              "param": "platform"
+            }
+          ],
+          "path_params": [
+            "file"
+          ],
+          "read_only": true
+        }
+      ]
     },
     {
       "id": "mych-cloud-infrastructure",
