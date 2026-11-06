@@ -2,7 +2,7 @@
   "schema": "mych-task-ledger/2",
   "project": "MYCH-HORIZON 2.0",
   "created_at": "2026-11-01T16:32:53Z",
-  "updated_at": "2026-11-06T15:29:37Z",
+  "updated_at": "2026-11-06T15:34:54Z",
   "tasks": [
     {
       "id": "A1",
@@ -835,10 +835,10 @@
       "title": "Architecture docs, compatibility and capability matrices, roadmap, changelog, README",
       "priority": "P1",
       "depends_on": [],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "Docs match the implemented system",
       "verification_method": "Link check; matrices list every specialist and provider",
-      "evidence": null,
+      "evidence": "docs/architecture.md, model-compatibility-matrix.md, specialist-capability-matrix.md, integration-registry.md (generated from registry/integrations.json), roadmap.md, decisions 0005-0008, README and CHANGELOG 2.0.0 written; links checked by reading",
       "blocker": null,
       "notes": [],
       "history": [
@@ -847,9 +847,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-06T15:34:54Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-06T15:34:54Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-06T15:34:54Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: docs/architecture.md, model-compatibility-matrix.md, specialist-capability-matrix.md, integration-registry.md (generated from registry/integrations.json), roadmap.md, decisions 0005-0008, README and CHANGELOG 2.0.0 written; links checked by reading"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-06T15:34:54Z",
+          "result": "pass",
+          "evidence": "docs/architecture.md, model-compatibility-matrix.md, specialist-capability-matrix.md, integration-registry.md (generated from registry/integrations.json), roadmap.md, decisions 0005-0008, README and CHANGELOG 2.0.0 written; links checked by reading"
+        }
+      ],
       "approval": null,
       "approvals": []
     },
@@ -860,10 +884,10 @@
       "depends_on": [
         "F1"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "dist archives verified; all tests green; no secrets",
       "verification_method": "package-all output; unittest output; secret scan output",
-      "evidence": null,
+      "evidence": "unittest discover -s tests: Ran 216 tests OK; validate-all --strict: 9 PASS; registry-check OK; package-all: 9 archives OK in dist/; security scans clean (evaluation/security-review-2.0.md)",
       "blocker": null,
       "notes": [],
       "history": [
@@ -872,9 +896,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-06T15:34:54Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-06T15:34:54Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-06T15:34:54Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest discover -s tests: Ran 216 tests OK; validate-all --strict: 9 PASS; registry-check OK; package-all: 9 archives OK in dist/; security scans clean (evaluation/security-review-2.0.md)"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-06T15:34:54Z",
+          "result": "pass",
+          "evidence": "unittest discover -s tests: Ran 216 tests OK; validate-all --strict: 9 PASS; registry-check OK; package-all: 9 archives OK in dist/; security scans clean (evaluation/security-review-2.0.md)"
+        }
+      ],
       "approval": null,
       "approvals": []
     },

@@ -1,6 +1,30 @@
 # Changelog
 
-All notable changes to MYCH-PLUGIN are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [Semantic Versioning](https://semver.org/).
+All notable changes to MYCH-HORIZON (formerly MYCH-PLUGIN) are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [Semantic Versioning](https://semver.org/).
+
+## [2.0.0] - 2026-11-06
+
+MYCH-HORIZON: the framework becomes model-agnostic and gains eight domain specialists. The core skill keeps its id `mych-plugin` ([decision 0005](docs/decisions/0005-keep-core-skill-id-mych-plugin.md)).
+
+### Added
+
+- Eight specialist skills under `specialists/`: `mych-pixel-art`, `mych-image-generation`, `mych-3d-design`, `mych-chatbot-engineering`, `mych-api-integration`, `mych-emoji-language`, `mych-cloud-infrastructure`, `mych-runpod`, each with twelve required sections, references, standard-library tools and tests.
+- Core: `systems/delegation.md`, `systems/model-portability.md`, domain specialist routing and handoffs, `scripts/detect-capabilities.py` (platform, commands, modules, GPU, credential names, skills, MCP server names, specialist readiness).
+- `registry/` (specialists, workflows, providers and hosts with evidence levels, neutral tools, integrations with live GitHub evidence) and `adapters/` for Claude, GPT, Gemini, GLM and open-weight models.
+- `tools/mych.py`: route, bundle, export, tools-schema, run-tool (workspace confinement, approval gating), harness, validate-all, package-all, registry-check; `tools/collect_ecosystem.py`.
+- Game benchmark Glowmoss Caverns with unit, stress, failure, solver and browser tests and a scored report.
+- Documentation: architecture, model compatibility matrix, specialist capability matrix, integration registry, roadmap, decisions 0005 to 0008, security review.
+
+### Changed
+
+- Task ledger schema 2: lock file for concurrent writers, failed status, approval gates (`--needs-approval`, `approve`, `unblock --approved-by`), evidence rules (restated, vague and failure-marker evidence refused unless overridden with a recorded reason), completed tasks can be blocked; schema 1 ledgers upgrade on write.
+- Project scanner: correct unittest command for test folders, data files listed but never opened, node-tap and the Node.js built-in runner recognized.
+- Validator: `mych-specialist` layout for any `mych-*` skill.
+- Core wording made provider-neutral; the framework is branded MYCH-HORIZON.
+
+### Fixed
+
+- Live-test weaknesses from 1.0 (see `evaluation/live-test-report.md`): lost ledger writes under concurrency, accepted failing or vague evidence, unenforced approval blocks, wrong inferred test command, missing delegation guidance and missing architecture-only route.
 
 ## [1.0.0] - 2026-11-01
 

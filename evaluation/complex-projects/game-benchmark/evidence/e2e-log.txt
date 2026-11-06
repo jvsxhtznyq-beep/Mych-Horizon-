@@ -17,9 +17,9 @@ PASS canvas fits the phone width (390x219)
 PASS touch controls appear on touch devices
 PASS touch right button moves the player (x 35.0 -> 91.2)
 PASS source build (ES modules over HTTP) runs and falls back to shapes when sprites fail (Sprites could not be loaded; using simple shapes.)
-PASS real-time loop advances the simulation without the test hook (frame 122)
-PASS rendering keeps a smooth frame rate in headless Chromium (60.4 fps)
-PASS update plus render costs well under a 16.7 ms frame (0.027 ms per step (600 steps, cavern 3))
+PASS real-time loop advances the simulation without the test hook (frame 123)
+PASS rendering keeps a smooth frame rate in headless Chromium (59.8 fps)
+PASS update plus render costs well under a 16.7 ms frame (0.030 ms per step (600 steps, cavern 3))
 PASS no unexpected page errors or console errors
 
 23 of 23 checks passed

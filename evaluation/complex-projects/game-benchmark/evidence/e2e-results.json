@@ -15,8 +15,8 @@
     ],
     "htmlBytes": 71790,
     "htmlSha256": "cb6988bf1e8e6a19fc5e424347458c498c551357a3f5f01729c396750a5e0253",
-    "zipBytes": 21883,
-    "zipSha256": "766599e96b988cbdf943cf9a7aed85ecab70281d8adc3a7c2e74c96add0605cc",
+    "zipBytes": 21911,
+    "zipSha256": "94bb85e50ff2351573644477450ceb6301359f383630df9be14484ec33971625",
     "spriteColors": 15,
     "spriteFrames": 21
   },
@@ -119,17 +119,17 @@
     {
       "name": "real-time loop advances the simulation without the test hook",
       "ok": true,
-      "detail": "frame 122"
+      "detail": "frame 123"
     },
     {
       "name": "rendering keeps a smooth frame rate in headless Chromium",
       "ok": true,
-      "detail": "60.4 fps"
+      "detail": "59.8 fps"
     },
     {
       "name": "update plus render costs well under a 16.7 ms frame",
       "ok": true,
-      "detail": "0.027 ms per step (600 steps, cavern 3)"
+      "detail": "0.030 ms per step (600 steps, cavern 3)"
     },
     {
       "name": "no unexpected page errors or console errors",
@@ -140,8 +140,8 @@
   "passed": 23,
   "total": 23,
   "metrics": {
-    "fps": 60.4,
-    "msPerStep": 0.027,
+    "fps": 59.8,
+    "msPerStep": 0.03,
     "level1Frames": 548
   }
 }

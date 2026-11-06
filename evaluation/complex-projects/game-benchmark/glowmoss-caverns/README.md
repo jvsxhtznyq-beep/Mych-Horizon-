@@ -16,4 +16,4 @@ Progress, best scores and settings are saved in the browser (local storage). Set
 
 ## Credits
 
-Design, code, sprites and synthesized audio were made for MYCH-HORIZON 2.0. Sprites were authored in the mych-pixel-art text format. MIT License.
+Design, code, sprites and synthesized audio were made for MYCH-HORIZON 2.0 (project owner: Kim). Sprites were authored in the mych-pixel-art text format. License: not yet specified by the project owner.

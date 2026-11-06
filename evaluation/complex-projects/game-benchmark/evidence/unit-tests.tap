@@ -2,152 +2,152 @@ TAP version 13
 # Subtest: keys map to actions with alternatives
 ok 1 - keys map to actions with alternatives
   ---
-  duration_ms: 0.699898
+  duration_ms: 0.721861
   type: 'test'
   ...
 # Subtest: held keys, single-use presses and blur
 ok 2 - held keys, single-use presses and blur
   ---
-  duration_ms: 0.905319
+  duration_ms: 1.658954
   type: 'test'
   ...
 # Subtest: every shipped level parses without errors
 ok 3 - every shipped level parses without errors
   ---
-  duration_ms: 2.320015
+  duration_ms: 1.600334
   type: 'test'
   ...
 # Subtest: validation rejects malformed maps with clear messages
 ok 4 - validation rejects malformed maps with clear messages
   ---
-  duration_ms: 0.418658
+  duration_ms: 0.226478
   type: 'test'
   ...
 # Subtest: falling body lands on solid ground and reports it
 ok 5 - falling body lands on solid ground and reports it
   ---
-  duration_ms: 1.109107
+  duration_ms: 1.008643
   type: 'test'
   ...
 # Subtest: walls stop horizontal movement without tunneling at full speed
 ok 6 - walls stop horizontal movement without tunneling at full speed
   ---
-  duration_ms: 1.432192
+  duration_ms: 1.457371
   type: 'test'
   ...
 # Subtest: one-way ledges let bodies pass from below and land from above
 ok 7 - one-way ledges let bodies pass from below and land from above
   ---
-  duration_ms: 0.207291
+  duration_ms: 0.245
   type: 'test'
   ...
 # Subtest: ceilings stop upward movement
 ok 8 - ceilings stop upward movement
   ---
-  duration_ms: 0.188829
+  duration_ms: 0.294303
   type: 'test'
   ...
 # Subtest: spike and overlap detection
 ok 9 - spike and overlap detection
   ---
-  duration_ms: 0.269138
+  duration_ms: 0.571485
   type: 'test'
   ...
 # Subtest: level 1 (Lantern Path) can be completed without taking damage
 ok 10 - level 1 (Lantern Path) can be completed without taking damage
   ---
-  duration_ms: 3907.682702
+  duration_ms: 4147.460792
   type: 'test'
   ...
 # Subtest: level 2 (Echo Hollow) can be completed without taking damage
 ok 11 - level 2 (Echo Hollow) can be completed without taking damage
   ---
-  duration_ms: 5684.909235
+  duration_ms: 5828.959306
   type: 'test'
   ...
 # Subtest: level 3 (Spore Galleries) can be completed without taking damage
 ok 12 - level 3 (Spore Galleries) can be completed without taking damage
   ---
-  duration_ms: 8622.944303
+  duration_ms: 8603.853859
   type: 'test'
   ...
 # Subtest: fresh storage gives defaults and saves round-trip
 ok 13 - fresh storage gives defaults and saves round-trip
   ---
-  duration_ms: 2.094618
+  duration_ms: 1.59768
   type: 'test'
   ...
 # Subtest: damaged JSON is reset with a notice
 ok 14 - damaged JSON is reset with a notice
   ---
-  duration_ms: 0.49032
+  duration_ms: 0.389139
   type: 'test'
   ...
 # Subtest: tampered values are repaired, not trusted
 ok 15 - tampered values are repaired, not trusted
   ---
-  duration_ms: 0.297875
+  duration_ms: 0.256231
   type: 'test'
   ...
 # Subtest: unavailable or failing storage is reported, never thrown
 ok 16 - unavailable or failing storage is reported, never thrown
   ---
-  duration_ms: 1.925621
+  duration_ms: 1.111092
   type: 'test'
   ...
-# stress: 504 enemies, 0.227 ms per simulated frame
+# stress: 504 enemies, 0.317 ms per simulated frame
 # Subtest: crowded world stays fast and finite
 ok 17 - crowded world stays fast and finite
   ---
-  duration_ms: 145.902579
+  duration_ms: 199.251623
   type: 'test'
   ...
 # Subtest: 10,000 frames of random input never produce invalid state
 ok 18 - 10,000 frames of random input never produce invalid state
   ---
-  duration_ms: 14.038183
+  duration_ms: 19.022637
   type: 'test'
   ...
 # Subtest: particle pool caps memory under a flood of effects
 ok 19 - particle pool caps memory under a flood of effects
   ---
-  duration_ms: 18.599813
+  duration_ms: 20.41199
   type: 'test'
   ...
 # Subtest: orbs add score and the exit completes the level with bonuses
 ok 20 - orbs add score and the exit completes the level with bonuses
   ---
-  duration_ms: 3.372352
+  duration_ms: 5.444541
   type: 'test'
   ...
 # Subtest: landing on an enemy defeats it and bounces; touching it from the side hurts
 ok 21 - landing on an enemy defeats it and bounces; touching it from the side hurts
   ---
-  duration_ms: 0.963076
+  duration_ms: 3.256701
   type: 'test'
   ...
 # Subtest: falling into a pit costs a heart and respawns at the last checkpoint
 ok 22 - falling into a pit costs a heart and respawns at the last checkpoint
   ---
-  duration_ms: 1.795042
+  duration_ms: 2.167641
   type: 'test'
   ...
 # Subtest: losing the last heart ends the game
 ok 23 - losing the last heart ends the game
   ---
-  duration_ms: 0.228658
+  duration_ms: 0.413092
   type: 'test'
   ...
 # Subtest: turrets fire on a rhythm and spores hurt
 ok 24 - turrets fire on a rhythm and spores hurt
   ---
-  duration_ms: 1.252433
+  duration_ms: 2.527304
   type: 'test'
   ...
 # Subtest: simulation is deterministic and the world can be cloned
 ok 25 - simulation is deterministic and the world can be cloned
   ---
-  duration_ms: 20.169653
+  duration_ms: 26.907753
   type: 'test'
   ...
 1..25
@@ -158,4 +158,4 @@ ok 25 - simulation is deterministic and the world can be cloned
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 18356.92414
+# duration_ms 18744.047645

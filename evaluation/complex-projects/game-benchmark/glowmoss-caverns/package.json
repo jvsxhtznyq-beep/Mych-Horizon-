@@ -4,7 +4,7 @@
   "private": true,
   "description": "A pixel-art cave platformer built as the MYCH-HORIZON 2.0 game benchmark.",
   "type": "module",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "scripts": {
     "build": "node tools/build.mjs",
     "solve": "node tools/solve.mjs",
