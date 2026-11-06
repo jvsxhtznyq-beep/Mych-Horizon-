@@ -1,0 +1,17 @@
+{
+  "notes": "Golden conversations for chatkit.py eval. Each case scripts the model's replies, so the run checks the agent loop and tool contracts deterministically. For live model evaluation, keep the same users and expectations and replace scripts with a real adapter in your own harness.",
+  "cases": [
+    {"name": "answers with a tool result", "user": "When are you open?", "tools": ["lookup"],
+     "script": [{"tool_calls": [{"name": "lookup", "arguments": {"key": "opening_hours"}}]}, {"text": "We are open Mon-Fri 08:00-16:00."}],
+     "expect": {"final_contains": ["08:00"], "tools_called": ["lookup"], "tool_errors": 0, "stop_reason": "final"}},
+    {"name": "recovers from invalid tool arguments", "user": "Add two and three", "tools": ["add"],
+     "script": [{"tool_calls": [{"name": "add", "arguments": {"a": "two", "b": 3}}]}, {"tool_calls": [{"name": "add", "arguments": {"a": 2, "b": 3}}]}, {"text": "2 + 3 = 5"}],
+     "expect": {"final_contains": ["5"], "tools_called": ["add", "add"], "tool_errors": 1}},
+    {"name": "does not invent unavailable tools", "user": "Book me an appointment", "tools": ["lookup"],
+     "script": [{"tool_calls": [{"name": "book_appointment", "arguments": {}}]}, {"text": "I can't book appointments here. Please call +47 22 00 00 00."}],
+     "expect": {"final_excludes": ["booked"], "tool_errors": 1}},
+    {"name": "stops runaway loops", "user": "Keep adding", "tools": ["add"], "max_steps": 3,
+     "script": [{"tool_calls": [{"name": "add", "arguments": {"a": 1, "b": 1}}]}, {"tool_calls": [{"name": "add", "arguments": {"a": 1, "b": 1}}]}, {"tool_calls": [{"name": "add", "arguments": {"a": 1, "b": 1}}]}],
+     "expect": {"stop_reason": "max_steps"}}
+  ]
+}

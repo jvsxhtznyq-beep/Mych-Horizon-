@@ -2,7 +2,7 @@
   "schema": "mych-task-ledger/2",
   "project": "MYCH-HORIZON 2.0",
   "created_at": "2026-11-01T16:32:53Z",
-  "updated_at": "2026-11-01T17:23:23Z",
+  "updated_at": "2026-11-06T14:53:22Z",
   "tasks": [
     {
       "id": "A1",
@@ -446,10 +446,10 @@
       "depends_on": [
         "A5"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "State, memory, tool calling, recovery, routing in a runnable kit",
       "verification_method": "Validator strict; Python and Node tests against a deterministic model",
-      "evidence": null,
+      "evidence": "unittest tests/test_spec_chatbot.py: Ran 13 tests OK (3 adapter styles vs stubs, harness end-to-end with mych_route, node suite 10/10 pass); chatkit eval golden set: 4 of 4 passed",
       "blocker": null,
       "notes": [],
       "history": [
@@ -458,9 +458,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-06T14:53:22Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-06T14:53:22Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-06T14:53:22Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: unittest tests/test_spec_chatbot.py: Ran 13 tests OK (3 adapter styles vs stubs, harness end-to-end with mych_route, node suite 10/10 pass); chatkit eval golden set: 4 of 4 passed"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-06T14:53:22Z",
+          "result": "pass",
+          "evidence": "unittest tests/test_spec_chatbot.py: Ran 13 tests OK (3 adapter styles vs stubs, harness end-to-end with mych_route, node suite 10/10 pass); chatkit eval golden set: 4 of 4 passed"
+        }
+      ],
       "approval": null,
       "approvals": []
     },

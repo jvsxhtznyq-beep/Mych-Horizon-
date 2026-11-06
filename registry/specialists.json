@@ -670,7 +670,7 @@
       "display_name": "Chatbot Engineering",
       "path": "specialists/mych-chatbot-engineering",
       "version": "2.0.0",
-      "status": "planned",
+      "status": "tested",
       "summary": "Conversational systems: state, memory, tool calling, retrieval, model routing, safety and evaluation, with a provider-neutral reference kit in Python and JavaScript.",
       "triggers": [
         "chatbot",
@@ -697,9 +697,104 @@
         "node"
       ],
       "live_capability": "a model credential or a local model runtime",
-      "scripts": [],
-      "tests": [],
-      "tools": []
+      "scripts": [
+        {
+          "path": "scripts/chatkit.py",
+          "purpose": "agent loop, validated tools, memory, BM25 retrieval, OpenAI/Anthropic/Gemini adapters, golden-conversation eval"
+        },
+        {
+          "path": "scripts/chatkit.mjs",
+          "purpose": "JavaScript version of the agent loop, tools, adapters and memory"
+        }
+      ],
+      "tests": [
+        "tests/test_spec_chatbot.py",
+        "tests/js/chatkit.test.mjs"
+      ],
+      "tools": [
+        {
+          "name": "mych_chat_eval",
+          "description": "Run golden conversations (scripted model replies with expectations) to test an agent loop and tool contracts deterministically. Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "cases": {
+                "type": "string",
+                "description": "Golden conversations JSON file relative to the workspace."
+              }
+            },
+            "required": [
+              "cases"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-chatbot-engineering",
+              "path": "scripts/chatkit.py"
+            },
+            "eval",
+            {
+              "param": "cases"
+            }
+          ],
+          "path_params": [
+            "cases"
+          ],
+          "read_only": true
+        },
+        {
+          "name": "mych_chat_request_preview",
+          "description": "Show the exact HTTP request a provider adapter would send for a user message (no network, keys redacted). Read-only.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "style": {
+                "type": "string",
+                "enum": [
+                  "openai-chat",
+                  "anthropic-messages",
+                  "gemini"
+                ],
+                "description": "API style."
+              },
+              "model": {
+                "type": "string",
+                "description": "Model name."
+              },
+              "user": {
+                "type": "string",
+                "description": "User message."
+              }
+            },
+            "required": [
+              "style",
+              "model"
+            ]
+          },
+          "command": [
+            "{python}",
+            {
+              "skill": "mych-chatbot-engineering",
+              "path": "scripts/chatkit.py"
+            },
+            "request",
+            "--style",
+            {
+              "param": "style"
+            },
+            "--model",
+            {
+              "param": "model"
+            },
+            {
+              "option": "--user",
+              "param": "user"
+            }
+          ],
+          "read_only": true
+        }
+      ]
     },
     {
       "id": "mych-api-integration",
