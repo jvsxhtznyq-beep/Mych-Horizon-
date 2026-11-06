@@ -1,0 +1,15 @@
+{
+  "name": "glowmoss-caverns",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A pixel-art cave platformer built as the MYCH-HORIZON 2.0 game benchmark.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "solve": "node tools/solve.mjs",
+    "test": "node --test tests/unit/*.test.mjs",
+    "test:e2e": "node tests/e2e/run.mjs"
+  },
+  "engines": { "node": ">=18" }
+}

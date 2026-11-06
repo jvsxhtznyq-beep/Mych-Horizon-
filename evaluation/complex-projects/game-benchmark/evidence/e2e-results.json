@@ -1,0 +1,147 @@
+{
+  "date": "2026-11-06",
+  "browser": "Chromium (Playwright, headless)",
+  "build": {
+    "modules": [
+      "src/game/physics.js",
+      "src/game/levels.js",
+      "src/game/world.js",
+      "src/engine/particles.js",
+      "src/engine/renderer.js",
+      "src/engine/input.js",
+      "src/engine/audio.js",
+      "src/engine/storage.js",
+      "src/main.js"
+    ],
+    "htmlBytes": 71790,
+    "htmlSha256": "cb6988bf1e8e6a19fc5e424347458c498c551357a3f5f01729c396750a5e0253",
+    "zipBytes": 21883,
+    "zipSha256": "766599e96b988cbdf943cf9a7aed85ecab70281d8adc3a7c2e74c96add0605cc",
+    "spriteColors": 15,
+    "spriteFrames": 21
+  },
+  "checks": [
+    {
+      "name": "title screen shows with sprites loaded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Play starts cavern 1",
+      "ok": true,
+      "detail": "screen playing"
+    },
+    {
+      "name": "Web Audio is available and unlocked by the click",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "cavern 1 completed through real keyboard input",
+      "ok": true,
+      "detail": "frames 548 (solver predicted 548), score 1754"
+    },
+    {
+      "name": "browser replay matches the Node simulation frame for frame",
+      "ok": true,
+      "detail": "browser 548/1754, node 548/1754"
+    },
+    {
+      "name": "effects ran during play (sound events and particles)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "progress saved: cavern 2 unlocked and best score stored",
+      "ok": true,
+      "detail": "{\"unlocked\":2,\"best\":{\"1\":1754}}"
+    },
+    {
+      "name": "Escape pauses the game",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "paused game does not advance",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Escape resumes the game",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Back from settings returns to the pause menu",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "settings persist across reloads",
+      "ok": true,
+      "detail": "{\"master\":0.8,\"music\":0.2,\"sfx\":0.8,\"shake\":false,\"reducedFlashing\":false,\"showFps\":true,\"touch\":\"auto\"}"
+    },
+    {
+      "name": "continue label offers the unlocked cavern",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "corrupted save is reset with a visible notice",
+      "ok": true,
+      "detail": "Saved progress was damaged and has been reset."
+    },
+    {
+      "name": "uncaught errors show the recovery screen",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "canvas fits the phone width",
+      "ok": true,
+      "detail": "390x219"
+    },
+    {
+      "name": "touch controls appear on touch devices",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "touch right button moves the player",
+      "ok": true,
+      "detail": "x 35.0 -> 91.2"
+    },
+    {
+      "name": "source build (ES modules over HTTP) runs and falls back to shapes when sprites fail",
+      "ok": true,
+      "detail": "Sprites could not be loaded; using simple shapes."
+    },
+    {
+      "name": "real-time loop advances the simulation without the test hook",
+      "ok": true,
+      "detail": "frame 122"
+    },
+    {
+      "name": "rendering keeps a smooth frame rate in headless Chromium",
+      "ok": true,
+      "detail": "60.4 fps"
+    },
+    {
+      "name": "update plus render costs well under a 16.7 ms frame",
+      "ok": true,
+      "detail": "0.027 ms per step (600 steps, cavern 3)"
+    },
+    {
+      "name": "no unexpected page errors or console errors",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "passed": 23,
+  "total": 23,
+  "metrics": {
+    "fps": 60.4,
+    "msPerStep": 0.027,
+    "level1Frames": 548
+  }
+}

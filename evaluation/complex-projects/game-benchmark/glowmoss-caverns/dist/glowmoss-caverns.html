@@ -1,0 +1,1610 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Glowmoss Caverns</title>
+<style>
+:root {
+  --bg: #0d0b14;
+  --panel: rgba(30, 26, 46, 0.92);
+  --text: #f2f0ff;
+  --muted: #c9a3ff;
+  --accent: #2bd67b;
+  --accent-light: #a8ff9e;
+  --gold: #ffd166;
+  --danger: #ff4f7a;
+  --scale: 3;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); overflow: hidden; }
+body { font: 16px/1.4 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; touch-action: none; }
+#app { position: fixed; inset: 0; display: grid; place-items: center; }
+#game {
+  image-rendering: pixelated; image-rendering: crisp-edges;
+  background: #000; box-shadow: 0 0 40px rgba(43, 214, 123, 0.12);
+  max-width: 100vw; max-height: 100vh;
+}
+.screen {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; padding: 16px; background: radial-gradient(ellipse at center, rgba(13, 11, 20, 0.55), rgba(13, 11, 20, 0.92));
+  text-align: center;
+}
+.screen[hidden] { display: none; }
+h1 { margin: 0; font-size: clamp(28px, 7vw, 56px); color: var(--accent-light); letter-spacing: 2px;
+     text-shadow: 0 0 18px rgba(43, 214, 123, 0.6), 0 3px 0 #1d8a6a; }
+h2 { margin: 0; font-size: clamp(22px, 5vw, 36px); color: var(--accent-light); }
+.tagline { color: var(--muted); margin: 0 0 8px; }
+.menu { display: flex; flex-direction: column; gap: 10px; min-width: min(320px, 90vw); }
+.menu.row { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+button {
+  font: inherit; color: var(--text); background: #2a2140; border: 2px solid #4a3a8c; border-radius: 6px;
+  padding: 10px 18px; min-height: 44px; cursor: pointer;
+}
+button:hover:not([disabled]) { border-color: var(--accent); }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+button[disabled] { opacity: 0.45; cursor: not-allowed; }
+button.secondary { background: transparent; border-color: #5d5a7a; color: var(--muted); }
+.settings { display: grid; gap: 10px; background: var(--panel); padding: 16px; border-radius: 8px; min-width: min(360px, 92vw); text-align: left; }
+.settings label { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.settings label.check { justify-content: flex-start; }
+input[type="range"] { width: 50%; accent-color: var(--accent); }
+input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent); }
+select { font: inherit; background: #2a2140; color: var(--text); border: 2px solid #4a3a8c; border-radius: 6px; padding: 6px; min-height: 40px; }
+.howto { text-align: left; max-width: 640px; background: var(--panel); padding: 16px 24px; border-radius: 8px; }
+.howto li { margin: 6px 0; }
+kbd { background: #3b3456; border-radius: 4px; padding: 1px 6px; border-bottom: 2px solid #1e1a2e; }
+p[role="status"] { max-width: 640px; background: var(--panel); padding: 12px 16px; border-radius: 8px; }
+.hint {
+  position: absolute; top: 56px; left: 50%; transform: translateX(-50%); max-width: min(560px, 92vw);
+  margin: 0; padding: 8px 14px; background: var(--panel); border-left: 4px solid var(--accent); border-radius: 6px;
+}
+.hud-button { position: absolute; top: 8px; right: 8px; min-height: 40px; padding: 6px 12px; opacity: 0.85; }
+.touch { position: absolute; inset: auto 0 0 0; display: flex; justify-content: space-between; padding: 16px; pointer-events: none; }
+.touch[hidden] { display: none; }
+.touch button { pointer-events: auto; width: 72px; height: 72px; font-size: 22px; border-radius: 50%; background: rgba(42, 33, 64, 0.75); }
+.touch .pad { display: flex; gap: 16px; }
+.touch .jump { width: 96px; height: 96px; font-size: 16px; }
+.toast {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%); max-width: min(560px, 92vw);
+  padding: 10px 16px; background: var(--panel); border: 2px solid var(--gold); border-radius: 6px;
+}
+.toast[hidden] { display: none; }
+code { color: var(--danger); word-break: break-word; }
+@media (max-width: 480px) { body { font-size: 14px; } button { padding: 8px 12px; } }
+@media (orientation: portrait) and (pointer: coarse) { #app { place-items: start center; padding-top: 64px; } .hint { top: auto; bottom: 150px; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<main id="app" aria-label="Glowmoss Caverns game">
+  <canvas id="game" width="320" height="180" aria-label="Game view" role="img" tabindex="-1"></canvas>
+  <button id="hud-pause" class="hud-button" data-action="pause" aria-label="Pause" hidden>II</button>
+  <p id="level-hint" class="hint" hidden></p>
+
+  <section class="screen" data-screen="title" aria-labelledby="title-heading">
+    <h1 id="title-heading">Glowmoss Caverns</h1>
+    <p class="tagline">Follow the light. Gather the moss. Find the way out.</p>
+    <div class="menu">
+      <button data-action="play"><span id="continue-label">Play</span></button>
+      <button data-action="levels">Choose cavern</button>
+      <button data-action="settings">Settings</button>
+      <button data-action="howto">How to play</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="levels" aria-labelledby="levels-heading" hidden>
+    <h2 id="levels-heading">Choose a cavern</h2>
+    <div id="level-list" class="menu"></div>
+    <div class="menu row">
+      <button data-action="back">Back</button>
+      <button data-action="reset" class="secondary">Reset progress</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="settings" aria-labelledby="settings-heading" hidden>
+    <h2 id="settings-heading">Settings</h2>
+    <form class="settings" onsubmit="return false">
+      <label>Master volume <input id="set-master" type="range" min="0" max="100" step="5"></label>
+      <label>Music volume <input id="set-music" type="range" min="0" max="100" step="5"></label>
+      <label>Effects volume <input id="set-sfx" type="range" min="0" max="100" step="5"></label>
+      <label class="check"><input id="set-shake" type="checkbox"> Screen shake</label>
+      <label class="check"><input id="set-reducedFlashing" type="checkbox"> Reduce flashing</label>
+      <label class="check"><input id="set-showFps" type="checkbox"> Show frame rate</label>
+      <label>Touch controls
+        <select id="set-touch"><option value="auto">Automatic</option><option value="on">Always</option><option value="off">Never</option></select>
+      </label>
+    </form>
+    <div class="menu"><button data-action="back">Back</button></div>
+  </section>
+
+  <section class="screen" data-screen="howto" aria-labelledby="howto-heading" hidden>
+    <h2 id="howto-heading">How to play</h2>
+    <ul class="howto">
+      <li><kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>A</kbd> <kbd>D</kbd>: run</li>
+      <li><kbd>Space</kbd>, <kbd>Z</kbd>, <kbd>&uarr;</kbd> or <kbd>W</kbd>: jump (hold for higher jumps)</li>
+      <li><kbd>Esc</kbd> or <kbd>P</kbd>: pause</li>
+      <li>Gamepad: stick or d-pad to run, A to jump, Start to pause. Touch: on-screen buttons.</li>
+      <li>Land on slimes, bats and spore turrets to defeat them. Avoid spikes and spores.</li>
+      <li>Glowmoss orbs give points; collect them all for a bonus. Heart crystals heal you.</li>
+      <li>Touch a glowing lamp to save your place. Reach the green door to finish the cavern.</li>
+    </ul>
+    <div class="menu"><button data-action="back">Back</button></div>
+  </section>
+
+  <section class="screen" data-screen="paused" aria-labelledby="paused-heading" hidden>
+    <h2 id="paused-heading">Paused</h2>
+    <div class="menu">
+      <button data-action="resume">Resume</button>
+      <button data-action="restart">Restart cavern</button>
+      <button data-action="settings">Settings</button>
+      <button data-action="quit">Quit to title</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="complete" aria-labelledby="complete-heading" hidden>
+    <h2 id="complete-heading">Cavern cleared!</h2>
+    <p id="complete-summary" role="status"></p>
+    <div class="menu">
+      <button data-action="next">Next cavern</button>
+      <button data-action="replay">Play again</button>
+      <button data-action="title">Title</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="gameover" aria-labelledby="gameover-heading" hidden>
+    <h2 id="gameover-heading">Your light went out</h2>
+    <p id="gameover-score" role="status"></p>
+    <div class="menu">
+      <button data-action="retry">Try again</button>
+      <button data-action="title">Title</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="victory" aria-labelledby="victory-heading" hidden>
+    <h2 id="victory-heading">You found the way out!</h2>
+    <p id="victory-summary" role="status"></p>
+    <div class="menu">
+      <button data-action="replay">Play the last cavern again</button>
+      <button data-action="title">Title</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="error" aria-labelledby="error-heading" hidden>
+    <h2 id="error-heading">Something went wrong</h2>
+    <p>The game hit an unexpected error. Your saved progress is safe.</p>
+    <p><code id="error-message"></code></p>
+    <div class="menu"><button data-action="reload">Reload the game</button></div>
+  </section>
+
+  <div id="touch" class="touch" hidden>
+    <div class="pad">
+      <button data-touch="left" aria-label="Move left">&#9664;</button>
+      <button data-touch="right" aria-label="Move right">&#9654;</button>
+    </div>
+    <button data-touch="jump" class="jump" aria-label="Jump">JUMP</button>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</main>
+<script>
+window.GLOWMOSS_ASSETS = {"sheetImage":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAAMFBMVEUAAAD/0Wb/jEINCxRKOozJo//y8P9e5ub/T3p6L1or1nuo/54dimo7NFZdWnoeGi7C/nY+AAAAAXRSTlMAQObYZgAAApVJREFUeNrlWAlypDAMNDQYw5Dk/79d21xS4wNqSNXujspJ0Ua0D8mNGGN+yZrmpkMFNw11tK0pOtSwATRf0xAjOVQwohX82aGC0UVD3p8cKtjDnjvYXznUsbWh5e7HAaILrmIbW26A5YHgguuYZqwGSDiUcWJP7wXhjIdoWVx1SGCghg336AHVfYTJQq5A4e1Ke3Qy9fmJEB6RyYTPF4ZP1gL4OP6q1dTqLkNVnZyr8uknpHRA/Vv5qoy0x2LTQ35EqBIFNToZNj45G0ZeP5mvu6NOBi4aSnzyibOcEXbOBsIRpQkKPUvImcbOxjaipPBCz6pq5WBD2wkxTa/XNJ3eKfuSOQgcJOfUJiLSTdOceUthWOQIZkuTkzr5/RuPoGCyfo7+r6h3rE5KvMZo+wQ3wikngGn5Eh2eDJJwtVnKG6TaIalaR0dYLfYtnBOEgMF1NWO9nFd7TA6B6ln8q00XVU8Q9khcvkXYY5nbcnU9KlnpCTwhj/qeUzOjx2jDG6TNUQZ1DP79erjXJD0ylQgCWhuK+r3x9d6CGPbrDjAB2t2QLZFd5xup4z4CEwCU2dgEMq1/iPzHCGcCA2v38jUpP0EsulJRrwgCBoqEBrHJ4kpVW5qABjjkTIk4xYkGOM1QEs4XCIme1IrwLmeXBW1dFLIYNwXtFOR/XA//DwPuqnk5Zr4UAWR9mPqA1yWx14oZuftYykNRfX1Fk0enbZU64mVldRaxOBgr4V46fH0Hvm/BCJJbqMSPBZs8CGs1N2blbNFMSTDrc00Yjiti/PygGITaHnPNfiK8nTf0DfA24el3nbcJiZ6y5tPLuYdsGD5OMJ+Nevwys8Nznxme7FHG2y/6K5wPLvj4ee2jCENFN32Knv0BaAYeu+VX8HEAAAAASUVORK5CYII=","sheet":{"frames":[{"filename":"player_idle_0","frame":{"x":0,"y":0,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":260},{"filename":"player_idle_1","frame":{"x":16,"y":0,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":260},{"filename":"player_run_0","frame":{"x":32,"y":0,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":90},{"filename":"player_run_1","frame":{"x":48,"y":0,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":90},{"filename":"player_run_2","frame":{"x":64,"y":0,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":90},{"filename":"player_run_3","frame":{"x":0,"y":16,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":90},{"filename":"player_jump_0","frame":{"x":16,"y":16,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":120},{"filename":"player_fall_0","frame":{"x":32,"y":16,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":120},{"filename":"player_hurt_0","frame":{"x":48,"y":16,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":120},{"filename":"slime_walk_0","frame":{"x":64,"y":16,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":220},{"filename":"slime_walk_1","frame":{"x":0,"y":32,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":220},{"filename":"bat_fly_0","frame":{"x":16,"y":32,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":140},{"filename":"bat_fly_1","frame":{"x":32,"y":32,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":140},{"filename":"turret_idle_0","frame":{"x":48,"y":32,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":400},{"filename":"turret_idle_1","frame":{"x":64,"y":32,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":400},{"filename":"spore_float_0","frame":{"x":0,"y":48,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":200},{"filename":"orb_glow_0","frame":{"x":16,"y":48,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":200},{"filename":"orb_glow_1","frame":{"x":32,"y":48,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":200},{"filename":"crystal_shine_0","frame":{"x":48,"y":48,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":300},{"filename":"checkpoint_off_0","frame":{"x":64,"y":48,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":500},{"filename":"checkpoint_on_0","frame":{"x":0,"y":64,"w":16,"h":16},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},"sourceSize":{"w":16,"h":16},"duration":300}],"meta":{"app":"mych-pixel-art pixel_tool.py","version":"2.0.0","image":"sprites.png","format":"RGBA8888","size":{"w":80,"h":80},"scale":"1","frameTags":[{"name":"player_idle","from":0,"to":1,"direction":"forward"},{"name":"player_run","from":2,"to":5,"direction":"forward"},{"name":"player_jump","from":6,"to":6,"direction":"forward"},{"name":"player_fall","from":7,"to":7,"direction":"forward"},{"name":"player_hurt","from":8,"to":8,"direction":"forward"},{"name":"slime_walk","from":9,"to":10,"direction":"forward"},{"name":"bat_fly","from":11,"to":12,"direction":"forward"},{"name":"turret_idle","from":13,"to":14,"direction":"forward"},{"name":"spore_float","from":15,"to":15,"direction":"forward"},{"name":"orb_glow","from":16,"to":17,"direction":"forward"},{"name":"crystal_shine","from":18,"to":18,"direction":"forward"},{"name":"checkpoint_off","from":19,"to":19,"direction":"forward"},{"name":"checkpoint_on","from":20,"to":20,"direction":"forward"}]}}};
+(function () {
+'use strict';
+// ---- src/game/physics.js ----
+// Tile physics: axis-separated movement with AABB collision against a tile grid.
+// Speeds stay below one tile per frame, so checking the destination row or column
+// is enough to prevent tunneling.
+
+const TILE = 16;
+const T_EMPTY = 0;
+const T_SOLID = 1;
+const T_ONEWAY = 2;
+const T_SPIKE = 3;
+
+const PHYS = Object.freeze({
+  gravity: 0.25,
+  maxFall: 5,
+  runAccel: 0.2,
+  runDecel: 0.3,
+  airAccel: 0.15,
+  maxRun: 1.6,
+  jumpVel: -4.7,
+  jumpCut: 0.45,
+  stompBounce: -3.6,
+  coyoteFrames: 6,
+  bufferFrames: 6,
+});
+
+function tileAt(level, tx, ty) {
+  if (tx < 0 || tx >= level.width) return T_SOLID;
+  if (ty < 0 || ty >= level.height) return T_EMPTY;
+  return level.tiles[ty * level.width + tx];
+}
+
+function isSolidTile(t) {
+  return t === T_SOLID;
+}
+
+function standingOn(body, level) {
+  const feet = body.y + body.h;
+  const ty = Math.round(feet / TILE);
+  if (Math.abs(feet - ty * TILE) > 0.01) return false;
+  const left = Math.floor(body.x / TILE);
+  const right = Math.floor((body.x + body.w - 0.001) / TILE);
+  for (let tx = left; tx <= right; tx++) {
+    const t = tileAt(level, tx, ty);
+    if (t === T_SOLID || t === T_ONEWAY) return true;
+  }
+  return false;
+}
+
+function moveAndCollide(body, level) {
+  const hit = { onGround: false, hitWall: false, hitCeiling: false };
+  if (body.vx !== 0) {
+    body.x += body.vx;
+    const top = Math.floor(body.y / TILE);
+    const bottom = Math.floor((body.y + body.h - 0.001) / TILE);
+    const tx = body.vx > 0 ? Math.floor((body.x + body.w - 0.001) / TILE) : Math.floor(body.x / TILE);
+    for (let ty = top; ty <= bottom; ty++) {
+      if (isSolidTile(tileAt(level, tx, ty))) {
+        body.x = body.vx > 0 ? tx * TILE - body.w : (tx + 1) * TILE;
+        body.vx = 0;
+        hit.hitWall = true;
+        break;
+      }
+    }
+  }
+  const prevBottom = body.y + body.h;
+  body.y += body.vy;
+  const left = Math.floor(body.x / TILE);
+  const right = Math.floor((body.x + body.w - 0.001) / TILE);
+  if (body.vy > 0) {
+    const ty = Math.floor((body.y + body.h - 0.001) / TILE);
+    for (let tx = left; tx <= right; tx++) {
+      const t = tileAt(level, tx, ty);
+      if (isSolidTile(t) || (t === T_ONEWAY && prevBottom <= ty * TILE + 0.001)) {
+        body.y = ty * TILE - body.h;
+        body.vy = 0;
+        hit.onGround = true;
+        break;
+      }
+    }
+  } else if (body.vy < 0) {
+    const ty = Math.floor(body.y / TILE);
+    for (let tx = left; tx <= right; tx++) {
+      if (isSolidTile(tileAt(level, tx, ty))) {
+        body.y = (ty + 1) * TILE;
+        body.vy = 0;
+        hit.hitCeiling = true;
+        break;
+      }
+    }
+  }
+  if (!hit.onGround && body.vy === 0) hit.onGround = standingOn(body, level);
+  return hit;
+}
+
+function overlaps(a, b) {
+  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+
+function touchesTile(body, level, kind, inset = 3) {
+  const left = Math.floor((body.x + inset) / TILE);
+  const right = Math.floor((body.x + body.w - inset - 0.001) / TILE);
+  const top = Math.floor((body.y + inset) / TILE);
+  const bottom = Math.floor((body.y + body.h - 0.001) / TILE);
+  for (let ty = top; ty <= bottom; ty++) {
+    for (let tx = left; tx <= right; tx++) if (tileAt(level, tx, ty) === kind) return true;
+  }
+  return false;
+}
+
+// ---- src/game/levels.js ----
+// Level data as text maps, and a parser that validates them.
+// Legend: '#' rock, '=' one-way ledge, '^' spikes, 'P' player start, 'E' exit,
+// 'o' glowmoss orb, '*' heart crystal, 'c' checkpoint, 's' slime, 'b' bat,
+// 't' spore turret facing left, 'T' spore turret facing right, '.' empty.
+
+
+const TILE_CODES = { '.': T_EMPTY, '#': T_SOLID, '=': T_ONEWAY, '^': T_SPIKE };
+const OBJECT_CODES = new Set(['P', 'E', 'o', '*', 'c', 's', 'b', 't', 'T']);
+const MAX_LEVEL_SIZE = { width: 400, height: 64 };
+
+const LEVELS = [
+  {
+    name: 'Lantern Path',
+    hint: 'Run and jump with the arrow keys and Space, a gamepad or the on-screen buttons. Collect glowmoss orbs and reach the glowing door.',
+    map: [
+      '############################################################',
+      '#..........................................................#',
+      '#..........................................................#',
+      '#..........................................................#',
+      '#..........................................................#',
+      '#..........................................................#',
+      '#..........................................................#',
+      '#...............................................o.o........#',
+      '#..............o.o.o........ooo.......*........#####.....E.#',
+      '#.P...........#######...........oo.s.===......#######...####',
+      '#.........###.........######...######.........##########...#',
+      '#######..####.........######...######.......################',
+      '#######..####^^^^^^^^^######...######^^^^^^^################',
+    ],
+  },
+  {
+    name: 'Echo Hollow',
+    hint: 'Bats bob up and down. Jump onto ledges from below, and stomp enemies by landing on them.',
+    map: [
+      '######################################################################',
+      '#....................................................................#',
+      '#....................................................................#',
+      '#...........................oo.......................................#',
+      '#..........b...............====..........b...........ooo.............#',
+      '#......................................................===.....E.....#',
+      '#..................ooo.............===.............===.......#########',
+      '#.................=====.......................===....................#',
+      '#..........o.o..........................c............................#',
+      '#.P.......=====..........s............#######...........s............#',
+      '#######..........################....#########....##############.....#',
+      '#######^^^^^^^^^^################^^^^#########^^^^##############^^^^^#',
+      '######################################################################',
+    ],
+  },
+  {
+    name: 'Spore Galleries',
+    hint: 'Turrets fire spores on a rhythm. Time your runs, and grab heart crystals when you are hurt.',
+    map: [
+      '##########################################################################',
+      '#........................................................................#',
+      '#........................................................................#',
+      '#.......................................ooo..............................#',
+      '#......................................=====.............*...............#',
+      '#...............ooo............................................ooo.......#',
+      '#..............=====.........*.............c..............=====......E...#',
+      '#...........................====.......................................###',
+      '#.P......o.o..................................b..........................#',
+      '#.......#####........T................................t..........s.......#',
+      '#######.......#############^^^#####...########....#######...##########...#',
+      '#######^^^^^^^#############^^^#####^^^########^^^^#######^^^##########^^^#',
+      '##########################################################################',
+    ],
+  },
+];
+
+function parseLevel(def) {
+  const errors = [];
+  const rows = Array.isArray(def?.map) ? def.map : [];
+  if (!rows.length) errors.push('level has no map rows');
+  const width = rows[0]?.length || 0;
+  const height = rows.length;
+  if (width > MAX_LEVEL_SIZE.width || height > MAX_LEVEL_SIZE.height) errors.push(`level is larger than ${MAX_LEVEL_SIZE.width}x${MAX_LEVEL_SIZE.height}`);
+  const tiles = new Uint8Array(Math.max(0, width * height));
+  const objects = [];
+  rows.forEach((row, y) => {
+    if (typeof row !== 'string' || row.length !== width) {
+      errors.push(`row ${y + 1} has ${row?.length} columns, expected ${width}`);
+      return;
+    }
+    [...row].forEach((ch, x) => {
+      if (ch in TILE_CODES) tiles[y * width + x] = TILE_CODES[ch];
+      else if (OBJECT_CODES.has(ch)) objects.push({ kind: ch, x: x * TILE, y: y * TILE, tx: x, ty: y });
+      else errors.push(`unknown character '${ch}' at row ${y + 1}, column ${x + 1}`);
+    });
+  });
+  const starts = objects.filter((o) => o.kind === 'P');
+  if (starts.length !== 1) errors.push(`level needs exactly one player start 'P' (found ${starts.length})`);
+  if (!objects.some((o) => o.kind === 'E')) errors.push("level needs an exit 'E'");
+  return { name: def?.name || 'Untitled', hint: def?.hint || '', width, height, tiles, objects, errors };
+}
+
+// ---- src/game/world.js ----
+// The game world: a deterministic simulation stepped at 60 updates per second.
+// The world holds only plain data (structuredClone-able), so the level solver and
+// tests can copy and replay it. Side effects (sound, particles, saving) are left
+// to the caller through the events list filled during each step.
+
+
+const MAX_HEARTS = 3;
+const POINTS = Object.freeze({ orb: 10, crystal: 50, slime: 100, bat: 120, turret: 150, allOrbs: 500, heart: 100 });
+const TURRET_PERIOD = 120;
+const INVULN_FRAMES = 90;
+
+function createWorld(levelIndex, options = {}) {
+  const def = (options.levels || LEVELS)[levelIndex];
+  if (!def) throw new Error(`no level ${levelIndex + 1}`);
+  const level = parseLevel(def);
+  if (level.errors.length) throw new Error(`level ${levelIndex + 1} is invalid: ${level.errors.join('; ')}`);
+  const world = {
+    levelIndex, level, frame: 0, score: 0, orbs: 0, orbsTotal: 0, hearts: options.hearts ?? MAX_HEARTS,
+    status: 'playing', events: [], enemies: [], projectiles: [], pickups: [], checkpoints: [], exit: null,
+    player: null, respawn: null, result: null, nextId: 1, stats: { stomps: 0, hurts: 0, falls: 0, jumps: 0 },
+  };
+  for (const obj of level.objects) {
+    const id = world.nextId++;
+    if (obj.kind === 'P') {
+      world.player = { x: obj.x + 3, y: obj.y + 2, w: 10, h: 14, vx: 0, vy: 0, facing: 1, onGround: false, coyote: 0,
+                       buffer: 0, jumpHeldPrev: false, invuln: 0, animTime: 0, landedFrame: -100 };
+      world.respawn = { x: obj.x + 3, y: obj.y + 2 };
+    } else if (obj.kind === 'E') {
+      world.exit = { id, x: obj.x + 2, y: obj.y - 12, w: 12, h: 28 };
+    } else if (obj.kind === 'o' || obj.kind === '*') {
+      world.pickups.push({ id, kind: obj.kind === 'o' ? 'orb' : 'crystal', x: obj.x + 4, y: obj.y + 4, w: 8, h: 8, taken: false });
+      if (obj.kind === 'o') world.orbsTotal += 1;
+    } else if (obj.kind === 'c') {
+      world.checkpoints.push({ id, x: obj.x + 2, y: obj.y, w: 12, h: 16, active: false });
+    } else if (obj.kind === 's') {
+      world.enemies.push({ id, kind: 'slime', x: obj.x + 2, y: obj.y + 6, w: 12, h: 10, vx: -0.5, vy: 0, dead: false, animTime: 0 });
+    } else if (obj.kind === 'b') {
+      world.enemies.push({ id, kind: 'bat', x: obj.x + 2, y: obj.y + 4, w: 12, h: 8, vx: 0.7, vy: 0, baseY: obj.y + 4,
+                           minX: obj.x - 48, maxX: obj.x + 48, phase: (obj.tx * 7) % 60, dead: false, animTime: 0 });
+    } else if (obj.kind === 't' || obj.kind === 'T') {
+      world.enemies.push({ id, kind: 'turret', x: obj.x + 2, y: obj.y + 4, w: 12, h: 12, facing: obj.kind === 't' ? -1 : 1,
+                           cooldown: 40 + (obj.tx * 13) % 60, dead: false, animTime: 0 });
+    }
+  }
+  return world;
+}
+
+function emit(world, type, data = {}) {
+  world.events.push({ type, frame: world.frame, ...data });
+}
+
+function hurtPlayer(world, fromX, reason) {
+  const p = world.player;
+  if (p.invuln > 0 || world.status !== 'playing') return;
+  world.hearts -= 1;
+  world.stats.hurts += 1;
+  p.invuln = INVULN_FRAMES;
+  p.vy = -3;
+  p.vx = (p.x + p.w / 2 < fromX ? -1 : 1) * 1.6;
+  emit(world, 'hurt', { reason, x: p.x, y: p.y });
+  if (world.hearts <= 0) gameOver(world);
+}
+
+function gameOver(world) {
+  world.status = 'gameover';
+  emit(world, 'gameover');
+}
+
+function updatePlayer(world, input) {
+  const p = world.player;
+  const dir = (input.right ? 1 : 0) - (input.left ? 1 : 0);
+  if (dir !== 0) {
+    p.vx += dir * (p.onGround ? PHYS.runAccel : PHYS.airAccel);
+    p.vx = Math.max(-PHYS.maxRun, Math.min(PHYS.maxRun, p.vx));
+    p.facing = dir;
+  } else {
+    const decel = p.onGround ? PHYS.runDecel : PHYS.airAccel * 0.5;
+    p.vx = Math.abs(p.vx) <= decel ? 0 : p.vx - Math.sign(p.vx) * decel;
+  }
+  const pressed = input.jump && !p.jumpHeldPrev;
+  p.buffer = pressed ? PHYS.bufferFrames : Math.max(0, p.buffer - 1);
+  p.coyote = p.onGround ? PHYS.coyoteFrames : Math.max(0, p.coyote - 1);
+  if (p.buffer > 0 && p.coyote > 0) {
+    p.vy = PHYS.jumpVel;
+    p.buffer = 0;
+    p.coyote = 0;
+    world.stats.jumps += 1;
+    emit(world, 'jump', { x: p.x, y: p.y + p.h });
+  }
+  if (p.jumpHeldPrev && !input.jump && p.vy < 0) p.vy *= PHYS.jumpCut;
+  p.vy = Math.min(PHYS.maxFall, p.vy + PHYS.gravity);
+  const fallSpeed = p.vy;
+  const wasGrounded = p.onGround;
+  const hit = moveAndCollide(p, world.level);
+  p.onGround = hit.onGround;
+  if (p.onGround && !wasGrounded && fallSpeed > 2) {
+    p.landedFrame = world.frame;
+    emit(world, 'land', { x: p.x + p.w / 2, y: p.y + p.h });
+  }
+  p.jumpHeldPrev = !!input.jump;
+  p.animTime += 1;
+  if (p.invuln > 0) p.invuln -= 1;
+}
+
+function updateEnemy(world, e) {
+  const level = world.level;
+  e.animTime += 1;
+  if (e.kind === 'slime') {
+    e.vy = Math.min(PHYS.maxFall, e.vy + PHYS.gravity);
+    const hit = moveAndCollide(e, level);
+    const aheadX = e.vx > 0 ? e.x + e.w + 1 : e.x - 1;
+    const below = tileAt(level, Math.floor(aheadX / TILE), Math.floor((e.y + e.h + 1) / TILE));
+    if (hit.hitWall) e.vx = e.vx > 0 ? -0.5 : 0.5;
+    else if (hit.onGround && below !== T_SOLID && below !== T_ONEWAY) e.vx = -e.vx;
+    if (e.y > level.height * TILE + 64) e.dead = true;
+  } else if (e.kind === 'bat') {
+    e.x += e.vx;
+    if (e.x < e.minX || e.x > e.maxX || touchesTile(e, level, T_SOLID, 0)) {
+      e.x -= e.vx;
+      e.vx = -e.vx;
+    }
+    e.y = e.baseY + Math.sin((world.frame + e.phase) * 0.08) * 10;
+  } else if (e.kind === 'turret') {
+    e.cooldown -= 1;
+    if (e.cooldown <= 0) {
+      e.cooldown = TURRET_PERIOD;
+      world.projectiles.push({ id: world.nextId++, x: e.facing > 0 ? e.x + e.w : e.x - 6, y: e.y + 3, w: 6, h: 6,
+                               vx: e.facing * 1.2, life: 240 });
+      emit(world, 'shoot', { x: e.x, y: e.y });
+    }
+  }
+}
+
+function playerCollisions(world) {
+  const p = world.player;
+  for (const e of world.enemies) {
+    if (e.dead || !overlaps(p, e)) continue;
+    const stomping = p.vy > 0 && p.y + p.h - p.vy <= e.y + 6;
+    if (stomping) {
+      e.dead = true;
+      p.vy = PHYS.stompBounce;
+      world.score += POINTS[e.kind];
+      world.stats.stomps += 1;
+      emit(world, 'stomp', { kind: e.kind, x: e.x + e.w / 2, y: e.y + e.h / 2 });
+    } else {
+      hurtPlayer(world, e.x + e.w / 2, e.kind);
+    }
+  }
+  for (const shot of world.projectiles) {
+    if (shot.life > 0 && overlaps(p, shot)) {
+      shot.life = 0;
+      hurtPlayer(world, shot.x, 'spore');
+    }
+  }
+  if (touchesTile(p, world.level, T_SPIKE, 3)) hurtPlayer(world, p.x + p.w / 2 - p.vx * 10, 'spikes');
+  for (const item of world.pickups) {
+    if (item.taken || !overlaps(p, item)) continue;
+    item.taken = true;
+    if (item.kind === 'orb') {
+      world.orbs += 1;
+      world.score += POINTS.orb;
+      emit(world, 'pickup', { x: item.x, y: item.y });
+    } else if (world.hearts < MAX_HEARTS) {
+      world.hearts += 1;
+      emit(world, 'heal', { x: item.x, y: item.y });
+    } else {
+      world.score += POINTS.crystal;
+      emit(world, 'pickup', { x: item.x, y: item.y, crystal: true });
+    }
+  }
+  for (const cp of world.checkpoints) {
+    if (!cp.active && overlaps(p, cp)) {
+      for (const other of world.checkpoints) other.active = false;
+      cp.active = true;
+      world.respawn = { x: cp.x + 1, y: cp.y + 2 };
+      emit(world, 'checkpoint', { x: cp.x, y: cp.y });
+    }
+  }
+  if (world.exit && overlaps(p, world.exit)) completeLevel(world);
+}
+
+function completeLevel(world) {
+  const seconds = world.frame / 60;
+  const timeBonus = Math.max(0, Math.round((180 - seconds) * 5));
+  const heartBonus = world.hearts * POINTS.heart;
+  const orbBonus = world.orbs === world.orbsTotal && world.orbsTotal > 0 ? POINTS.allOrbs : 0;
+  world.result = { base: world.score, timeBonus, heartBonus, orbBonus, total: world.score + timeBonus + heartBonus + orbBonus,
+                   seconds: Math.round(seconds * 10) / 10, orbs: world.orbs, orbsTotal: world.orbsTotal };
+  world.score = world.result.total;
+  world.status = 'complete';
+  emit(world, 'complete', { total: world.result.total });
+}
+
+function stepWorld(world, input) {
+  world.events = [];
+  if (world.status !== 'playing') return world;
+  world.frame += 1;
+  updatePlayer(world, input);
+  for (const e of world.enemies) if (!e.dead) updateEnemy(world, e);
+  for (const shot of world.projectiles) {
+    if (shot.life <= 0) continue;
+    shot.x += shot.vx;
+    shot.life -= 1;
+    if (touchesTile(shot, world.level, T_SOLID, 0)) {
+      shot.life = 0;
+      emit(world, 'puff', { x: shot.x, y: shot.y });
+    }
+  }
+  world.projectiles = world.projectiles.filter((shot) => shot.life > 0);
+  playerCollisions(world);
+  const p = world.player;
+  if (world.status === 'playing' && p.y > world.level.height * TILE + 32) {
+    world.hearts -= 1;
+    world.stats.falls += 1;
+    emit(world, 'fall', { x: p.x, y: p.y });
+    if (world.hearts <= 0) {
+      gameOver(world);
+    } else {
+      Object.assign(p, { x: world.respawn.x, y: world.respawn.y, vx: 0, vy: 0, invuln: 60, onGround: false });
+      emit(world, 'respawn', { x: p.x, y: p.y });
+    }
+  }
+  return world;
+}
+
+function levelCount(levels = LEVELS) {
+  return levels.length;
+}
+
+// ---- src/engine/particles.js ----
+// Pooled particles for visual effects. A fixed pool caps memory and work;
+// a seeded generator keeps effects reproducible in tests.
+
+function seededRandom(seed) {
+  let state = seed >>> 0;
+  return () => {
+    state = (state + 0x6d2b79f5) >>> 0;
+    let t = state;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function createParticles(max = 400, seed = 7) {
+  const pool = Array.from({ length: max }, () => ({ alive: false, x: 0, y: 0, vx: 0, vy: 0, life: 0, maxLife: 1, color: '#fff', size: 1, gravity: 0 }));
+  const random = seededRandom(seed);
+  let cursor = 0;
+  return {
+    spawn(x, y, { count = 8, color = '#a8ff9e', speed = 1.5, life = 30, gravity = 0.05, size = 2, spread = Math.PI * 2, angle = 0 } = {}) {
+      for (let i = 0; i < count; i++) {
+        const p = pool[cursor];
+        cursor = (cursor + 1) % max;
+        const a = angle - spread / 2 + random() * spread;
+        const v = speed * (0.4 + random() * 0.6);
+        Object.assign(p, { alive: true, x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life, maxLife: life, color, size, gravity });
+      }
+    },
+    update() {
+      for (const p of pool) {
+        if (!p.alive) continue;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += p.gravity;
+        p.life -= 1;
+        if (p.life <= 0) p.alive = false;
+      }
+    },
+    draw(ctx, camX, camY) {
+      for (const p of pool) {
+        if (!p.alive) continue;
+        ctx.globalAlpha = Math.max(0, p.life / p.maxLife);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(Math.round(p.x - camX), Math.round(p.y - camY), p.size, p.size);
+      }
+      ctx.globalAlpha = 1;
+    },
+    count() {
+      return pool.reduce((n, p) => n + (p.alive ? 1 : 0), 0);
+    },
+    clear() {
+      for (const p of pool) p.alive = false;
+    },
+  };
+}
+
+// ---- src/engine/renderer.js ----
+// Canvas renderer at a fixed internal resolution (320x180), scaled up by CSS
+// with pixelated sampling. The level's tiles are drawn once to an offscreen
+// canvas; sprites come from the sheet built with mych-pixel-art, with simple
+// shapes as a fallback when the sheet is missing.
+
+
+const VIEW_W = 320;
+const VIEW_H = 180;
+const COLORS = {
+  bgTop: '#0d0b14', bgBottom: '#1e1a2e', rock: '#3b3456', rockLight: '#5d5a7a', rockDark: '#2a2140',
+  moss: '#2bd67b', mossLight: '#a8ff9e', ledge: '#4a3a8c', spike: '#c9a3ff', hud: '#f2f0ff', heart: '#ff4f7a',
+  cyan: '#5ee6e6', gold: '#ffd166',
+};
+
+function indexSheet(image, meta) {
+  const frames = meta.frames.map((f) => ({ name: f.filename, ...f.frame, duration: f.duration || 100 }));
+  const tags = new Map(meta.meta.frameTags.map((t) => [t.name, { from: t.from, to: t.to, direction: t.direction }]));
+  return { image, frames, tags };
+}
+
+function tagFrame(sheet, tag, time) {
+  const info = sheet.tags.get(tag);
+  if (!info) return null;
+  const frames = sheet.frames.slice(info.from, info.to + 1);
+  const total = frames.reduce((n, f) => n + f.duration, 0);
+  let t = ((time * 1000) / 60) % total;
+  for (const f of frames) {
+    if (t < f.duration) return f;
+    t -= f.duration;
+  }
+  return frames[frames.length - 1];
+}
+
+function makeCanvas(doc, w, h) {
+  if (typeof OffscreenCanvas !== 'undefined') return new OffscreenCanvas(w, h);
+  const c = doc.createElement('canvas');
+  c.width = w;
+  c.height = h;
+  return c;
+}
+
+function createRenderer(canvas, doc = globalThis.document) {
+  const ctx = canvas.getContext('2d');
+  canvas.width = VIEW_W;
+  canvas.height = VIEW_H;
+  ctx.imageSmoothingEnabled = false;
+  let sheet = null;
+  let tileCache = null;
+  let tileLevel = null;
+  const cam = { x: 0, y: 0, ready: false };
+
+  function buildTiles(level) {
+    const c = makeCanvas(doc, level.width * TILE, level.height * TILE);
+    const g = c.getContext('2d');
+    const random = seededRandom(level.width * 131 + level.height);
+    for (let ty = 0; ty < level.height; ty++) {
+      for (let tx = 0; tx < level.width; tx++) {
+        const t = tileAt(level, tx, ty);
+        const x = tx * TILE;
+        const y = ty * TILE;
+        if (t === T_SOLID) {
+          g.fillStyle = COLORS.rock;
+          g.fillRect(x, y, TILE, TILE);
+          g.fillStyle = COLORS.rockDark;
+          g.fillRect(x, y + TILE - 2, TILE, 2);
+          for (let i = 0; i < 3; i++) {
+            g.fillStyle = random() < 0.5 ? COLORS.rockLight : COLORS.rockDark;
+            g.fillRect(x + Math.floor(random() * 14) + 1, y + Math.floor(random() * 12) + 2, 2, 1);
+          }
+          if (tileAt(level, tx, ty - 1) !== T_SOLID && ty > 0) {
+            g.fillStyle = COLORS.moss;
+            g.fillRect(x, y, TILE, 3);
+            g.fillStyle = COLORS.mossLight;
+            for (let i = 0; i < 4; i++) g.fillRect(x + Math.floor(random() * 15), y, 1, 1);
+            if (random() < 0.4) {
+              g.fillStyle = COLORS.moss;
+              g.fillRect(x + Math.floor(random() * 14), y + 3, 1, 2 + Math.floor(random() * 3));
+            }
+          }
+        } else if (t === T_ONEWAY) {
+          g.fillStyle = COLORS.ledge;
+          g.fillRect(x, y, TILE, 4);
+          g.fillStyle = COLORS.moss;
+          g.fillRect(x, y, TILE, 1);
+          g.fillStyle = COLORS.rockDark;
+          g.fillRect(x + 2, y + 4, 2, 3);
+          g.fillRect(x + 12, y + 4, 2, 3);
+        } else if (t === T_SPIKE) {
+          g.fillStyle = COLORS.spike;
+          for (let i = 0; i < 4; i++) {
+            const sx = x + i * 4;
+            for (let row = 0; row < 7; row++) g.fillRect(sx + Math.floor(row / 3), y + TILE - row - 1, Math.max(1, 4 - Math.floor(row / 2) * 1), 1);
+          }
+          g.fillStyle = COLORS.cyan;
+          g.fillRect(x + 1, y + TILE - 7, 1, 1);
+          g.fillRect(x + 9, y + TILE - 7, 1, 1);
+        }
+      }
+    }
+    return c;
+  }
+
+  function background(camX, camY, frame) {
+    const grad = ctx.createLinearGradient(0, 0, 0, VIEW_H);
+    grad.addColorStop(0, COLORS.bgTop);
+    grad.addColorStop(1, COLORS.bgBottom);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    for (const [depth, color, spacing, length] of [[0.2, '#16122a', 23, 50], [0.45, '#211a3a', 37, 70]]) {
+      ctx.fillStyle = color;
+      const offset = Math.floor(camX * depth);
+      for (let i = -1; i < VIEW_W / spacing + 2; i++) {
+        const worldIndex = Math.floor(offset / spacing) + i;
+        const h = 10 + ((worldIndex * 7919) % length);
+        const x = worldIndex * spacing - offset;
+        ctx.fillRect(x, 0, 6, h);
+        ctx.fillRect(x + 2, h, 2, 6);
+        ctx.fillRect(x + 1, VIEW_H - Math.floor(h * 0.6) - Math.floor(camY * depth * 0.2), 8, VIEW_H);
+      }
+    }
+    for (let i = 0; i < 24; i++) {
+      const x = (i * 53 - Math.floor(camX * 0.3)) % VIEW_W;
+      const y = (i * 37 + Math.sin((frame + i * 20) * 0.03) * 6) % VIEW_H;
+      ctx.fillStyle = i % 3 === 0 ? COLORS.cyan : COLORS.moss;
+      ctx.globalAlpha = 0.25 + 0.2 * Math.sin((frame + i * 13) * 0.05);
+      ctx.fillRect((x + VIEW_W) % VIEW_W, (y + VIEW_H) % VIEW_H, 1, 1);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function glow(x, y, radius, color, strength) {
+    const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
+    grad.addColorStop(0, color);
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.globalAlpha = strength;
+    ctx.fillStyle = grad;
+    ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+    ctx.globalAlpha = 1;
+  }
+
+  function sprite(tag, time, body, camX, camY, flip = false, fallback = '#ff00ff') {
+    const x = Math.round(body.x + body.w / 2 - 8 - camX);
+    const y = Math.round(body.y + body.h - 16 - camY);
+    const frame = sheet ? tagFrame(sheet, tag, time) : null;
+    if (!frame) {
+      ctx.fillStyle = fallback;
+      ctx.fillRect(Math.round(body.x - camX), Math.round(body.y - camY), body.w, body.h);
+      return;
+    }
+    if (flip) {
+      ctx.save();
+      ctx.translate(x + 16, y);
+      ctx.scale(-1, 1);
+      ctx.drawImage(sheet.image, frame.x, frame.y, frame.w, frame.h, 0, 0, 16, 16);
+      ctx.restore();
+    } else {
+      ctx.drawImage(sheet.image, frame.x, frame.y, frame.w, frame.h, x, y, 16, 16);
+    }
+  }
+
+  function updateCamera(world) {
+    const p = world.player;
+    const maxX = Math.max(0, world.level.width * TILE - VIEW_W);
+    const maxY = Math.max(0, world.level.height * TILE - VIEW_H);
+    const targetX = Math.min(maxX, Math.max(0, p.x + p.w / 2 - VIEW_W / 2 + p.facing * 24));
+    const targetY = Math.min(maxY, Math.max(0, p.y + p.h / 2 - VIEW_H / 2 - 8));
+    if (!cam.ready) {
+      cam.x = targetX;
+      cam.y = targetY;
+      cam.ready = true;
+    }
+    cam.x += (targetX - cam.x) * 0.12;
+    cam.y += (targetY - cam.y) * 0.12;
+    return { x: Math.round(cam.x), y: Math.round(cam.y) };
+  }
+
+  function hud(world, fps) {
+    ctx.fillStyle = 'rgba(13,11,20,0.65)';
+    ctx.fillRect(0, 0, VIEW_W, 14);
+    for (let i = 0; i < MAX_HEARTS; i++) {
+      ctx.fillStyle = i < world.hearts ? COLORS.heart : '#3b3456';
+      const x = 4 + i * 10;
+      ctx.fillRect(x, 4, 3, 3);
+      ctx.fillRect(x + 4, 4, 3, 3);
+      ctx.fillRect(x, 6, 7, 3);
+      ctx.fillRect(x + 1, 9, 5, 1);
+      ctx.fillRect(x + 2, 10, 3, 1);
+    }
+    ctx.font = '8px monospace';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = COLORS.mossLight;
+    ctx.fillText(`ORBS ${world.orbs}/${world.orbsTotal}`, 40, 3);
+    ctx.fillStyle = COLORS.gold;
+    ctx.fillText(`SCORE ${world.score}`, 116, 3);
+    ctx.fillStyle = COLORS.hud;
+    ctx.fillText(`${(world.frame / 60).toFixed(1)}s`, 200, 3);
+    ctx.fillText(world.level.name.toUpperCase().slice(0, 16), 236, 3);
+    if (fps) {
+      ctx.fillStyle = COLORS.cyan;
+      ctx.fillText(`${fps} FPS`, 4, VIEW_H - 10);
+    }
+  }
+
+  return {
+    get hasSheet() { return !!sheet; },
+    setSheet(next) { sheet = next; },
+    resetCamera() { cam.ready = false; },
+    render(world, { particles = null, shake = 0, flash = 0, fps = 0 } = {}) {
+      if (tileLevel !== world.level) {
+        tileCache = buildTiles(world.level);
+        tileLevel = world.level;
+        cam.ready = false;
+      }
+      const view = updateCamera(world);
+      const sx = shake ? Math.round((Math.sin(world.frame * 12.9898) * 43758.5453 % 1) * shake) : 0;
+      const sy = shake ? Math.round((Math.sin(world.frame * 78.233) * 12543.123 % 1) * shake) : 0;
+      const camX = view.x + sx;
+      const camY = view.y + sy;
+      background(camX, camY, world.frame);
+      ctx.drawImage(tileCache, camX, camY, VIEW_W, VIEW_H, 0, 0, VIEW_W, VIEW_H);
+      const t = world.frame;
+      for (const item of world.pickups) {
+        if (item.taken) continue;
+        const bob = Math.round(Math.sin((t + item.id * 9) * 0.08) * 2);
+        glow(item.x + 4 - camX, item.y + 4 - camY, item.kind === 'orb' ? 12 : 16, item.kind === 'orb' ? COLORS.moss : COLORS.heart, 0.35);
+        sprite(item.kind === 'orb' ? 'orb_glow' : 'crystal_shine', t, { ...item, y: item.y + 4 + bob }, camX, camY, false,
+               item.kind === 'orb' ? COLORS.moss : COLORS.heart);
+      }
+      for (const cp of world.checkpoints) {
+        if (cp.active) glow(cp.x + 6 - camX, cp.y + 4 - camY, 18, COLORS.cyan, 0.3);
+        sprite(cp.active ? 'checkpoint_on' : 'checkpoint_off', t, cp, camX, camY, false, COLORS.cyan);
+      }
+      if (world.exit) {
+        const e = world.exit;
+        glow(e.x + e.w / 2 - camX, e.y + e.h / 2 - camY, 34, COLORS.mossLight, 0.35 + 0.1 * Math.sin(t * 0.05));
+        ctx.fillStyle = COLORS.rockDark;
+        ctx.fillRect(Math.round(e.x - camX) - 2, Math.round(e.y - camY), e.w + 4, e.h);
+        ctx.fillStyle = COLORS.moss;
+        ctx.fillRect(Math.round(e.x - camX), Math.round(e.y - camY) + 2, e.w, e.h - 2);
+        ctx.fillStyle = COLORS.mossLight;
+        ctx.fillRect(Math.round(e.x - camX) + 3, Math.round(e.y - camY) + 5 + Math.round(Math.sin(t * 0.1) * 2), e.w - 6, 2);
+      }
+      for (const enemy of world.enemies) {
+        if (enemy.dead) continue;
+        const tag = enemy.kind === 'slime' ? 'slime_walk' : enemy.kind === 'bat' ? 'bat_fly' : 'turret_idle';
+        sprite(tag, enemy.animTime, enemy, camX, camY, enemy.kind === 'turret' ? enemy.facing > 0 : (enemy.vx || 0) > 0, '#ff8c42');
+      }
+      for (const shot of world.projectiles) {
+        glow(shot.x + 3 - camX, shot.y + 3 - camY, 8, COLORS.gold, 0.4);
+        sprite('spore_float', t, shot, camX, camY, false, COLORS.gold);
+      }
+      const p = world.player;
+      if (!(p.invuln > 0 && Math.floor(p.invuln / 4) % 2 === 0)) {
+        let tag = 'player_idle';
+        if (p.invuln > 70) tag = 'player_hurt';
+        else if (!p.onGround) tag = p.vy < 0 ? 'player_jump' : 'player_fall';
+        else if (Math.abs(p.vx) > 0.2) tag = 'player_run';
+        glow(p.x + p.w / 2 - camX, p.y - camY, 22, COLORS.gold, 0.18);
+        sprite(tag, p.animTime, p, camX, camY, p.facing < 0, COLORS.ledge);
+      }
+      if (particles) particles.draw(ctx, camX, camY);
+      hud(world, fps);
+      if (flash > 0) {
+        ctx.globalAlpha = Math.min(0.5, flash / 20);
+        ctx.fillStyle = COLORS.heart;
+        ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+        ctx.globalAlpha = 1;
+      }
+    },
+  };
+}
+
+// ---- src/engine/input.js ----
+// Keyboard, touch and gamepad input mapped to game actions.
+
+const KEY_BINDINGS = Object.freeze({
+  left: ['ArrowLeft', 'KeyA'],
+  right: ['ArrowRight', 'KeyD'],
+  jump: ['Space', 'KeyZ', 'ArrowUp', 'KeyW', 'KeyK'],
+  pause: ['Escape', 'KeyP'],
+  confirm: ['Enter'],
+});
+
+const CODE_TO_ACTION = new Map(Object.entries(KEY_BINDINGS).flatMap(([action, codes]) => codes.map((code) => [code, action])));
+
+function actionForCode(code) {
+  return CODE_TO_ACTION.get(code) || null;
+}
+
+function createInput(target, win = globalThis) {
+  const held = new Set();
+  const pressed = new Set();
+  const touch = { left: false, right: false, jump: false };
+  let padPause = false;
+  const onKeyDown = (event) => {
+    const action = actionForCode(event.code);
+    if (!action) return;
+    if (['left', 'right', 'jump'].includes(action)) event.preventDefault();
+    if (!event.repeat) pressed.add(action);
+    held.add(action);
+  };
+  const onKeyUp = (event) => {
+    const action = actionForCode(event.code);
+    if (action) held.delete(action);
+  };
+  const onBlur = () => held.clear();
+  target.addEventListener('keydown', onKeyDown);
+  target.addEventListener('keyup', onKeyUp);
+  win.addEventListener?.('blur', onBlur);
+
+  function gamepad() {
+    const pads = win.navigator?.getGamepads ? [...win.navigator.getGamepads()].filter(Boolean) : [];
+    const pad = pads[0];
+    if (!pad) return { left: false, right: false, jump: false };
+    const axis = pad.axes?.[0] || 0;
+    const button = (i) => !!pad.buttons?.[i]?.pressed;
+    const pause = button(9);
+    if (pause && !padPause) pressed.add('pause');
+    padPause = pause;
+    return { left: axis < -0.5 || button(14), right: axis > 0.5 || button(15), jump: button(0) };
+  }
+
+  return {
+    sample() {
+      const pad = gamepad();
+      return {
+        left: held.has('left') || touch.left || pad.left,
+        right: held.has('right') || touch.right || pad.right,
+        jump: held.has('jump') || touch.jump || pad.jump,
+      };
+    },
+    consume(action) {
+      const was = pressed.has(action);
+      pressed.delete(action);
+      return was;
+    },
+    clearPressed() {
+      pressed.clear();
+    },
+    bindTouch(element, action) {
+      const set = (value) => (event) => {
+        event.preventDefault();
+        if (action === 'pause') {
+          if (value) pressed.add('pause');
+        } else {
+          touch[action] = value;
+        }
+      };
+      element.addEventListener('pointerdown', set(true));
+      for (const name of ['pointerup', 'pointercancel', 'pointerleave']) element.addEventListener(name, set(false));
+    },
+    dispose() {
+      target.removeEventListener('keydown', onKeyDown);
+      target.removeEventListener('keyup', onKeyUp);
+      win.removeEventListener?.('blur', onBlur);
+    },
+  };
+}
+
+// ---- src/engine/audio.js ----
+// Synthesized sound effects and music with the Web Audio API. Everything is
+// generated at runtime (no audio files). When Web Audio is unavailable or
+// blocked, every call is a safe no-op and the game runs silently.
+
+const NOTE = (n) => 440 * Math.pow(2, (n - 69) / 12);
+const BASS = [45, 45, 52, 52, 48, 48, 43, 43];
+const ARP = [69, 72, 76, 72, 67, 71, 74, 71, 64, 67, 72, 67, 62, 67, 71, 67];
+
+function createAudio(win = globalThis) {
+  const Context = win.AudioContext || win.webkitAudioContext;
+  let available = !!Context;
+  let ctx = null;
+  let master = null;
+  let musicBus = null;
+  let sfxBus = null;
+  let musicTimer = null;
+  let nextNoteTime = 0;
+  let step = 0;
+  const volumes = { master: 0.8, music: 0.5, sfx: 0.8 };
+
+  function applyVolumes() {
+    if (!ctx) return;
+    master.gain.value = volumes.master;
+    musicBus.gain.value = volumes.music * 0.35;
+    sfxBus.gain.value = volumes.sfx * 0.6;
+  }
+
+  function tone(type, freq, start, duration, gain, bus, slideTo = null) {
+    const osc = ctx.createOscillator();
+    const env = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, start);
+    if (slideTo) osc.frequency.exponentialRampToValueAtTime(slideTo, start + duration);
+    env.gain.setValueAtTime(0.0001, start);
+    env.gain.exponentialRampToValueAtTime(gain, start + 0.01);
+    env.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+    osc.connect(env).connect(bus);
+    osc.start(start);
+    osc.stop(start + duration + 0.02);
+  }
+
+  function noise(start, duration, gain) {
+    const length = Math.max(1, Math.floor(ctx.sampleRate * duration));
+    const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    let seed = 12345;
+    for (let i = 0; i < length; i++) {
+      seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+      data[i] = (seed / 0x7fffffff * 2 - 1) * (1 - i / length);
+    }
+    const src = ctx.createBufferSource();
+    const env = ctx.createGain();
+    env.gain.value = gain;
+    src.buffer = buffer;
+    src.connect(env).connect(sfxBus);
+    src.start(start);
+  }
+
+  const SOUNDS = {
+    jump: (t) => tone('square', 330, t, 0.12, 0.25, sfxBus, 660),
+    land: (t) => tone('triangle', 140, t, 0.06, 0.2, sfxBus, 90),
+    pickup: (t) => { tone('triangle', 880, t, 0.08, 0.25, sfxBus); tone('triangle', 1320, t + 0.06, 0.1, 0.22, sfxBus); },
+    heal: (t) => { tone('sine', 660, t, 0.12, 0.25, sfxBus); tone('sine', 990, t + 0.1, 0.18, 0.25, sfxBus); },
+    stomp: (t) => { noise(t, 0.12, 0.35); tone('square', 220, t, 0.1, 0.2, sfxBus, 110); },
+    hurt: (t) => tone('sawtooth', 300, t, 0.25, 0.28, sfxBus, 80),
+    fall: (t) => tone('sawtooth', 400, t, 0.4, 0.25, sfxBus, 60),
+    shoot: (t) => tone('sine', 520, t, 0.08, 0.12, sfxBus, 260),
+    checkpoint: (t) => { tone('triangle', 523, t, 0.12, 0.22, sfxBus); tone('triangle', 784, t + 0.1, 0.2, 0.22, sfxBus); },
+    complete: (t) => [523, 659, 784, 1047].forEach((f, i) => tone('triangle', f, t + i * 0.09, 0.3, 0.25, sfxBus)),
+    gameover: (t) => [392, 330, 262].forEach((f, i) => tone('square', f, t + i * 0.18, 0.3, 0.2, sfxBus)),
+    menu: (t) => tone('square', 660, t, 0.05, 0.15, sfxBus),
+  };
+
+  function schedule() {
+    const beat = 60 / 104 / 2;
+    while (nextNoteTime < ctx.currentTime + 0.2) {
+      if (step % 2 === 0) tone('triangle', NOTE(BASS[(step / 2) % BASS.length]), nextNoteTime, beat * 1.8, 0.3, musicBus);
+      tone('square', NOTE(ARP[step % ARP.length]), nextNoteTime, beat * 0.8, 0.08, musicBus);
+      nextNoteTime += beat;
+      step += 1;
+    }
+  }
+
+  return {
+    get available() { return available; },
+    get running() { return !!ctx && ctx.state === 'running'; },
+    unlock() {
+      if (!available) return false;
+      try {
+        if (!ctx) {
+          ctx = new Context();
+          master = ctx.createGain();
+          musicBus = ctx.createGain();
+          sfxBus = ctx.createGain();
+          musicBus.connect(master);
+          sfxBus.connect(master);
+          master.connect(ctx.destination);
+          applyVolumes();
+        }
+        if (ctx.state === 'suspended') ctx.resume();
+        return true;
+      } catch {
+        available = false;
+        return false;
+      }
+    },
+    setVolumes(next) {
+      Object.assign(volumes, next);
+      applyVolumes();
+    },
+    play(name) {
+      if (!ctx || ctx.state !== 'running' || !SOUNDS[name]) return;
+      try { SOUNDS[name](ctx.currentTime); } catch { /* a failed sound must never break the game */ }
+    },
+    startMusic() {
+      if (!ctx || musicTimer) return;
+      nextNoteTime = ctx.currentTime + 0.05;
+      musicTimer = win.setInterval(() => { try { schedule(); } catch { /* ignore */ } }, 25);
+    },
+    stopMusic() {
+      if (musicTimer) win.clearInterval(musicTimer);
+      musicTimer = null;
+    },
+    suspend() { if (ctx && ctx.state === 'running') ctx.suspend(); },
+    resume() { if (ctx && ctx.state === 'suspended') ctx.resume(); },
+  };
+}
+
+// ---- src/engine/storage.js ----
+// Versioned save data with validation. Corrupt or tampered data is repaired or
+// reset with a notice; when storage is unavailable (private mode, blocked
+// cookies), progress lives in memory and the player is told.
+
+const SAVE_KEY = 'glowmoss-caverns.save';
+const SAVE_VERSION = 1;
+const DEFAULT_SETTINGS = Object.freeze({ master: 0.8, music: 0.5, sfx: 0.8, shake: true, reducedFlashing: false,
+                                               showFps: false, touch: 'auto' });
+
+function defaultSave() {
+  return { version: SAVE_VERSION, unlocked: 1, best: {}, settings: { ...DEFAULT_SETTINGS }, plays: 0 };
+}
+
+function clampNumber(value, min, max, fallback) {
+  return typeof value === 'number' && Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : fallback;
+}
+
+function sanitizeSave(raw, levelCount) {
+  const problems = [];
+  const clean = defaultSave();
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return { save: clean, problems: ['save data is not an object'] };
+  if (raw.version !== SAVE_VERSION) problems.push(`unknown save version ${JSON.stringify(raw.version)}`);
+  const unlocked = Number.isInteger(raw.unlocked) ? raw.unlocked : 1;
+  clean.unlocked = Math.min(levelCount, Math.max(1, unlocked));
+  if (clean.unlocked !== raw.unlocked) problems.push('unlocked level was out of range');
+  if (raw.best && typeof raw.best === 'object') {
+    for (const [key, value] of Object.entries(raw.best)) {
+      const index = Number(key);
+      if (Number.isInteger(index) && index >= 1 && index <= levelCount && Number.isInteger(value) && value >= 0 && value <= 1e7) {
+        clean.best[index] = value;
+      } else {
+        problems.push(`dropped invalid best score for ${key}`);
+      }
+    }
+  }
+  const s = raw.settings && typeof raw.settings === 'object' ? raw.settings : {};
+  for (const key of ['master', 'music', 'sfx']) clean.settings[key] = clampNumber(s[key], 0, 1, DEFAULT_SETTINGS[key]);
+  for (const key of ['shake', 'reducedFlashing', 'showFps']) clean.settings[key] = typeof s[key] === 'boolean' ? s[key] : DEFAULT_SETTINGS[key];
+  clean.settings.touch = ['auto', 'on', 'off'].includes(s.touch) ? s.touch : DEFAULT_SETTINGS.touch;
+  clean.plays = Number.isInteger(raw.plays) && raw.plays >= 0 ? raw.plays : 0;
+  return { save: clean, problems };
+}
+
+function browserStorage(win = globalThis) {
+  try {
+    const storage = win.localStorage;
+    const probe = '__glowmoss_probe__';
+    storage.setItem(probe, '1');
+    storage.removeItem(probe);
+    return { available: true, getItem: (k) => storage.getItem(k), setItem: (k, v) => storage.setItem(k, v) };
+  } catch {
+    return memoryStorage();
+  }
+}
+
+function memoryStorage() {
+  const data = new Map();
+  return { available: false, getItem: (k) => (data.has(k) ? data.get(k) : null), setItem: (k, v) => data.set(k, String(v)) };
+}
+
+function createStore(levelCount, backend = browserStorage()) {
+  return {
+    backend,
+    load() {
+      if (!backend.available) {
+        return { save: defaultSave(), notice: 'Saving is unavailable in this browser mode; progress lasts until you close the page.' };
+      }
+      let text = null;
+      try {
+        text = backend.getItem(SAVE_KEY);
+      } catch {
+        return { save: defaultSave(), notice: 'Saved progress could not be read; starting fresh.' };
+      }
+      if (text === null) return { save: defaultSave(), notice: null };
+      let parsed;
+      try {
+        parsed = JSON.parse(text);
+      } catch {
+        return { save: defaultSave(), notice: 'Saved progress was damaged and has been reset.' };
+      }
+      const { save, problems } = sanitizeSave(parsed, levelCount);
+      return { save, notice: problems.length ? 'Some saved data was invalid and has been repaired.' : null, problems };
+    },
+    write(save) {
+      try {
+        backend.setItem(SAVE_KEY, JSON.stringify(save));
+        return { ok: true };
+      } catch {
+        return { ok: false, notice: 'Progress could not be saved (storage is full or blocked).' };
+      }
+    },
+  };
+}
+
+// ---- src/main.js ----
+// Glowmoss Caverns: application shell. Screens and menus are DOM overlays;
+// the game runs a fixed 60 Hz simulation and renders on animation frames.
+// With ?test in the URL, the simulation only advances through
+// window.__glowmoss.step(n), so browser tests are deterministic.
+
+
+const STEP_MS = 1000 / 60;
+const MAX_STEPS_PER_FRAME = 5;
+const PARTICLE_STYLES = {
+  pickup: { count: 10, color: '#a8ff9e', speed: 1.4, life: 26, gravity: 0.02 },
+  heal: { count: 14, color: '#ff4f7a', speed: 1.2, life: 34, gravity: -0.02 },
+  stomp: { count: 16, color: '#ff8c42', speed: 1.8, life: 24, gravity: 0.08 },
+  hurt: { count: 12, color: '#ff4f7a', speed: 1.6, life: 22, gravity: 0.06 },
+  land: { count: 5, color: '#5d5a7a', speed: 0.8, life: 14, gravity: 0.02, spread: Math.PI, angle: -Math.PI / 2 },
+  jump: { count: 4, color: '#5d5a7a', speed: 0.6, life: 12, gravity: 0.02, spread: Math.PI, angle: Math.PI / 2 },
+  puff: { count: 6, color: '#ffd166', speed: 0.8, life: 16, gravity: 0 },
+  checkpoint: { count: 18, color: '#5ee6e6', speed: 1.2, life: 40, gravity: -0.02 },
+  complete: { count: 40, color: '#a8ff9e', speed: 2.2, life: 50, gravity: 0.03 },
+};
+
+function startApp() {
+  const doc = document;
+  const $ = (selector) => doc.querySelector(selector);
+  const canvas = $('#game');
+  const testMode = new URLSearchParams(location.search).has('test');
+  const store = createStore(LEVELS.length);
+  const loaded = store.load();
+  let save = loaded.save;
+  const renderer = createRenderer(canvas, doc);
+  const input = createInput(window, window);
+  const audio = createAudio(window);
+  const particles = createParticles(400);
+  let screen = 'title';
+  let world = createWorld(0);
+  let settingsReturn = 'title';
+  let shake = 0;
+  let flash = 0;
+  let accumulator = 0;
+  let lastTime = 0;
+  let fps = 0;
+  let fpsFrames = 0;
+  let fpsTime = 0;
+  let crashed = false;
+  const eventLog = [];
+
+  function toast(message) {
+    if (!message) return;
+    const el = $('#toast');
+    el.textContent = message;
+    el.hidden = false;
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => { el.hidden = true; }, 4500);
+  }
+
+  function showScreen(name) {
+    screen = name;
+    for (const el of doc.querySelectorAll('.screen')) el.hidden = el.dataset.screen !== name;
+    $('#hud-pause').hidden = name !== 'playing';
+    if (name !== 'playing') $('#level-hint').hidden = true;
+    updateTouchControls();
+    const active = doc.querySelector(`.screen[data-screen="${name}"]`);
+    const first = active && active.querySelector('button:not([disabled]), input, select');
+    if (first) first.focus({ preventScroll: true });
+    else canvas.focus({ preventScroll: true }); // keep Space from activating a hidden button during play
+    if (name !== 'playing' && name !== 'paused') audio.stopMusic();
+  }
+
+  function persist() {
+    const result = store.write(save);
+    if (!result.ok) toast(result.notice);
+  }
+
+  function applySettings() {
+    const s = save.settings;
+    audio.setVolumes({ master: s.master, music: s.music, sfx: s.sfx });
+    for (const key of ['master', 'music', 'sfx']) $(`#set-${key}`).value = String(Math.round(s[key] * 100));
+    for (const key of ['shake', 'reducedFlashing', 'showFps']) $(`#set-${key}`).checked = s[key];
+    $('#set-touch').value = s.touch;
+    updateTouchControls();
+  }
+
+  function updateTouchControls() {
+    const mode = save.settings.touch;
+    const coarse = window.matchMedia ? window.matchMedia('(pointer: coarse)').matches : false;
+    $('#touch').hidden = !(screen === 'playing' && (mode === 'on' || (mode === 'auto' && coarse)));
+  }
+
+  function renderLevelSelect() {
+    const list = $('#level-list');
+    list.textContent = '';
+    LEVELS.forEach((level, index) => {
+      const button = doc.createElement('button');
+      const locked = index + 1 > save.unlocked;
+      button.disabled = locked;
+      button.dataset.level = String(index);
+      const best = save.best[index + 1];
+      button.textContent = `${index + 1}. ${level.name}${locked ? ' (locked)' : best ? ` - best ${best}` : ''}`;
+      list.appendChild(button);
+    });
+  }
+
+  function startLevel(index) {
+    world = createWorld(index);
+    particles.clear();
+    renderer.resetCamera();
+    shake = 0;
+    flash = 0;
+    input.clearPressed();
+    $('#level-hint').textContent = LEVELS[index].hint;
+    $('#level-hint').hidden = false;
+    setTimeout(() => { $('#level-hint').hidden = true; }, 6000);
+    save.plays += 1;
+    persist();
+    showScreen('playing');
+    audio.unlock();
+    audio.startMusic();
+  }
+
+  function handleEvents(events) {
+    for (const event of events) {
+      eventLog.push(event.type);
+      if (eventLog.length > 200) eventLog.shift();
+      audio.play(event.type === 'respawn' ? 'checkpoint' : event.type);
+      const style = PARTICLE_STYLES[event.type];
+      if (style && event.x !== undefined) particles.spawn(event.x + 4, event.y, style);
+      if (event.type === 'stomp' && save.settings.shake) shake = 3;
+      if ((event.type === 'hurt' || event.type === 'fall') && save.settings.shake) shake = 4;
+      if ((event.type === 'hurt' || event.type === 'fall') && !save.settings.reducedFlashing) flash = 10;
+      if (event.type === 'complete') onComplete();
+      if (event.type === 'gameover') {
+        $('#gameover-score').textContent = `Score: ${world.score}`;
+        showScreen('gameover');
+      }
+    }
+  }
+
+  function onComplete() {
+    const number = world.levelIndex + 1;
+    const r = world.result;
+    const previous = save.best[number] || 0;
+    if (r.total > previous) save.best[number] = r.total;
+    save.unlocked = Math.min(LEVELS.length, Math.max(save.unlocked, number + 1));
+    persist();
+    const lines = [`Orbs ${r.orbs}/${r.orbsTotal}: ${r.base} points`, `Time ${r.seconds}s: +${r.timeBonus}`,
+                   `Hearts: +${r.heartBonus}`, r.orbBonus ? `All orbs: +${r.orbBonus}` : null,
+                   `Total: ${r.total}${r.total > previous ? ' (new best!)' : ` (best ${previous})`}`].filter(Boolean);
+    if (number === LEVELS.length) {
+      const total = Object.values(save.best).reduce((a, b) => a + b, 0);
+      $('#victory-summary').textContent = `${lines.join(' • ')} • Best total across caverns: ${total}`;
+      if (testMode) showScreen('victory'); else setTimeout(() => showScreen('victory'), 600);
+    } else {
+      $('#complete-summary').textContent = lines.join(' • ');
+      if (testMode) showScreen('complete'); else setTimeout(() => showScreen('complete'), 600);
+    }
+  }
+
+  function update() {
+    if (screen === 'playing') {
+      if (input.consume('pause')) {
+        showScreen('paused');
+        return;
+      }
+      stepWorld(world, input.sample());
+      handleEvents(world.events);
+      particles.update();
+      if (shake > 0) shake = Math.max(0, shake - 0.25);
+      if (flash > 0) flash -= 1;
+    } else if (screen === 'paused') {
+      if (input.consume('pause')) {
+        showScreen('playing');
+        audio.startMusic();
+      }
+    } else {
+      input.consume('pause');
+    }
+  }
+
+  function draw() {
+    renderer.render(world, { particles, shake: save.settings.shake ? shake : 0, flash, fps: save.settings.showFps ? fps : 0 });
+  }
+
+  function crash(message) {
+    if (crashed) return;
+    crashed = true;
+    $('#error-message').textContent = String(message || 'Unknown error').slice(0, 300);
+    showScreen('error');
+  }
+
+  function frame(time) {
+    if (crashed) return;
+    try {
+      const delta = lastTime ? Math.min(250, time - lastTime) : STEP_MS;
+      lastTime = time;
+      if (!testMode) {
+        accumulator += delta;
+        let steps = 0;
+        while (accumulator >= STEP_MS && steps < MAX_STEPS_PER_FRAME) {
+          update();
+          accumulator -= STEP_MS;
+          steps += 1;
+        }
+        if (steps === MAX_STEPS_PER_FRAME) accumulator = 0;
+      }
+      fpsFrames += 1;
+      fpsTime += delta;
+      if (fpsTime >= 1000) {
+        fps = Math.round((fpsFrames * 1000) / fpsTime);
+        fpsFrames = 0;
+        fpsTime = 0;
+      }
+      draw();
+    } catch (error) {
+      console.error(error);
+      crash(error && error.message);
+      return;
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function resize() {
+    const scale = Math.min(window.innerWidth / 320, window.innerHeight / 180);
+    // Whole-number scaling keeps pixels crisp; below 2x it would waste most of a
+    // phone's width, so small screens use the exact fit instead.
+    const integer = scale >= 2 ? Math.floor(scale) : scale;
+    canvas.style.width = `${Math.floor(320 * integer)}px`;
+    canvas.style.height = `${Math.floor(180 * integer)}px`;
+    doc.documentElement.style.setProperty('--scale', String(integer));
+  }
+
+  doc.addEventListener('click', (event) => {
+    const target = event.target.closest('button');
+    if (!target) return;
+    audio.unlock();
+    audio.play('menu');
+    if (target.dataset.level) {
+      startLevel(Number(target.dataset.level));
+      return;
+    }
+    const action = target.dataset.action;
+    const actions = {
+      play: () => startLevel(Math.min(save.unlocked, LEVELS.length) - 1),
+      levels: () => { renderLevelSelect(); showScreen('levels'); },
+      settings: () => { settingsReturn = screen; applySettings(); showScreen('settings'); },
+      howto: () => showScreen('howto'),
+      back: () => showScreen(settingsReturn === 'paused' && screen === 'settings' ? 'paused' : 'title'),
+      resume: () => { showScreen('playing'); audio.startMusic(); },
+      pause: () => showScreen('paused'),
+      restart: () => startLevel(world.levelIndex),
+      quit: () => { world = createWorld(0); showScreen('title'); },
+      next: () => startLevel(world.levelIndex + 1),
+      replay: () => startLevel(world.levelIndex),
+      retry: () => startLevel(world.levelIndex),
+      title: () => { world = createWorld(0); showScreen('title'); },
+      reload: () => location.reload(),
+      reset: () => { save = { ...save, unlocked: 1, best: {} }; persist(); renderLevelSelect(); toast('Progress reset.'); },
+    };
+    if (actions[action]) actions[action]();
+  });
+
+  for (const key of ['master', 'music', 'sfx']) {
+    $(`#set-${key}`).addEventListener('input', (event) => {
+      save.settings[key] = Number(event.target.value) / 100;
+      applySettings();
+      persist();
+    });
+  }
+  for (const key of ['shake', 'reducedFlashing', 'showFps']) {
+    $(`#set-${key}`).addEventListener('change', (event) => {
+      save.settings[key] = event.target.checked;
+      persist();
+    });
+  }
+  $('#set-touch').addEventListener('change', (event) => {
+    save.settings.touch = event.target.value;
+    applySettings();
+    persist();
+  });
+  for (const button of doc.querySelectorAll('#touch [data-touch]')) input.bindTouch(button, button.dataset.touch);
+  window.addEventListener('keydown', (event) => {
+    if (event.code === 'Escape' && ['settings', 'levels', 'howto'].includes(screen)) {
+      showScreen(settingsReturn === 'paused' && screen === 'settings' ? 'paused' : 'title');
+    }
+  });
+  doc.addEventListener('visibilitychange', () => {
+    if (doc.hidden) {
+      if (screen === 'playing') showScreen('paused');
+      audio.suspend();
+    } else {
+      audio.resume();
+    }
+  });
+  window.addEventListener('resize', resize);
+  window.addEventListener('error', (event) => crash(event.message));
+  window.addEventListener('unhandledrejection', (event) => crash(event.reason && event.reason.message));
+
+  function loadSprites() {
+    const embedded = window.GLOWMOSS_ASSETS;
+    const image = new Image();
+    const metaPromise = embedded ? Promise.resolve(embedded.sheet)
+      : fetch('../build/assets/sprites.json').then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); });
+    return metaPromise.then((meta) => new Promise((resolve, reject) => {
+      image.onload = () => resolve(indexSheet(image, meta));
+      image.onerror = () => reject(new Error('sprite image failed to load'));
+      image.src = embedded ? embedded.sheetImage : '../build/assets/sprites.png';
+    }));
+  }
+
+  loadSprites().then((sheet) => renderer.setSheet(sheet)).catch(() => toast('Sprites could not be loaded; using simple shapes.'));
+  applySettings();
+  resize();
+  showScreen('title');
+  $('#continue-label').textContent = save.unlocked > 1 ? `Continue (cavern ${save.unlocked})` : 'Play';
+  toast(loaded.notice);
+  requestAnimationFrame(frame);
+
+  window.__glowmoss = {
+    testMode,
+    step(n = 1) {
+      for (let i = 0; i < n; i++) update();
+      draw();
+      return this.state();
+    },
+    state() {
+      const p = world.player;
+      return { screen, level: world.levelIndex, frame: world.frame, status: world.status, score: world.score,
+               hearts: world.hearts, orbs: world.orbs, x: p.x, y: p.y, events: eventLog.slice(-20),
+               particles: particles.count(), sprites: renderer.hasSheet, audio: audio.available, save };
+    },
+    startLevel,
+    crash,
+  };
+}
+
+startApp();
+
+})();
+</script>
+</body>
+</html>

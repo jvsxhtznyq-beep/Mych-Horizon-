@@ -45,6 +45,13 @@ class RouteTest(unittest.TestCase):
         self.assertIn("mych-pixel-art", ids)
         self.assertNotIn("mych-3d-design", ids)
 
+    def test_build_requests_mentioning_ui_stay_build_projects(self):
+        result = self.route("Build a complete playable 2D pixel-art platformer game with menus, settings, levels, enemies, "
+                            "scoring, audio, save/load, responsive UI and automated tests")
+        self.assertEqual((result["workflow"]["id"], result["lead"], result["tier"]), ("new-software-project", "Engineer", 3))
+        self.assertTrue({"Architect", "Designer", "Engineer"} <= set(result["disciplines"]))
+        self.assertEqual(self.route("Redesign the settings UI")["workflow"]["id"], "product-design")
+
     def test_small_change_is_tier_one_engineer_only(self):
         result = self.route("Fix the typo in the README")
         self.assertEqual((result["tier"], result["disciplines"], result["workflow"]["id"]),

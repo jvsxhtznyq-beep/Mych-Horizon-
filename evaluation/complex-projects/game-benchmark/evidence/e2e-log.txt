@@ -1,0 +1,25 @@
+PASS title screen shows with sprites loaded
+PASS Play starts cavern 1 (screen playing)
+PASS Web Audio is available and unlocked by the click
+PASS cavern 1 completed through real keyboard input (frames 548 (solver predicted 548), score 1754)
+PASS browser replay matches the Node simulation frame for frame (browser 548/1754, node 548/1754)
+PASS effects ran during play (sound events and particles)
+PASS progress saved: cavern 2 unlocked and best score stored ({"unlocked":2,"best":{"1":1754}})
+PASS Escape pauses the game
+PASS paused game does not advance
+PASS Escape resumes the game
+PASS Back from settings returns to the pause menu
+PASS settings persist across reloads ({"master":0.8,"music":0.2,"sfx":0.8,"shake":false,"reducedFlashing":false,"showFps":true,"touch":"auto"})
+PASS continue label offers the unlocked cavern
+PASS corrupted save is reset with a visible notice (Saved progress was damaged and has been reset.)
+PASS uncaught errors show the recovery screen
+PASS canvas fits the phone width (390x219)
+PASS touch controls appear on touch devices
+PASS touch right button moves the player (x 35.0 -> 91.2)
+PASS source build (ES modules over HTTP) runs and falls back to shapes when sprites fail (Sprites could not be loaded; using simple shapes.)
+PASS real-time loop advances the simulation without the test hook (frame 122)
+PASS rendering keeps a smooth frame rate in headless Chromium (60.4 fps)
+PASS update plus render costs well under a 16.7 ms frame (0.027 ms per step (600 steps, cavern 3))
+PASS no unexpected page errors or console errors
+
+23 of 23 checks passed

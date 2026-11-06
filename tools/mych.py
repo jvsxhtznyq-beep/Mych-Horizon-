@@ -140,6 +140,11 @@ def route(task: str) -> Dict[str, Any]:
     matched = [flow for flow in workflows["workflows"] if any(phrase_in(text, t) for t in flow["triggers"])]
     sensitive = next((flow for flow in matched if flow["id"] == "sensitive-change"), None)
     others = [flow for flow in matched if flow["id"] != "sensitive-change"]
+    builds = any(phrase_in(text, verb) for verb in ("build", "create", "develop", "implement", "make"))
+    if builds and any(flow["id"] == "new-software-project" for flow in others):
+        # A request to build something is a build, even when it mentions UI or architecture:
+        # design-only and decision-only routes give way, and their disciplines join below.
+        others = [flow for flow in others if flow["id"] not in ("product-design", "architecture-decision")]
     default = next(flow for flow in workflows["workflows"] if flow["id"] == "execution-lifecycle")
     primary = others[0] if others else (sensitive or default)
     also_follow = ["sensitive-change"] if sensitive and primary is not sensitive else []

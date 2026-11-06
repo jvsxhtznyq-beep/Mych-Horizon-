@@ -2,7 +2,7 @@
   "schema": "mych-task-ledger/2",
   "project": "MYCH-HORIZON 2.0",
   "created_at": "2026-11-01T16:32:53Z",
-  "updated_at": "2026-11-06T15:04:51Z",
+  "updated_at": "2026-11-06T15:29:37Z",
   "tasks": [
     {
       "id": "A1",
@@ -689,10 +689,10 @@
       "title": "Ecosystem research and integration registry with real adoption evidence",
       "priority": "P1",
       "depends_on": [],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "Registry entries with source, stars, last push, license, permissions, security and compatibility",
       "verification_method": "Registry JSON schema test; evidence fields come from GitHub search output captured in the repo",
-      "evidence": null,
+      "evidence": "tools/collect_ecosystem.py: 46 of 47 candidates found via GitHub search on 2026-11-06 (stars, last push, license, archived); registry-check OK",
       "blocker": null,
       "notes": [],
       "history": [
@@ -701,9 +701,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-06T15:29:36Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-06T15:29:36Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-06T15:29:36Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: tools/collect_ecosystem.py: 46 of 47 candidates found via GitHub search on 2026-11-06 (stars, last push, license, archived); registry-check OK"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-06T15:29:36Z",
+          "result": "pass",
+          "evidence": "tools/collect_ecosystem.py: 46 of 47 candidates found via GitHub search on 2026-11-06 (stars, last push, license, archived); registry-check OK"
+        }
+      ],
       "approval": null,
       "approvals": []
     },
@@ -715,10 +739,10 @@
         "B1",
         "A6"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "Playable game with menus, levels, enemies, scoring, audio, animation, save/load, settings",
       "verification_method": "Automated playthrough completes a level through real keyboard input in headless Chromium",
-      "evidence": null,
+      "evidence": "node tools/build.mjs: single-file build 71790 bytes, identical SHA-256 across two builds; node tools/solve.mjs: 3 of 3 caverns solved",
       "blocker": null,
       "notes": [],
       "history": [
@@ -727,9 +751,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-06T15:29:36Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-06T15:29:36Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-06T15:29:37Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: node tools/build.mjs: single-file build 71790 bytes, identical SHA-256 across two builds; node tools/solve.mjs: 3 of 3 caverns solved"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-06T15:29:37Z",
+          "result": "pass",
+          "evidence": "node tools/build.mjs: single-file build 71790 bytes, identical SHA-256 across two builds; node tools/solve.mjs: 3 of 3 caverns solved"
+        }
+      ],
       "approval": null,
       "approvals": []
     },
@@ -740,10 +788,10 @@
       "depends_on": [
         "G1"
       ],
-      "status": "not-started",
+      "status": "verified",
       "expected_result": "Evidence-backed report under evaluation/complex-projects/game-benchmark",
       "verification_method": "Test outputs and screenshots stored; score per rubric with evidence",
-      "evidence": null,
+      "evidence": "node --test tests/unit: 25 pass 0 fail; node tests/e2e/run.mjs: 23 of 23 checks passed (60.3 fps); report scored 86/100 in evaluation/complex-projects/game-benchmark/report.md",
       "blocker": null,
       "notes": [],
       "history": [
@@ -752,9 +800,33 @@
           "from": null,
           "to": "not-started",
           "note": "created"
+        },
+        {
+          "at": "2026-11-06T15:29:37Z",
+          "from": "not-started",
+          "to": "in-progress",
+          "note": "started"
+        },
+        {
+          "at": "2026-11-06T15:29:37Z",
+          "from": "in-progress",
+          "to": "completed",
+          "note": "completed"
+        },
+        {
+          "at": "2026-11-06T15:29:37Z",
+          "from": "completed",
+          "to": "verified",
+          "note": "evidence: node --test tests/unit: 25 pass 0 fail; node tests/e2e/run.mjs: 23 of 23 checks passed (60.3 fps); report scored 86/100 in evaluation/complex-projects/game-benchmark/report.md"
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "at": "2026-11-06T15:29:37Z",
+          "result": "pass",
+          "evidence": "node --test tests/unit: 25 pass 0 fail; node tests/e2e/run.mjs: 23 of 23 checks passed (60.3 fps); report scored 86/100 in evaluation/complex-projects/game-benchmark/report.md"
+        }
+      ],
       "approval": null,
       "approvals": []
     },

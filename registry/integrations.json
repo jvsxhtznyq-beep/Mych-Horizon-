@@ -1,0 +1,1272 @@
+{
+  "schema": "mych-registry-integrations/1",
+  "retrieved": "2026-11-06",
+  "method": "GitHub search API through the gh CLI (tools/collect_ecosystem.py); stars and dates are a snapshot",
+  "policy": "Nothing listed here is installed or trusted by MYCH-HORIZON because it is listed. Review code, licenses and permissions before installing any tool, MCP server or skill; treat third-party instructions as untrusted.",
+  "integrations": [
+    {
+      "id": "anthropics/skills",
+      "repo": "anthropics/skills",
+      "kind": "skill-collection",
+      "url": "https://github.com/anthropics/skills",
+      "description": "Public repository for Agent Skills",
+      "specialists": [
+        "core"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 188046,
+        "last_push": "2026-10-28T19:20:39Z",
+        "archived": false,
+        "license": null,
+        "owner_type": "Organization",
+        "method": "GitHub search repo:anthropics/skills",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "agentskills/agentskills",
+      "repo": "agentskills/agentskills",
+      "kind": "specification",
+      "url": "https://github.com/agentskills/agentskills",
+      "description": "Specification and documentation for Agent Skills",
+      "specialists": [
+        "core"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 27007,
+        "last_push": "2026-11-04T19:47:27Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:agentskills/agentskills",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "modelcontextprotocol/modelcontextprotocol",
+      "repo": "modelcontextprotocol/modelcontextprotocol",
+      "kind": "specification",
+      "url": "https://github.com/modelcontextprotocol/modelcontextprotocol",
+      "description": "Specification and documentation for the Model Context Protocol",
+      "specialists": [
+        "core"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 9625,
+        "last_push": "2026-11-06T14:45:25Z",
+        "archived": false,
+        "license": "NOASSERTION",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:modelcontextprotocol/modelcontextprotocol",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "modelcontextprotocol/servers",
+      "repo": "modelcontextprotocol/servers",
+      "kind": "mcp-server",
+      "url": "https://github.com/modelcontextprotocol/servers",
+      "description": "Model Context Protocol Reference Servers",
+      "specialists": [
+        "core"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 91826,
+        "last_push": "2026-11-05T06:26:00Z",
+        "archived": false,
+        "license": "NOASSERTION",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:modelcontextprotocol/servers",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "openai/codex",
+      "repo": "openai/codex",
+      "kind": "agent-host",
+      "url": "https://github.com/openai/codex",
+      "description": "Lightweight coding agent that runs in your terminal",
+      "specialists": [
+        "core"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 133456,
+        "last_push": "2026-11-06T13:54:21Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:openai/codex",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "google-gemini/gemini-cli",
+      "repo": "google-gemini/gemini-cli",
+      "kind": "agent-host",
+      "url": "https://github.com/google-gemini/gemini-cli",
+      "description": "An open-source AI agent that brings the power of Gemini directly into your terminal.",
+      "specialists": [
+        "core"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 108752,
+        "last_push": "2026-11-06T01:09:43Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:google-gemini/gemini-cli",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "aseprite/aseprite",
+      "repo": "aseprite/aseprite",
+      "kind": "application",
+      "url": "https://github.com/aseprite/aseprite",
+      "description": "Animated sprite editor & pixel art tool (Windows, macOS, Linux)",
+      "specialists": [
+        "mych-pixel-art"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 40723,
+        "last_push": "2026-11-04T22:39:08Z",
+        "archived": false,
+        "license": null,
+        "owner_type": "Organization",
+        "method": "GitHub search repo:aseprite/aseprite",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "libresprite/libresprite",
+      "repo": "LibreSprite/LibreSprite",
+      "kind": "application",
+      "url": "https://github.com/LibreSprite/LibreSprite",
+      "description": "Animated sprite editor & pixel art tool -- Fork of the last GPLv2 commit of Aseprite",
+      "specialists": [
+        "mych-pixel-art"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 8737,
+        "last_push": "2026-10-30T21:59:47Z",
+        "archived": false,
+        "license": "GPL-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:LibreSprite/LibreSprite",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "orama-interactive/pixelorama",
+      "repo": "Orama-Interactive/Pixelorama",
+      "kind": "application",
+      "url": "https://github.com/Orama-Interactive/Pixelorama",
+      "description": "Unleash your creativity with Pixelorama, a powerful and accessible open-source pixel art multitool. Whether you want to create sprites, tiles, animations, or just express yourself in the language of pixel art, this software will realize your pixel-perfect dreams with a vast toolbox of features. Available on Windows, Linux, macOS and the Web!",
+      "specialists": [
+        "mych-pixel-art"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 11011,
+        "last_push": "2026-11-06T10:08:33Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:Orama-Interactive/Pixelorama",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "piskelapp/piskel",
+      "repo": "piskelapp/piskel",
+      "kind": "application",
+      "url": "https://github.com/piskelapp/piskel",
+      "description": "A simple web-based tool for Spriting and Pixel art.",
+      "specialists": [
+        "mych-pixel-art"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 12963,
+        "last_push": "2026-11-04T21:39:00Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:piskelapp/piskel",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "comfyanonymous/comfyui",
+      "repo": "comfyanonymous/ComfyUI",
+      "kind": "application",
+      "url": "https://github.com/comfyanonymous/ComfyUI",
+      "specialists": [
+        "mych-image-generation"
+      ],
+      "status": "referenced",
+      "trust": "unknown",
+      "evidence": {
+        "found": false,
+        "method": "GitHub search repo:comfyanonymous/ComfyUI",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "comfy-org/comfyui",
+      "repo": "Comfy-Org/ComfyUI",
+      "kind": "application",
+      "url": "https://github.com/Comfy-Org/ComfyUI",
+      "description": "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface. The fastest local inference engine in the world.",
+      "specialists": [
+        "mych-image-generation"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 145376,
+        "last_push": "2026-11-06T14:41:01Z",
+        "archived": false,
+        "license": "GPL-3.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:Comfy-Org/ComfyUI",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "huggingface/diffusers",
+      "repo": "huggingface/diffusers",
+      "kind": "library",
+      "url": "https://github.com/huggingface/diffusers",
+      "description": "🤗 Diffusers: State-of-the-art diffusion models for image, video, and audio generation in PyTorch.",
+      "specialists": [
+        "mych-image-generation"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 34881,
+        "last_push": "2026-11-06T14:12:51Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:huggingface/diffusers",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "automatic1111/stable-diffusion-webui",
+      "repo": "AUTOMATIC1111/stable-diffusion-webui",
+      "kind": "application",
+      "url": "https://github.com/AUTOMATIC1111/stable-diffusion-webui",
+      "description": "Stable Diffusion web UI",
+      "specialists": [
+        "mych-image-generation"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 165248,
+        "last_push": "2026-03-02T07:00:53Z",
+        "archived": false,
+        "license": "AGPL-3.0",
+        "owner_type": "User",
+        "method": "GitHub search repo:AUTOMATIC1111/stable-diffusion-webui",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "danielgatis/rembg",
+      "repo": "danielgatis/rembg",
+      "kind": "library",
+      "url": "https://github.com/danielgatis/rembg",
+      "description": "Rembg is a tool to remove images background",
+      "specialists": [
+        "mych-image-generation"
+      ],
+      "status": "referenced",
+      "trust": "community-popular (popularity is not a security review)",
+      "evidence": {
+        "found": true,
+        "stars": 25361,
+        "last_push": "2026-11-06T01:18:29Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "User",
+        "method": "GitHub search repo:danielgatis/rembg",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "python-pillow/pillow",
+      "repo": "python-pillow/Pillow",
+      "kind": "library",
+      "url": "https://github.com/python-pillow/Pillow",
+      "description": "Python Imaging Library (fork)",
+      "specialists": [
+        "mych-image-generation",
+        "mych-pixel-art"
+      ],
+      "status": "used-in-evaluation",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 13969,
+        "last_push": "2026-11-06T12:57:54Z",
+        "archived": false,
+        "license": "NOASSERTION",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:python-pillow/Pillow",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "imagemagick/imagemagick",
+      "repo": "ImageMagick/ImageMagick",
+      "kind": "cli",
+      "url": "https://github.com/ImageMagick/ImageMagick",
+      "description": "ImageMagick is a free, open-source software suite for creating, editing, converting, and displaying images. It supports 200+ formats and offers powerful command-line tools and APIs for automation, scripting, and integration across platforms.",
+      "specialists": [
+        "mych-pixel-art"
+      ],
+      "status": "used-in-evaluation",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 17808,
+        "last_push": "2026-11-06T14:40:08Z",
+        "archived": false,
+        "license": "NOASSERTION",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:ImageMagick/ImageMagick",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "blender/blender",
+      "repo": "blender/blender",
+      "kind": "application",
+      "url": "https://github.com/blender/blender",
+      "description": "Official mirror of Blender",
+      "specialists": [
+        "mych-3d-design"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 21679,
+        "last_push": "2026-11-06T14:55:50Z",
+        "archived": false,
+        "license": "NOASSERTION",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:blender/blender",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "khronosgroup/gltf-validator",
+      "repo": "KhronosGroup/glTF-Validator",
+      "kind": "test-tool",
+      "url": "https://github.com/KhronosGroup/glTF-Validator",
+      "description": "Tool to validate glTF assets.",
+      "specialists": [
+        "mych-3d-design"
+      ],
+      "status": "used-in-evaluation",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 475,
+        "last_push": "2026-10-06T19:02:48Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:KhronosGroup/glTF-Validator",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "khronosgroup/gltf",
+      "repo": "KhronosGroup/glTF",
+      "kind": "specification",
+      "url": "https://github.com/KhronosGroup/glTF",
+      "description": "glTF – Runtime 3D Asset Delivery",
+      "specialists": [
+        "mych-3d-design"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 7881,
+        "last_push": "2026-11-03T16:14:38Z",
+        "archived": false,
+        "license": "NOASSERTION",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:KhronosGroup/glTF",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "mrdoob/three.js",
+      "repo": "mrdoob/three.js",
+      "kind": "library",
+      "url": "https://github.com/mrdoob/three.js",
+      "description": "JavaScript 3D Library.",
+      "specialists": [
+        "mych-3d-design"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 117681,
+        "last_push": "2026-11-06T10:21:28Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "User",
+        "method": "GitHub search repo:mrdoob/three.js",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "donmccurdy/gltf-transform",
+      "repo": "donmccurdy/glTF-Transform",
+      "kind": "library",
+      "url": "https://github.com/donmccurdy/glTF-Transform",
+      "description": "glTF 2.0 SDK for JavaScript and TypeScript, on Web and Node.js.",
+      "specialists": [
+        "mych-3d-design"
+      ],
+      "status": "candidate",
+      "trust": "community-popular (popularity is not a security review)",
+      "evidence": {
+        "found": true,
+        "stars": 2063,
+        "last_push": "2026-10-20T11:41:51Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "User",
+        "method": "GitHub search repo:donmccurdy/glTF-Transform",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "ahujasid/mcp-for-blender",
+      "repo": "ahujasid/mcp-for-blender",
+      "kind": "mcp-server",
+      "url": "https://github.com/ahujasid/mcp-for-blender",
+      "description": "Community plugin to control Blender 3D with any LLM of your choice. Not affiliated with the official Blender Foundation.",
+      "specialists": [
+        "mych-3d-design"
+      ],
+      "status": "candidate",
+      "trust": "community-popular (popularity is not a security review)",
+      "evidence": {
+        "found": true,
+        "stars": 33464,
+        "last_push": "2026-11-04T13:04:08Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "User",
+        "method": "GitHub search repo:ahujasid/mcp-for-blender",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "godotengine/godot",
+      "repo": "godotengine/godot",
+      "kind": "application",
+      "url": "https://github.com/godotengine/godot",
+      "description": "Godot Engine – Multi-platform 2D and 3D game engine",
+      "specialists": [
+        "mych-3d-design",
+        "game"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 119658,
+        "last_push": "2026-11-06T01:51:23Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:godotengine/godot",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "discordjs/discord.js",
+      "repo": "discordjs/discord.js",
+      "kind": "library",
+      "url": "https://github.com/discordjs/discord.js",
+      "description": "A powerful JavaScript library for interacting with the Discord API",
+      "specialists": [
+        "mych-chatbot-engineering"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 26827,
+        "last_push": "2026-11-05T09:50:25Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:discordjs/discord.js",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "rapptz/discord.py",
+      "repo": "Rapptz/discord.py",
+      "kind": "library",
+      "url": "https://github.com/Rapptz/discord.py",
+      "description": "An API wrapper for Discord written in Python.",
+      "specialists": [
+        "mych-chatbot-engineering"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 16203,
+        "last_push": "2026-09-07T18:11:46Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "User",
+        "method": "GitHub search repo:Rapptz/discord.py",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "slackapi/bolt-python",
+      "repo": "slackapi/bolt-python",
+      "kind": "library",
+      "url": "https://github.com/slackapi/bolt-python",
+      "description": "A framework to build Slack apps using Python",
+      "specialists": [
+        "mych-chatbot-engineering"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 1332,
+        "last_push": "2026-11-06T14:09:31Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:slackapi/bolt-python",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "ollama/ollama",
+      "repo": "ollama/ollama",
+      "kind": "model-runtime",
+      "url": "https://github.com/ollama/ollama",
+      "description": "Get up and running with Kimi, GLM, MiniMax, DeepSeek, gpt-oss, Qwen, Gemma and other models.",
+      "specialists": [
+        "mych-chatbot-engineering",
+        "core"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 186105,
+        "last_push": "2026-11-06T14:59:41Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:ollama/ollama",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "ggml-org/llama.cpp",
+      "repo": "ggml-org/llama.cpp",
+      "kind": "model-runtime",
+      "url": "https://github.com/ggml-org/llama.cpp",
+      "description": "LLM inference in C/C++",
+      "specialists": [
+        "mych-chatbot-engineering",
+        "core"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 133555,
+        "last_push": "2026-11-06T14:50:28Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:ggml-org/llama.cpp",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "vllm-project/vllm",
+      "repo": "vllm-project/vllm",
+      "kind": "model-runtime",
+      "url": "https://github.com/vllm-project/vllm",
+      "description": "A high-throughput and memory-efficient inference and serving engine for LLMs",
+      "specialists": [
+        "mych-chatbot-engineering",
+        "mych-runpod"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 96459,
+        "last_push": "2026-11-06T15:03:25Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:vllm-project/vllm",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "oai/openapi-specification",
+      "repo": "OAI/OpenAPI-Specification",
+      "kind": "specification",
+      "url": "https://github.com/OAI/OpenAPI-Specification",
+      "description": "The OpenAPI Specification Repository",
+      "specialists": [
+        "mych-api-integration"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 31303,
+        "last_push": "2026-11-05T17:37:34Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:OAI/OpenAPI-Specification",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "stoplightio/prism",
+      "repo": "stoplightio/prism",
+      "kind": "test-tool",
+      "url": "https://github.com/stoplightio/prism",
+      "description": "Turn any OpenAPI2/3 and Postman Collection file into an API server with mocking, transformations and validations.",
+      "specialists": [
+        "mych-api-integration"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 5065,
+        "last_push": "2026-10-31T23:25:25Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:stoplightio/prism",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "schemathesis/schemathesis",
+      "repo": "schemathesis/schemathesis",
+      "kind": "test-tool",
+      "url": "https://github.com/schemathesis/schemathesis",
+      "description": "Catch API bugs before your users do",
+      "specialists": [
+        "mych-api-integration"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 3749,
+        "last_push": "2026-11-06T14:49:49Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:schemathesis/schemathesis",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "googlefonts/noto-emoji",
+      "repo": "googlefonts/noto-emoji",
+      "kind": "asset-set",
+      "url": "https://github.com/googlefonts/noto-emoji",
+      "description": "Noto Emoji fonts",
+      "specialists": [
+        "mych-emoji-language"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 5125,
+        "last_push": "2026-10-26T23:16:49Z",
+        "archived": false,
+        "license": "OFL-1.1",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:googlefonts/noto-emoji",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "jdecked/twemoji",
+      "repo": "jdecked/twemoji",
+      "kind": "asset-set",
+      "url": "https://github.com/jdecked/twemoji",
+      "description": "Emoji for everyone.",
+      "specialists": [
+        "mych-emoji-language"
+      ],
+      "status": "referenced",
+      "trust": "community-popular (popularity is not a security review)",
+      "evidence": {
+        "found": true,
+        "stars": 1913,
+        "last_push": "2026-06-01T22:21:37Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "User",
+        "method": "GitHub search repo:jdecked/twemoji",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "twitter/twemoji",
+      "repo": "twitter/twemoji",
+      "kind": "asset-set",
+      "url": "https://github.com/twitter/twemoji",
+      "description": "Emoji for everyone. https://twemoji.twitter.com/",
+      "specialists": [
+        "mych-emoji-language"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 17813,
+        "last_push": "2026-07-07T21:41:18Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:twitter/twemoji",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "hfg-gmuend/openmoji",
+      "repo": "hfg-gmuend/openmoji",
+      "kind": "asset-set",
+      "url": "https://github.com/hfg-gmuend/openmoji",
+      "description": "Open source emojis for designers, developers and everyone else!",
+      "specialists": [
+        "mych-emoji-language"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 4581,
+        "last_push": "2026-11-04T10:33:49Z",
+        "archived": false,
+        "license": "CC-BY-SA-4.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:hfg-gmuend/openmoji",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "unicode-org/cldr",
+      "repo": "unicode-org/cldr",
+      "kind": "data",
+      "url": "https://github.com/unicode-org/cldr",
+      "description": "The home of the Unicode Common Locale Data Repository",
+      "specialists": [
+        "mych-emoji-language"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 1171,
+        "last_push": "2026-11-05T03:02:09Z",
+        "archived": false,
+        "license": "NOASSERTION",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:unicode-org/cldr",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "hashicorp/terraform",
+      "repo": "hashicorp/terraform",
+      "kind": "cli",
+      "url": "https://github.com/hashicorp/terraform",
+      "description": "Terraform enables you to safely and predictably create, change, and improve infrastructure. It is a source-available tool that codifies APIs into declarative configuration files that can be shared amongst team members, treated as code, edited, reviewed, and versioned.",
+      "specialists": [
+        "mych-cloud-infrastructure"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 50142,
+        "last_push": "2026-11-06T15:06:47Z",
+        "archived": false,
+        "license": "NOASSERTION",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:hashicorp/terraform",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "opentofu/opentofu",
+      "repo": "opentofu/opentofu",
+      "kind": "cli",
+      "url": "https://github.com/opentofu/opentofu",
+      "description": "OpenTofu lets you declaratively manage your cloud infrastructure.",
+      "specialists": [
+        "mych-cloud-infrastructure"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 30739,
+        "last_push": "2026-11-06T01:50:11Z",
+        "archived": false,
+        "license": "MPL-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:opentofu/opentofu",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "pulumi/pulumi",
+      "repo": "pulumi/pulumi",
+      "kind": "cli",
+      "url": "https://github.com/pulumi/pulumi",
+      "description": "Pulumi - Infrastructure as Code in any programming language 🚀",
+      "specialists": [
+        "mych-cloud-infrastructure"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 25845,
+        "last_push": "2026-11-06T15:00:07Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:pulumi/pulumi",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "hadolint/hadolint",
+      "repo": "hadolint/hadolint",
+      "kind": "test-tool",
+      "url": "https://github.com/hadolint/hadolint",
+      "description": "Dockerfile linter, validate inline bash, written in Haskell",
+      "specialists": [
+        "mych-cloud-infrastructure"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 12516,
+        "last_push": "2026-10-19T12:12:51Z",
+        "archived": false,
+        "license": "GPL-3.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:hadolint/hadolint",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "runpod/runpod-python",
+      "repo": "runpod/runpod-python",
+      "kind": "service-sdk",
+      "url": "https://github.com/runpod/runpod-python",
+      "description": "🐍 | Python library for Runpod API and serverless worker SDK. ",
+      "specialists": [
+        "mych-runpod"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 317,
+        "last_push": "2026-11-06T10:22:35Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:runpod/runpod-python",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "runpod/runpodctl",
+      "repo": "runpod/runpodctl",
+      "kind": "cli",
+      "url": "https://github.com/runpod/runpodctl",
+      "description": "interact with Runpod via the cli",
+      "specialists": [
+        "mych-runpod"
+      ],
+      "status": "referenced",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 465,
+        "last_push": "2026-11-06T14:23:18Z",
+        "archived": false,
+        "license": "GPL-3.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:runpod/runpodctl",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "runpod-workers/worker-vllm",
+      "repo": "runpod-workers/worker-vllm",
+      "kind": "worker-template",
+      "url": "https://github.com/runpod-workers/worker-vllm",
+      "description": "The Runpod worker template for serving our large language model endpoints. Powered by vLLM.",
+      "specialists": [
+        "mych-runpod"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 474,
+        "last_push": "2026-11-05T20:32:36Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:runpod-workers/worker-vllm",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "phaserjs/phaser",
+      "repo": "phaserjs/phaser",
+      "kind": "library",
+      "url": "https://github.com/phaserjs/phaser",
+      "description": "Phaser is a fun, free and fast 2D game framework for making HTML5 games for desktop and mobile web browsers, supporting Canvas and WebGL rendering.",
+      "specialists": [
+        "game"
+      ],
+      "status": "candidate",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 40653,
+        "last_push": "2026-08-21T06:56:13Z",
+        "archived": false,
+        "license": "MIT",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:phaserjs/phaser",
+        "retrieved": "2026-11-06"
+      }
+    },
+    {
+      "id": "microsoft/playwright",
+      "repo": "microsoft/playwright",
+      "kind": "test-tool",
+      "url": "https://github.com/microsoft/playwright",
+      "description": "Playwright is a framework for Web Testing and Automation. It allows testing Chromium, Firefox and WebKit with a single API. ",
+      "specialists": [
+        "game",
+        "core"
+      ],
+      "status": "used-in-evaluation",
+      "trust": "project-owned (the repository belongs to the project's own organization or author)",
+      "evidence": {
+        "found": true,
+        "stars": 99449,
+        "last_push": "2026-11-06T09:20:47Z",
+        "archived": false,
+        "license": "Apache-2.0",
+        "owner_type": "Organization",
+        "method": "GitHub search repo:microsoft/playwright",
+        "retrieved": "2026-11-06"
+      }
+    }
+  ],
+  "discovered": [
+    {
+      "query": "comfyui mcp",
+      "specialists": [
+        "mych-image-generation"
+      ],
+      "results": [
+        {
+          "repo": "heshengtao/super-agent-party",
+          "url": "https://github.com/heshengtao/super-agent-party",
+          "description": "⭐ All-in-one AI companion! Super Agent Party = Self hosted neuro sama + openclaw! ⭐ 全能AI伴侣！超级智能体派对 = 自托管neuro sama + openclaw!",
+          "stars": 2813,
+          "last_push": "2026-10-27T02:11:54Z",
+          "archived": false,
+          "license": "AGPL-3.0",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "heshengtao/comfyui_LLM_party",
+          "url": "https://github.com/heshengtao/comfyui_LLM_party",
+          "description": "LLM Agent Framework in ComfyUI includes MCP sever, Omost,GPT-sovits, ChatTTS,GOT-OCR2.0, and FLUX prompt nodes,access to Feishu,discord,and adapts to all llms with similar openai / aisuite interfaces, such as o1,ollama, gemini, grok, qwen, GLM, deepseek, kimi,doubao. Adapted to local llms, vlm, gguf such as llama-3.3 Janus-Pro, Linkage graphRAG",
+          "stars": 2388,
+          "last_push": "2026-07-29T18:05:53Z",
+          "archived": false,
+          "license": "AGPL-3.0",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "ATH-MaaS/Pixelle-MCP",
+          "url": "https://github.com/ATH-MaaS/Pixelle-MCP",
+          "description": "An Open-Source Multimodal AIGC Solution based on ComfyUI + MCP + LLM  https://pixelle.ai",
+          "stars": 1131,
+          "last_push": "2025-12-17T07:18:03Z",
+          "archived": false,
+          "license": "MIT",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        }
+      ]
+    },
+    {
+      "query": "runpod mcp",
+      "specialists": [
+        "mych-runpod"
+      ],
+      "results": [
+        {
+          "repo": "vavo/lora-pilot",
+          "url": "https://github.com/vavo/lora-pilot",
+          "description": "From dataset to trained LoRA to finished image or video. One browser workspace for your models, datasets, training, and generation. LoRA Pilot supports 50+ training model groups, with ComfyUI, Kohya, AI Toolkit, and Diffusion Pipe included. Run on your own GPU or RunPod, and connect AI agents through MCP.",
+          "stars": 91,
+          "last_push": "2026-11-06T01:54:00Z",
+          "archived": false,
+          "license": "MIT",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "runpod/runpod-mcp",
+          "url": "https://github.com/runpod/runpod-mcp",
+          "description": null,
+          "stars": 86,
+          "last_push": "2026-11-06T14:53:57Z",
+          "archived": false,
+          "license": "NOASSERTION",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "runpod/runpod-plugins-official",
+          "url": "https://github.com/runpod/runpod-plugins-official",
+          "description": "Official Runpod plugin for AI coding agents. Skills plus the hosted Runpod MCP server for managing pods, serverless endpoints, templates and volumes. Works with Claude Code, Codex and Gemini CLI.",
+          "stars": 48,
+          "last_push": "2026-11-06T07:08:29Z",
+          "archived": false,
+          "license": "Apache-2.0",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        }
+      ]
+    },
+    {
+      "query": "aseprite mcp",
+      "specialists": [
+        "mych-pixel-art"
+      ],
+      "results": [
+        {
+          "repo": "diivi/aseprite-mcp",
+          "url": "https://github.com/diivi/aseprite-mcp",
+          "description": "MCP server for interacting with the Aseprite API",
+          "stars": 900,
+          "last_push": "2026-11-03T23:19:28Z",
+          "archived": false,
+          "license": "MIT",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "with-pebbly/aseprite-ai-artist",
+          "url": "https://github.com/with-pebbly/aseprite-ai-artist",
+          "description": "Your coding agent paints pixel art in the Aseprite window you already have open. MCP server + skills for Claude Code, omp, Codex, Gemini CLI and Cursor — draws, looks at its work, animates and exports. Gallery and benchmark: pixeli.pebbly.space",
+          "stars": 615,
+          "last_push": "2026-10-22T09:37:00Z",
+          "archived": false,
+          "license": "MIT",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "willibrandon/pixel-plugin",
+          "url": "https://github.com/willibrandon/pixel-plugin",
+          "description": "Claude Code plugin for creating pixel art with Aseprite through natural language. Supports animation, retro palettes, dithering, and game engine export.",
+          "stars": 414,
+          "last_push": "2025-10-19T00:52:11Z",
+          "archived": false,
+          "license": "MIT",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        }
+      ]
+    },
+    {
+      "query": "openapi mcp server",
+      "specialists": [
+        "mych-api-integration"
+      ],
+      "results": [
+        {
+          "repo": "Evil0ctal/Douyin_TikTok_Download_API",
+          "url": "https://github.com/Evil0ctal/Douyin_TikTok_Download_API",
+          "description": "🚀 自托管的抖音、TikTok、B 站数据采集与无水印视频下载 API，支持 AI agent 通过 MCP 调用与离线语音转文字，Docker 一键部署。| Self-hosted TikTok, Douyin & Bilibili scraper and no-watermark video downloader — async REST API, MCP server for AI agents, CLI and web console, plus offline speech-to-text for downloaded videos. Self-healing identity pool, PostgreSQL archive, one docker compose up.",
+          "stars": 21219,
+          "last_push": "2026-11-02T07:43:14Z",
+          "archived": false,
+          "license": "Apache-2.0",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "open-webui/mcpo",
+          "url": "https://github.com/open-webui/mcpo",
+          "description": "A simple, secure MCP-to-OpenAPI proxy server",
+          "stars": 4419,
+          "last_push": "2026-05-17T20:40:30Z",
+          "archived": false,
+          "license": "MIT",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "cortex-docs/cortex",
+          "url": "https://github.com/cortex-docs/cortex",
+          "description": "Cortex - Generates interactive API documentation, typed SDKs, and MCP servers from OpenAPI, AsyncAPI, GraphQL, gRPC, OpenRPC, and Markdown.",
+          "stars": 3298,
+          "last_push": "2026-10-06T05:58:39Z",
+          "archived": false,
+          "license": "MIT",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        }
+      ]
+    },
+    {
+      "query": "terraform mcp server",
+      "specialists": [
+        "mych-cloud-infrastructure"
+      ],
+      "results": [
+        {
+          "repo": "patrickchugh/terravision",
+          "url": "https://github.com/patrickchugh/terravision",
+          "description": "Cloud architecture diagrams in both directions: AI prompt or JSON to diagram, diagram to Terraform via MCP server, and Terraform to diagram via CLI or CI/CD. Using Official AWS, Azure and GCP icons.",
+          "stars": 1672,
+          "last_push": "2026-10-31T01:08:24Z",
+          "archived": false,
+          "license": "AGPL-3.0",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "hashicorp/terraform-mcp-server",
+          "url": "https://github.com/hashicorp/terraform-mcp-server",
+          "description": "The Terraform MCP Server provides seamless integration with Terraform ecosystem, enabling advanced automation and interaction capabilities for Infrastructure as Code (IaC) development.",
+          "stars": 1556,
+          "last_push": "2026-11-06T12:13:33Z",
+          "archived": false,
+          "license": "MPL-2.0",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "agentic-community/mcp-gateway-registry",
+          "url": "https://github.com/agentic-community/mcp-gateway-registry",
+          "description": "Enterprise-ready MCP Gateway & Registry that centralizes AI development tools with secure OAuth authentication, dynamic tool discovery, and unified access for both autonomous AI agents and AI coding assistants. Transform scattered MCP server chaos into governed, auditable tool access with Keycloak/Entra integration.",
+          "stars": 1038,
+          "last_push": "2026-11-05T17:07:32Z",
+          "archived": false,
+          "license": "Apache-2.0",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        }
+      ]
+    },
+    {
+      "query": "agent skills SKILL.md",
+      "specialists": [
+        "core"
+      ],
+      "results": [
+        {
+          "repo": "microsoft/SkillOpt",
+          "url": "https://github.com/microsoft/SkillOpt",
+          "description": "SkillOpt is a text-space optimizer that trains reusable natural-language skills for frozen LLM agents through trajectory-driven edits, validation-gated updates, and deployable best_skill.md artifacts.",
+          "stars": 18923,
+          "last_push": "2026-11-05T14:44:36Z",
+          "archived": false,
+          "license": "MIT",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "gamedev-skills/awesome-gamedev-agent-skills",
+          "url": "https://github.com/gamedev-skills/awesome-gamedev-agent-skills",
+          "description": "77 game-dev skills for AI coding agents — Godot, Unity, Unreal, Phaser, PixiJS, three.js, Bevy, pygame, LÖVE, Roblox. Portable SKILL.md Agent Skills (the format Anthropic launched as Claude Skills), with a router that loads the right skill for your engine and task. Runs in Claude Code, Cursor, Kiro, Codex, Copilot, Gemini CLI and more.",
+          "stars": 7130,
+          "last_push": "2026-10-28T03:10:14Z",
+          "archived": false,
+          "license": "Apache-2.0",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        },
+        {
+          "repo": "bergside/awesome-design-skills",
+          "url": "https://github.com/bergside/awesome-design-skills",
+          "description": "List of 67 awesome DESIGN.md and SKILL.md design skill files for agentic tools like Claude Design, Google Stitch, Codex, Cursor, and other AI tools",
+          "stars": 3535,
+          "last_push": "2026-06-28T10:05:22Z",
+          "archived": false,
+          "license": "MIT",
+          "trust": "community-unreviewed (discovered by search; not reviewed or installed)"
+        }
+      ]
+    }
+  ]
+}

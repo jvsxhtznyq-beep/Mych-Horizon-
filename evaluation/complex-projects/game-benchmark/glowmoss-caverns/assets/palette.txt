@@ -1,0 +1,17 @@
+# Glowmoss Caverns palette (16 colors). Used by sprites.sprite and enforced by the build.
+#0d0b14 outline
+#1e1a2e cave dark
+#2a2140 shadow
+#3b3456 rock
+#5d5a7a rock light
+#4a3a8c violet
+#c9a3ff lavender
+#f2f0ff white
+#2bd67b glowmoss
+#a8ff9e moss light
+#1d8a6a teal
+#5ee6e6 cyan
+#ffd166 lantern gold
+#ff8c42 ember
+#ff4f7a heart pink
+#7a2f5a berry

@@ -1,0 +1,39 @@
+{
+  "task": "Build a complete playable 2D pixel-art platformer game with menus, settings, levels, enemies, scoring, audio, save/load, responsive UI and automated tests",
+  "tier": 3,
+  "lead": "Engineer",
+  "disciplines": [
+    "Architect",
+    "Designer",
+    "Engineer"
+  ],
+  "workflow": {
+    "id": "new-software-project",
+    "file": "mych-plugin/workflows/new-software-project.md"
+  },
+  "also_follow": [],
+  "specialists": [
+    {
+      "id": "mych-pixel-art",
+      "matched": [
+        "pixel art",
+        "platformer"
+      ],
+      "status": "tested"
+    }
+  ],
+  "signals": {
+    "Designer": [
+      "ui",
+      "menus",
+      "responsive",
+      "pixel art"
+    ],
+    "Engineer": [
+      "build",
+      "tests",
+      "game"
+    ]
+  },
+  "note": "Heuristic suggestion from keyword matching; confirm it with the orientation questions in SKILL.md."
+}

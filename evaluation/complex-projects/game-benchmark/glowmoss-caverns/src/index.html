@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Glowmoss Caverns</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main id="app" aria-label="Glowmoss Caverns game">
+  <canvas id="game" width="320" height="180" aria-label="Game view" role="img" tabindex="-1"></canvas>
+  <button id="hud-pause" class="hud-button" data-action="pause" aria-label="Pause" hidden>II</button>
+  <p id="level-hint" class="hint" hidden></p>
+
+  <section class="screen" data-screen="title" aria-labelledby="title-heading">
+    <h1 id="title-heading">Glowmoss Caverns</h1>
+    <p class="tagline">Follow the light. Gather the moss. Find the way out.</p>
+    <div class="menu">
+      <button data-action="play"><span id="continue-label">Play</span></button>
+      <button data-action="levels">Choose cavern</button>
+      <button data-action="settings">Settings</button>
+      <button data-action="howto">How to play</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="levels" aria-labelledby="levels-heading" hidden>
+    <h2 id="levels-heading">Choose a cavern</h2>
+    <div id="level-list" class="menu"></div>
+    <div class="menu row">
+      <button data-action="back">Back</button>
+      <button data-action="reset" class="secondary">Reset progress</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="settings" aria-labelledby="settings-heading" hidden>
+    <h2 id="settings-heading">Settings</h2>
+    <form class="settings" onsubmit="return false">
+      <label>Master volume <input id="set-master" type="range" min="0" max="100" step="5"></label>
+      <label>Music volume <input id="set-music" type="range" min="0" max="100" step="5"></label>
+      <label>Effects volume <input id="set-sfx" type="range" min="0" max="100" step="5"></label>
+      <label class="check"><input id="set-shake" type="checkbox"> Screen shake</label>
+      <label class="check"><input id="set-reducedFlashing" type="checkbox"> Reduce flashing</label>
+      <label class="check"><input id="set-showFps" type="checkbox"> Show frame rate</label>
+      <label>Touch controls
+        <select id="set-touch"><option value="auto">Automatic</option><option value="on">Always</option><option value="off">Never</option></select>
+      </label>
+    </form>
+    <div class="menu"><button data-action="back">Back</button></div>
+  </section>
+
+  <section class="screen" data-screen="howto" aria-labelledby="howto-heading" hidden>
+    <h2 id="howto-heading">How to play</h2>
+    <ul class="howto">
+      <li><kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>A</kbd> <kbd>D</kbd>: run</li>
+      <li><kbd>Space</kbd>, <kbd>Z</kbd>, <kbd>&uarr;</kbd> or <kbd>W</kbd>: jump (hold for higher jumps)</li>
+      <li><kbd>Esc</kbd> or <kbd>P</kbd>: pause</li>
+      <li>Gamepad: stick or d-pad to run, A to jump, Start to pause. Touch: on-screen buttons.</li>
+      <li>Land on slimes, bats and spore turrets to defeat them. Avoid spikes and spores.</li>
+      <li>Glowmoss orbs give points; collect them all for a bonus. Heart crystals heal you.</li>
+      <li>Touch a glowing lamp to save your place. Reach the green door to finish the cavern.</li>
+    </ul>
+    <div class="menu"><button data-action="back">Back</button></div>
+  </section>
+
+  <section class="screen" data-screen="paused" aria-labelledby="paused-heading" hidden>
+    <h2 id="paused-heading">Paused</h2>
+    <div class="menu">
+      <button data-action="resume">Resume</button>
+      <button data-action="restart">Restart cavern</button>
+      <button data-action="settings">Settings</button>
+      <button data-action="quit">Quit to title</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="complete" aria-labelledby="complete-heading" hidden>
+    <h2 id="complete-heading">Cavern cleared!</h2>
+    <p id="complete-summary" role="status"></p>
+    <div class="menu">
+      <button data-action="next">Next cavern</button>
+      <button data-action="replay">Play again</button>
+      <button data-action="title">Title</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="gameover" aria-labelledby="gameover-heading" hidden>
+    <h2 id="gameover-heading">Your light went out</h2>
+    <p id="gameover-score" role="status"></p>
+    <div class="menu">
+      <button data-action="retry">Try again</button>
+      <button data-action="title">Title</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="victory" aria-labelledby="victory-heading" hidden>
+    <h2 id="victory-heading">You found the way out!</h2>
+    <p id="victory-summary" role="status"></p>
+    <div class="menu">
+      <button data-action="replay">Play the last cavern again</button>
+      <button data-action="title">Title</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="error" aria-labelledby="error-heading" hidden>
+    <h2 id="error-heading">Something went wrong</h2>
+    <p>The game hit an unexpected error. Your saved progress is safe.</p>
+    <p><code id="error-message"></code></p>
+    <div class="menu"><button data-action="reload">Reload the game</button></div>
+  </section>
+
+  <div id="touch" class="touch" hidden>
+    <div class="pad">
+      <button data-touch="left" aria-label="Move left">&#9664;</button>
+      <button data-touch="right" aria-label="Move right">&#9654;</button>
+    </div>
+    <button data-touch="jump" class="jump" aria-label="Jump">JUMP</button>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</main>
+<script type="module" src="main.js"></script>
+</body>
+</html>
